@@ -313,7 +313,7 @@ export function AdminView() {
       showToast(`Lavado #${w.ticket_number} reasignado a ${op.name}`, 'success');
     } catch (err) {
       console.error('Error reassigning operator:', err);
-      showToast('Error al reasignar el operario', 'error');
+      showToast('Error al reasignar el especialista', 'error');
       await loadData();
     }
   };
@@ -321,7 +321,7 @@ export function AdminView() {
   const handleStartWash = async (w: Wash) => {
 
     if (w.operator_id && busyOperatorIds.has(w.operator_id)) {
-      showToast(`El operario ${w.operator_name} debe finalizar su lavado actual antes de iniciar este servicio.`, 'error');
+      showToast(`La especialista ${w.operator_name} debe finalizar su servicio actual antes de iniciar este servicio.`, 'error');
       return;
     }
     try {
@@ -877,15 +877,15 @@ export function AdminView() {
                           onClick={() => setReassignTarget(reassignTarget === w.id ? null : w.id)}
                           className="action-control action-surface flex items-center gap-1.5 px-1.5 py-1 -ml-1.5 rounded-lg border border-blue-200/80 text-slate-500"
                         >
-                          <span>{w.operator_name || 'Sin operario'} · {new Date(w.created_at).toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' })}</span>
+                          <span>{w.operator_name || 'Sin especialista'} · {new Date(w.created_at).toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' })}</span>
                           <Pencil className="w-3 h-3 text-blue-600" />
                         </button>
                       ) : (
-                        <span>{w.operator_name || 'Sin operario'} · {new Date(w.created_at).toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' })}</span>
+                        <span>{w.operator_name || 'Sin especialista'} · {new Date(w.created_at).toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' })}</span>
                       )}
                       {reassignTarget === w.id && (
                         <div className="absolute z-40 mt-1 left-0 w-56 max-h-64 overflow-y-auto bg-white border border-[#E2E8F0] shadow-sm rounded-xl shadow-2xl p-1">
-                          <div className="px-2 py-1.5 text-[11px] font-semibold text-slate-500">Reasignar operario</div>
+                          <div className="px-2 py-1.5 text-[11px] font-semibold text-slate-500">Reasignar especialista</div>
                           {operators.filter((o) => o.active).map((op) => (
                             <button
                               key={op.id}
@@ -896,7 +896,7 @@ export function AdminView() {
                             </button>
                           ))}
                           {operators.filter((o) => o.active).length === 0 && (
-                            <div className="px-2 py-2 text-xs text-slate-500">No hay operarios activos</div>
+                            <div className="px-2 py-2 text-xs text-slate-500">No hay especialistas activas</div>
                           )}
                         </div>
                       )}
@@ -1008,7 +1008,7 @@ export function AdminView() {
             <section className="animate-fadeIn">
               <h3 className="text-sm font-semibold text-slate-500 mb-2 flex items-center gap-2">
                 <span className="w-5 h-5 rounded-full bg-blue-500 text-white text-xs flex items-center justify-center font-bold">2</span>
-                Selecciona el operario
+                Selecciona la especialista
               </h3>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                 {operators.filter((o) => o.active).map((op) => {
@@ -1288,7 +1288,7 @@ export function AdminView() {
               <div className="flex justify-between"><span>Negocio:</span><span className="font-semibold">{business.name}</span></div>
               <div className="flex justify-between"><span>Vehículo:</span><span className="font-semibold">{ticketModal.category_name}</span></div>
               <div className="flex justify-between"><span>Placa:</span><span className="font-semibold">{ticketModal.plate ?? 'N/A'}</span></div>
-              <div className="flex justify-between"><span>Operario:</span><span className="font-semibold">{ticketModal.operator_name || 'N/A'}</span></div>
+              <div className="flex justify-between"><span>especialista:</span><span className="font-semibold">{ticketModal.operator_name || 'N/A'}</span></div>
               <div className="flex justify-between"><span>Lavado:</span><span>${ticketModal.price.toLocaleString('es-CO')}</span></div>
               {(ticketModal.additionals_detail ?? []).map((d, i) => (
                 <div key={i} className="flex justify-between text-slate-500"><span>+ {d.name}:</span><span>${d.amount.toLocaleString('es-CO')}</span></div>
@@ -1372,7 +1372,7 @@ export function AdminView() {
                 <div className="text-[10px] text-slate-500 mt-0.5">{shiftCompleted.length} cobrados</div>
               </div>
               <div className="bg-amber-50 border border-amber-200 rounded-xl p-3">
-                <div className="text-xs text-amber-600/70">Pago Total Operarios</div>
+                <div className="text-xs text-amber-600/70">Pago Total especialista</div>
                 <div className="text-lg font-bold text-amber-600">${totalOperatorPay.toLocaleString('es-CO')}</div>
                 <div className="text-[10px] text-slate-500 mt-0.5">{Math.round(commissionRate * 100)}% comisión + propinas</div>
               </div>
@@ -1442,7 +1442,7 @@ export function AdminView() {
             {/* Operator liquidation */}
             <div className="mb-4">
               <h3 className="text-sm font-semibold text-slate-600 mb-2 flex items-center gap-2">
-                <Users className="w-4 h-4 text-amber-600" /> Liquidación de Operarios
+                <Users className="w-4 h-4 text-amber-600" /> Liquidación de especialista
               </h3>
               <div className="space-y-2">
                 {operatorLiquidation.map((liq) => (
@@ -1516,7 +1516,7 @@ export function AdminView() {
                 <span className="font-semibold text-emerald-600">${shiftRevenue.toLocaleString('es-CO')}</span>
               </div>
               <div className="flex justify-between items-center text-sm">
-                <span className="text-slate-600">- Pago Operarios ({Math.round(commissionRate * 100)}% + propinas)</span>
+                <span className="text-slate-600">- Pago especialista ({Math.round(commissionRate * 100)}% + propinas)</span>
                 <span className="font-semibold text-amber-600">-${totalOperatorPay.toLocaleString('es-CO')}</span>
               </div>
               <div className="flex justify-between items-center text-sm">
@@ -1531,7 +1531,7 @@ export function AdminView() {
                 <span className="text-sm font-medium text-amber-700">Saldo Neto en Caja (Ganancia Lavadero)</span>
                 <span className="text-2xl font-bold text-amber-600">${netCash.toLocaleString('es-CO')}</span>
               </div>
-              <p className="text-[10px] text-slate-500">Las propinas entran a caja y salen directo a operarios; no afectan la utilidad del lavadero.</p>
+              <p className="text-[10px] text-slate-500">Las propinas entran a caja y salen directo a especialista; no afectan la utilidad del lavadero.</p>
             </div>
 
             {/* Cash arqueo */}
@@ -1562,7 +1562,7 @@ export function AdminView() {
                 <span className="font-semibold text-rose-600">-${shiftAdvancesCash.toLocaleString('es-CO')}</span>
               </div>
               <label className="flex items-center justify-between cursor-pointer bg-slate-800/30 border border-slate-100 rounded-xl p-3">
-                <span className="text-sm text-slate-600">¿Pagó operarios en efectivo del turno?</span>
+                <span className="text-sm text-slate-600">¿Pagó especialista en efectivo del turno?</span>
                 <button
                   type="button"
                   onClick={() => setOperatorsPaidCash(!operatorsPaidCash)}
@@ -1582,7 +1582,7 @@ export function AdminView() {
                     <span>-${shiftAdvancesCash.toLocaleString('es-CO')}</span>
                   </div>
                   <div className="flex justify-between items-center text-sm">
-                    <span className="text-slate-500">- Pago operarios neto pendiente</span>
+                    <span className="text-slate-500">- Pago especialista neto pendiente</span>
                     <span className="font-semibold text-amber-600">-${netOperatorPay.toLocaleString('es-CO')}</span>
                   </div>
                 </div>
@@ -1675,8 +1675,8 @@ export function AdminView() {
                     <Percent className="w-5 h-5" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-slate-900">Comisión de Operarios</h3>
-                    <p className="text-xs text-slate-500">Porcentaje pagado a lavadores</p>
+                    <h3 className="text-lg font-bold text-slate-900">Comisión de Especialistas</h3>
+                    <p className="text-xs text-slate-500">Porcentaje pagado a Especialistas</p>
                   </div>
                 </div>
 
@@ -1730,7 +1730,7 @@ export function AdminView() {
                     )}
 
                     <p className="text-[11px] text-slate-500">
-                      El lavadero retiene el {100 - commissionInput}% sobre los servicios. Las propinas son 100% para los operarios.
+                      El lavadero retiene el {100 - commissionInput}% sobre los servicios. Las propinas son 100% para las Especialistas.
                     </p>
                   </div>
 
@@ -1982,7 +1982,7 @@ export function AdminView() {
               </div>
               <div>
                 <h2 className="text-lg font-bold text-slate-900">Vales y Adelantos</h2>
-                <p className="text-sm text-slate-500">Adelantos a lavadores</p>
+                <p className="text-sm text-slate-500">Adelantos a especialista</p>
               </div>
             </div>
 
