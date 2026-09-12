@@ -113,7 +113,7 @@ export function LoginScreen() {
               type="text"
               value={businessId}
               onChange={(e) => setBusinessId(e.target.value)}
-              placeholder="Ej: LAV01"
+              placeholder="Ej: NAIL01"
               className="w-full px-4 py-4 text-lg font-mono uppercase tracking-wider bg-white border border-[#E2E8F0] shadow-sm rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-200 focus:ring-2 focus:ring-blue-500/20 transition-all"
               autoFocus
               disabled={!!submittingRole}
@@ -159,7 +159,7 @@ export function LoginScreen() {
           </form>
 
           <p className="text-center text-xs text-slate-500 mt-6">
-            Demo: usa <span className="font-mono text-blue-600 font-bold">LAV01</span> para entrar
+            Demo: usa <span className="font-mono text-blue-600 font-bold">NAIL01</span> para entrar
           </p>
         </div>
       </div>
