@@ -92,7 +92,7 @@ export function OwnerView() {
   const commissionRate = business?.commission_rate ?? 0.40;
   const liquidation = new Map<string, { name: string; count: number; revenue: number; commission: number; tips: number }>();
   for (const w of completed) {
-    const name = w.operator_name || 'Sin operario';
+    const name = w.operator_name || 'Sin Especialista';
     const entry = liquidation.get(name) ?? { name, count: 0, revenue: 0, commission: 0, tips: 0 };
     entry.count++;
     entry.revenue += washTotal(w);
@@ -185,7 +185,7 @@ export function OwnerView() {
           { key: 'losses', label: 'Pérdidas', Icon: AlertTriangle },
           { key: 'inventory', label: 'Inventario', Icon: Package },
           { key: 'history', label: 'Historial', Icon: History },
-          { key: 'operators', label: 'Lavadores', Icon: Users },
+          { key: 'operators', label: 'serviciores', Icon: Users },
           { key: 'subscription', label: 'Suscripción', Icon: CreditCard },
         ] as { key: OwnerTab; label: string; Icon: typeof TrendingUp }[]).map(({ key, label, Icon }) => (
           <button
@@ -210,7 +210,7 @@ export function OwnerView() {
             <div className="grid grid-cols-2 gap-3">
               <KPICard label="Ingresos" value={`$${totalRevenue.toLocaleString('es-CO')}`} Icon={DollarSign} color="from-emerald-600 to-green-500" />
               <KPICard label="Propinas" value={`$${totalTips.toLocaleString('es-CO')}`} Icon={TrendingUp} color="from-blue-600 to-blue-500" />
-              <KPICard label="Lavados" value={completed.length.toString()} Icon={Receipt} color="from-blue-600 to-indigo-500" />
+              <KPICard label="servicios" value={completed.length.toString()} Icon={Receipt} color="from-blue-600 to-indigo-500" />
               <KPICard label="Desistidos" value={desisted.length.toString()} Icon={AlertTriangle} color="from-red-600 to-rose-500" />
             </div>
 
@@ -271,7 +271,7 @@ export function OwnerView() {
               <p className="text-3xl font-bold text-slate-900">
                 {Math.floor(avgDuration / 60)}m <span className="text-lg text-slate-500">{avgDuration % 60}s</span>
               </p>
-              <p className="text-xs text-slate-500 mt-1">Basado en {completed.length} lavados completados</p>
+              <p className="text-xs text-slate-500 mt-1">Basado en {completed.length} servicios completados</p>
             </section>
           </div>
         )}
@@ -279,7 +279,7 @@ export function OwnerView() {
         {/* LIQUIDATION TAB */}
         {tab === 'liquidation' && (
           <div className="space-y-3 animate-fadeIn">
-            <h3 className="text-sm font-semibold text-slate-600">Liquidación diaria por lavador</h3>
+            <h3 className="text-sm font-semibold text-slate-600">Liquidación diaria por servicior</h3>
             {[...liquidation.values()].sort((a, b) => b.revenue - a.revenue).map((liq) => (
               <div key={liq.name} className="bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-4">
                 <div className="flex items-center justify-between mb-3">
@@ -289,7 +289,7 @@ export function OwnerView() {
                     </div>
                     <div>
                       <div className="font-semibold text-sm">{liq.name}</div>
-                      <div className="text-xs text-slate-500">{liq.count} lavados</div>
+                      <div className="text-xs text-slate-500">{liq.count} servicios</div>
                     </div>
                   </div>
                 </div>

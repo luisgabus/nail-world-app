@@ -497,14 +497,14 @@ export async function seedDefaultOperators(businessId: string): Promise<void> {
   const existing = await fetchOperators(businessId);
   if (existing.length > 0) return;
 
-  const defaults = ['Lavador 1', 'Lavador 2', 'Lavador 3'];
+  const defaults = ['servicior 1', 'servicior 2', 'servicior 3'];
   for (let i = 0; i < defaults.length; i++) {
     const op: Operator = {
       id: uuid(),
       business_id: businessId,
       name: defaults[i],
       active: true,
-      role: 'lavador',
+      role: 'servicior',
       phone: null,
       address: null,
       document_id: null,
@@ -527,7 +527,7 @@ export async function seedDefaultInventory(businessId: string): Promise<void> {
   const defaults = [
     { name: 'Shampoo Automotriz', unit: 'litros', quantity: 20, min_quantity: 5 },
     { name: 'Cera Pulidora', unit: 'unidades', quantity: 10, min_quantity: 3 },
-    { name: 'Jabón Lavado', unit: 'kilos', quantity: 15, min_quantity: 4 },
+    { name: 'Jabón servicio', unit: 'kilos', quantity: 15, min_quantity: 4 },
     { name: 'Paños Microfibra', unit: 'unidades', quantity: 50, min_quantity: 10 },
   { name: 'Desengrasante', unit: 'litros', quantity: 8, min_quantity: 3 },
   ];

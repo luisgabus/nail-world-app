@@ -19,7 +19,7 @@ interface LiquidationModalProps {
 }
 
 const QUICK_SERVICES = [
-  { name: 'Lavado de motor', amount: 10000 },
+  { name: 'servicio de motor', amount: 10000 },
   { name: 'Encerado', amount: 10000 },
   { name: 'Chasis', amount: 10000 },
   { name: 'Limpieza interior', amount: 8000 },
@@ -196,14 +196,14 @@ export default function LiquidationModal({ wash, operators, onClose, onConfirm }
             </div>
             <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-xl p-3">
               <div className="flex items-center gap-2 text-xs text-slate-500 mb-1">
-                <User className="w-3.5 h-3.5" /> Lavador responsable
+                <User className="w-3.5 h-3.5" /> servicior responsable
               </div>
               <select
                 value={selectedOperatorId}
                 onChange={(e) => setSelectedOperatorId(e.target.value)}
                 className="w-full bg-slate-100 text-sm font-medium text-slate-900 rounded-lg px-2 py-1.5 focus:outline-none border border-[#E2E8F0]"
               >
-                <option value="">Sin operario</option>
+                <option value="">Sin Especialista</option>
                 {operators.filter((o) => o.active).map((op) => (
                   <option key={op.id} value={op.id}>{op.name}</option>
                 ))}
@@ -213,7 +213,7 @@ export default function LiquidationModal({ wash, operators, onClose, onConfirm }
 
           {/* Base price */}
           <div>
-            <label className="text-xs text-slate-500 mb-1.5 block font-medium">Precio base del lavado</label>
+            <label className="text-xs text-slate-500 mb-1.5 block font-medium">Precio base del servicio</label>
             <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-xl p-3 flex items-center gap-2">
               <span className="text-slate-500 text-sm">$</span>
               <input

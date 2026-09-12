@@ -34,7 +34,7 @@ import LiquidationModal from './LiquidationModal';
 
 type View = 'main' | 'operators' | 'categories' | 'staff';
 
-const ACTIVE_STATUSES: WashStatus[] = ['en_espera', 'en_lavado', 'listo'];
+const ACTIVE_STATUSES: WashStatus[] = ['en_espera', 'en_servicio', 'listo'];
 
 function minutesBetween(from: string, to: string): number {
   return Math.max(0, Math.floor((new Date(to).getTime() - new Date(from).getTime()) / 60000));
@@ -43,7 +43,7 @@ function minutesBetween(from: string, to: string): number {
 function statusLabel(s: WashStatus): string {
   switch (s) {
     case 'en_espera': return 'En Espera';
-    case 'en_lavado': return 'En Lavado';
+    case 'en_servicio': return 'En servicio';
     case 'listo': return 'Listo';
     case 'completado': return 'Completado';
     case 'desistido': return 'Desistido';
@@ -62,7 +62,7 @@ function washTotal(w: Wash): number {
 function statusColor(s: WashStatus): string {
   switch (s) {
     case 'en_espera': return 'text-amber-700 bg-amber-100';
-    case 'en_lavado': return 'text-emerald-700 bg-emerald-100';
+    case 'en_servicio': return 'text-emerald-700 bg-emerald-100';
     case 'listo': return 'text-blue-700 bg-blue-100';
     case 'completado': return 'text-emerald-700 bg-emerald-100';
     case 'desistido': return 'text-red-700 bg-red-100';
@@ -72,7 +72,7 @@ function statusColor(s: WashStatus): string {
 function cardTint(s: WashStatus): string {
   switch (s) {
     case 'en_espera': return 'bg-amber-50/70 border-amber-200';
-    case 'en_lavado': return 'bg-emerald-50/70 border-emerald-200';
+    case 'en_servicio': return 'bg-emerald-50/70 border-emerald-200';
     case 'listo': return 'bg-blue-50/70 border-blue-200';
     default: return 'bg-white border-[#E2E8F0]';
   }
@@ -255,7 +255,7 @@ export function AdminView() {
   const handleRegister = async () => {
     if (!business || !selectedCategory || saving || !plate.trim()) return;
     if (subState?.isBlocked) {
-      showToast('Suscripción suspendida. No se pueden registrar nuevos vehículos.', 'error');
+      showToast('Suscripción suspendida. No se pueden registrar nuevos clientes.', 'error');
       return;
     }
 
@@ -294,10 +294,10 @@ export function AdminView() {
       await saveWash(wash);
       resetForm();
       await loadData();
-      showToast('Vehículo ingresado en cola', 'success');
+      showToast('cliente ingresado en cola', 'success');
     } catch (err) {
       console.error('Error registering wash:', err);
-      showToast('Error al registrar el lavado. Intenta de nuevo.', 'error');
+      showToast('Error al registrar el servicio. Intenta de nuevo.', 'error');
     } finally {
       setSaving(false);
     }
@@ -310,7 +310,7 @@ export function AdminView() {
       setWashes((prev) => prev.map((x) => (x.id === w.id ? { ...x, operator_id: op.id, operator_name: op.name } : x)));
       await updateWashStatus(w.id, w.status, { operator_id: op.id, operator_name: op.name });
       await loadData();
-      showToast(`Lavado #${w.ticket_number} reasignado a ${op.name}`, 'success');
+      showToast(`servicio #${w.ticket_number} reasignado a ${op.name}`, 'success');
     } catch (err) {
       console.error('Error reassigning operator:', err);
       showToast('Error al reasignar el especialista', 'error');
@@ -326,12 +326,12 @@ export function AdminView() {
     }
     try {
       const now = new Date().toISOString();
-      await updateWashStatus(w.id, 'en_lavado', { started_at: now });
+      await updateWashStatus(w.id, 'en_servicio', { started_at: now });
       await loadData();
-      showToast('Lavado iniciado', 'success');
+      showToast('servicio iniciado', 'success');
     } catch (err) {
       console.error('Error starting wash:', err);
-      showToast('Error al iniciar el lavado', 'error');
+      showToast('Error al iniciar el servicio', 'error');
     }
   };
 
@@ -379,7 +379,7 @@ export function AdminView() {
       showToast('Servicio finalizado y liquidado correctamente', 'success');
     } catch (err) {
       console.error('Error finishing wash:', err);
-      showToast('Error al finalizar el lavado', 'error');
+      showToast('Error al finalizar el servicio', 'error');
     }
   };
 
@@ -400,10 +400,10 @@ export function AdminView() {
       setDeliverPaymentMethod(null);
       await loadData();
       setTicketModal(completedWash);
-      showToast('Vehículo entregado y cobrado', 'success');
+      showToast('cliente entregado y cobrado', 'success');
     } catch (err) {
       console.error('Error delivering wash:', err);
-      showToast('Error al entregar el lavado', 'error');
+      showToast('Error al entregar el servicio', 'error');
     } finally {
       setDeliverSaving(false);
     }
@@ -535,15 +535,15 @@ export function AdminView() {
     const fullName = w.customer_name || 'Cliente';
     const washTotal = (w.total_price ?? (w.price + (w.additional_total ?? 0))) + w.tip;
     const total = washTotal.toLocaleString('es-CO');
-    const plateText = w.plate ? ` con placa ${w.plate}` : '';
-    const msg = `¡Hola ${fullName}! 🚗✨\n\nLe avisamos con gusto que su vehículo ${w.category_name}${plateText} (Ticket #${w.ticket_number}) ya está listo para retirar.\n\nValor a pagar: ${total}\n\n¡Gracias por preferirnos! 🙌`;
+    const plateText = w.plate ? ` con identificación ${w.plate}` : '';
+    const msg = `¡Hola ${fullName}! 🚗✨\n\nLe avisamos con gusto que su cliente ${w.category_name}${plateText} (Ticket #${w.ticket_number}) ya está listo para retirar.\n\nValor a pagar: ${total}\n\n¡Gracias por preferirnos! 🙌`;
     return `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
   };
 
-  // Operators currently washing (en_lavado only — en_espera is queued, not busy)
+  // Operators currently washing (en_servicio only — en_espera is queued, not busy)
   const busyOperatorIds = new Set(
     washes
-      .filter((w) => w.status === 'en_lavado' && w.operator_id)
+      .filter((w) => w.status === 'en_servicio' && w.operator_id)
       .map((w) => w.operator_id!)
   );
 
@@ -568,7 +568,7 @@ export function AdminView() {
       const currentOp = w.operator_id ? operators.find((o) => o.id === w.operator_id) : undefined;
       const entry = map.get(key) ?? {
         operator_id: w.operator_id,
-        operator_name: currentOp?.name || w.operator_name || 'Sin operario',
+        operator_name: currentOp?.name || w.operator_name || 'Sin Especialista',
         washes: 0, revenue: 0, commission: 0, tips: 0, advances: 0, total: 0,
       };
       if (currentOp?.name) entry.operator_name = currentOp.name;
@@ -826,7 +826,7 @@ export function AdminView() {
         <section>
           <h2 className="text-sm font-semibold text-slate-500 mb-2 flex items-center gap-2">
             <Timer className="w-4 h-4 text-amber-600" />
-            Vehículos Activos
+            clientes Activos
             {shiftPending.length > 0 && (
               <span className="px-2 py-0.5 rounded-full bg-amber-50 text-amber-600 text-xs font-bold">
                 {shiftPending.length}
@@ -836,14 +836,14 @@ export function AdminView() {
           <div className="space-y-2">
             {shiftPending.length === 0 && (
               <div className="text-center py-6 text-slate-500 text-sm bg-white border border-[#E2E8F0] shadow-sm rounded-xl">
-                No hay vehículos activos. Registra un nuevo lavado abajo.
+                No hay clientes activos. Registra un nuevo servicio abajo.
               </div>
             )}
             {shiftPending.map((w) => {
               const now = new Date().toISOString();
               const elapsedMin = w.status === 'en_espera'
                 ? minutesBetween(w.created_at, now)
-                : w.status === 'en_lavado' && w.started_at
+                : w.status === 'en_servicio' && w.started_at
                   ? minutesBetween(w.started_at, now)
                   : w.status === 'listo' && w.started_at && w.completed_at
                     ? minutesBetween(w.started_at, w.completed_at)
@@ -872,7 +872,7 @@ export function AdminView() {
                   {/* Row 2: operator + price */}
                   <div className="flex items-center justify-between text-xs text-slate-500">
                     <div className="relative">
-                      {(w.status === 'en_espera' || w.status === 'en_lavado') ? (
+                      {(w.status === 'en_espera' || w.status === 'en_servicio') ? (
                         <button
                           onClick={() => setReassignTarget(reassignTarget === w.id ? null : w.id)}
                           className="action-control action-surface flex items-center gap-1.5 px-1.5 py-1 -ml-1.5 rounded-lg border border-blue-200/80 text-slate-500"
@@ -912,7 +912,7 @@ export function AdminView() {
                           onClick={() => handleStartWash(w)}
                           className="action-control action-surface flex-1 py-2.5 border border-blue-200/80 font-semibold rounded-lg flex items-center justify-center gap-1.5 text-sm text-blue-600"
                         >
-                          <Play className="w-4 h-4" /> Iniciar Lavado
+                          <Play className="w-4 h-4" /> Iniciar servicio
                         </button>
                         <button
                           onClick={() => { setDesistidoTarget(w); setCancellationReason(''); }}
@@ -922,12 +922,12 @@ export function AdminView() {
                         </button>
                       </>
                     )}
-                    {w.status === 'en_lavado' && (
+                    {w.status === 'en_servicio' && (
                       <button
                         onClick={() => handleFinishWash(w)}
                         className="action-control action-surface flex-1 py-2.5 border border-blue-200/80 text-blue-600 font-semibold rounded-lg flex items-center justify-center gap-1.5 text-sm"
                       >
-                        <Square className="w-4 h-4" /> Finalizar Lavado
+                        <Square className="w-4 h-4" /> Finalizar servicio
                       </button>
                     )}
                     {w.status === 'listo' && (
@@ -966,14 +966,14 @@ export function AdminView() {
         {/* ===== Registration form ===== */}
         <div className="border-t border-[#E2E8F0] pt-4 space-y-4">
           <h2 className="text-sm font-bold text-slate-600 flex items-center gap-2">
-            <Plus className="w-4 h-4 text-emerald-600" /> Registrar Nuevo Vehículo
+            <Plus className="w-4 h-4 text-emerald-600" /> Registrar Nuevo cliente
           </h2>
 
           {/* Step 1: Category */}
           <section>
             <h3 className="text-sm font-semibold text-slate-500 mb-2 flex items-center gap-2">
               <span className="w-5 h-5 rounded-full bg-blue-500 text-white text-xs flex items-center justify-center font-bold">1</span>
-              Selecciona el vehículo
+              Selecciona el cliente
             </h3>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {categories.filter((c) => c.active).map((cat) => {
@@ -1027,7 +1027,7 @@ export function AdminView() {
                       <div className={`w-8 h-8 rounded-full flex items-center justify-center ${isSelected ? 'bg-emerald-400 text-slate-900' : isBusy ? 'bg-amber-50 text-amber-600' : 'bg-slate-100 text-slate-500'}`}>
                         <User className="w-4 h-4" />
                       </div>
-                      <span className="text-sm font-medium truncate">{op.name}{isBusy && <span className="text-amber-600 text-xs ml-1">(En lavado)</span>}</span>
+                      <span className="text-sm font-medium truncate">{op.name}{isBusy && <span className="text-amber-600 text-xs ml-1">(En servicio)</span>}</span>
                     </button>
                   );
                 })}
@@ -1040,10 +1040,10 @@ export function AdminView() {
             <section className="animate-fadeIn">
               <h3 className="text-sm font-semibold text-slate-500 mb-2 flex items-center gap-2">
                 <span className="w-5 h-5 rounded-full bg-blue-500 text-white text-xs flex items-center justify-center font-bold">3</span>
-                Ajusta precio del lavado
+                Ajusta precio del servicio
               </h3>
               <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-4">
-                <label className="text-xs text-slate-500 mb-1 block">Precio del lavado</label>
+                <label className="text-xs text-slate-500 mb-1 block">Precio del servicio</label>
                 <input
                   type="number"
                   value={price}
@@ -1054,12 +1054,12 @@ export function AdminView() {
             </section>
           )}
 
-          {/* Step 4: Placa */}
+          {/* Step 4: identificación */}
           {selectedCategory && (
             <section className="animate-fadeIn">
               <h3 className="text-sm font-semibold text-slate-500 mb-2 flex items-center gap-2">
                 <span className="w-5 h-5 rounded-full bg-blue-500 text-white text-xs flex items-center justify-center font-bold">4</span>
-                Placa del vehículo <span className="text-red-600 text-xs">*</span>
+                identificación del cliente <span className="text-red-600 text-xs">*</span>
               </h3>
               <div className="flex gap-2">
                 <div className="flex-1 bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-3 relative">
@@ -1188,7 +1188,7 @@ export function AdminView() {
                     {w.plate && <span className="text-xs font-mono font-bold text-blue-600 bg-cyan-50 px-1.5 py-0.5 rounded">{w.plate}</span>}
                   </div>
                   <div className="text-xs text-slate-500">
-                    {w.operator_name || 'Sin operario'} · {new Date(w.created_at).toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' })}
+                    {w.operator_name || 'Sin Especialista'} · {new Date(w.created_at).toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' })}
                   </div>
                 </div>
                 <div className="text-right">
@@ -1205,7 +1205,7 @@ export function AdminView() {
             ))}
             {shiftWashes.filter((w) => !ACTIVE_STATUSES.includes(w.status)).length === 0 && (
               <div className="text-center py-4 text-slate-500 text-sm">
-                No hay lavados completados en este turno
+                No hay servicios completados en este turno
               </div>
             )}
           </div>
@@ -1222,7 +1222,7 @@ export function AdminView() {
               </div>
               <div>
                 <h2 className="text-lg font-bold text-slate-900">Registrar Desistido</h2>
-                <p className="text-sm text-slate-500">#{desistidoTarget.ticket_number} · {desistidoTarget.plate ?? 'Sin placa'}</p>
+                <p className="text-sm text-slate-500">#{desistidoTarget.ticket_number} · {desistidoTarget.plate ?? 'Sin identificación'}</p>
               </div>
             </div>
 
@@ -1286,10 +1286,10 @@ export function AdminView() {
 
             <div className="bg-slate-50 rounded-2xl p-4 space-y-2 text-sm font-mono text-slate-800">
               <div className="flex justify-between"><span>Negocio:</span><span className="font-semibold">{business.name}</span></div>
-              <div className="flex justify-between"><span>Vehículo:</span><span className="font-semibold">{ticketModal.category_name}</span></div>
-              <div className="flex justify-between"><span>Placa:</span><span className="font-semibold">{ticketModal.plate ?? 'N/A'}</span></div>
+              <div className="flex justify-between"><span>cliente:</span><span className="font-semibold">{ticketModal.category_name}</span></div>
+              <div className="flex justify-between"><span>identificación:</span><span className="font-semibold">{ticketModal.plate ?? 'N/A'}</span></div>
               <div className="flex justify-between"><span>especialista:</span><span className="font-semibold">{ticketModal.operator_name || 'N/A'}</span></div>
-              <div className="flex justify-between"><span>Lavado:</span><span>${ticketModal.price.toLocaleString('es-CO')}</span></div>
+              <div className="flex justify-between"><span>servicio:</span><span>${ticketModal.price.toLocaleString('es-CO')}</span></div>
               {(ticketModal.additionals_detail ?? []).map((d, i) => (
                 <div key={i} className="flex justify-between text-slate-500"><span>+ {d.name}:</span><span>${d.amount.toLocaleString('es-CO')}</span></div>
               ))}
@@ -1313,7 +1313,7 @@ export function AdminView() {
                       <span className="font-bold">Premio de Fidelizacion!</span>
                       <span>
                         {business.loyalty_reward_type === 'free'
-                          ? 'Esta visita es un lavado sin costo.'
+                          ? 'Esta visita es un servicio sin costo.'
                           : `Descuento del ${business.loyalty_discount_percent}% aplicado.`}
                       </span>
                     </div>
@@ -1324,7 +1324,7 @@ export function AdminView() {
                   return (
                     <div className="mt-2 text-xs text-amber-600 flex items-center gap-1">
                       <Gift className="w-3 h-3" />
-                      Te faltan {remaining} lavado{remaining !== 1 ? 's' : ''} para tu premio.
+                      Te faltan {remaining} servicio{remaining !== 1 ? 's' : ''} para tu premio.
                     </div>
                   );
                 }
@@ -1450,7 +1450,7 @@ export function AdminView() {
                     <div className="flex items-center justify-between">
                       <div>
                         <div className="text-sm font-medium text-slate-900">{liq.operator_name}</div>
-                        <div className="text-xs text-slate-500">{liq.washes} lavados · ${liq.commission.toLocaleString('es-CO')} comisión + ${liq.tips.toLocaleString('es-CO')} prop.</div>
+                        <div className="text-xs text-slate-500">{liq.washes} servicios · ${liq.commission.toLocaleString('es-CO')} comisión + ${liq.tips.toLocaleString('es-CO')} prop.</div>
                       </div>
                       <div className="text-right">
                         <div className="font-bold text-amber-600">${liq.total.toLocaleString('es-CO')}</div>
@@ -1472,7 +1472,7 @@ export function AdminView() {
                   </div>
                 ))}
                 {operatorLiquidation.length === 0 && (
-                  <p className="text-center text-slate-500 text-sm py-3">Sin lavados cobrados en este turno</p>
+                  <p className="text-center text-slate-500 text-sm py-3">Sin servicios cobrados en este turno</p>
                 )}
               </div>
             </div>
@@ -1480,7 +1480,7 @@ export function AdminView() {
             {/* Wash detail list */}
             {shiftCompleted.length > 0 && (
               <div className="mb-4">
-                <h3 className="text-sm font-semibold text-slate-600 mb-2">Lavados cobrados del turno</h3>
+                <h3 className="text-sm font-semibold text-slate-600 mb-2">servicios cobrados del turno</h3>
                 <div className="space-y-1.5 max-h-40 overflow-y-auto">
                   {shiftCompleted.map((w) => (
                     <div key={w.id} className="flex items-center justify-between bg-white border border-[#E2E8F0] shadow-sm rounded-lg px-3 py-2 text-xs">
@@ -1988,9 +1988,9 @@ export function AdminView() {
 
             <div className="space-y-3 mb-4">
               <div>
-                <label className="text-xs text-slate-500 mb-1 block">Lavador</label>
+                <label className="text-xs text-slate-500 mb-1 block">servicior</label>
                 <div className="grid grid-cols-2 gap-2">
-                  {operators.filter((o) => o.active && o.role === 'lavador').map((op) => (
+                  {operators.filter((o) => o.active && o.role === 'servicior').map((op) => (
                     <button
                       key={op.id}
                       onClick={() => setAdvanceOperator(op)}
@@ -2124,14 +2124,14 @@ export function AdminView() {
                 <LogOut className="w-5 h-5" />
               </button>
               <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-                <ClipboardList className="w-5 h-5 text-indigo-600" /> Liquidación de Lavadores
+                <ClipboardList className="w-5 h-5 text-indigo-600" /> Liquidación de serviciores
               </h2>
             </div>
 
             {operatorLiquidation.length === 0 ? (
               <div className="text-center py-12 text-slate-500">
                 <ClipboardList className="w-12 h-12 mx-auto mb-3 opacity-50" />
-                <p>No hay lavados cobrados en este turno</p>
+                <p>No hay servicios cobrados en este turno</p>
               </div>
             ) : (
               <div className="space-y-4">
@@ -2145,7 +2145,7 @@ export function AdminView() {
                         </div>
                         <div className="flex-1">
                           <div className="font-bold text-slate-900">{liq.operator_name}</div>
-                          <div className="text-xs text-slate-500">{liq.washes} lavados completados</div>
+                          <div className="text-xs text-slate-500">{liq.washes} servicios completados</div>
                         </div>
                       </div>
 
@@ -2257,7 +2257,7 @@ function LoyaltyConfigModal({
           {enabled && (
             <div className="space-y-4 animate-fadeIn">
               <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-xl p-4">
-                <label className="text-xs text-slate-500 mb-2 block">Lavados necesarios para premio</label>
+                <label className="text-xs text-slate-500 mb-2 block">servicios necesarios para premio</label>
                 <input
                   type="number"
                   value={threshold}
@@ -2290,7 +2290,7 @@ function LoyaltyConfigModal({
                         : 'action-surface text-slate-500'
                     }`}
                   >
-                    Lavado Gratis
+                    servicio Gratis
                   </button>
                   <button
                     onClick={() => setRewardType('discount')}
@@ -2333,8 +2333,8 @@ function LoyaltyConfigModal({
               <div className="bg-amber-50 border border-amber-200 rounded-xl p-3">
                 <p className="text-xs text-slate-500">
                   {rewardType === 'free'
-                    ? `Al completar ${threshold} lavados, la siguiente visita será un lavado sin costo.`
-                    : `Al completar ${threshold} lavados, la siguiente visita tendrá ${discountPercent}% de descuento.`}
+                    ? `Al completar ${threshold} servicios, la siguiente visita será un servicio sin costo.`
+                    : `Al completar ${threshold} servicios, la siguiente visita tendrá ${discountPercent}% de descuento.`}
                 </p>
               </div>
             </div>

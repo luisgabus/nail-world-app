@@ -51,12 +51,12 @@ export function generateTicketText(wash: Wash, business: Business): string {
   Ticket #: ${wash.ticket_number}
   Fecha:   ${date}
 
-  Vehículo:  ${wash.category_name}
-  Placa:     ${wash.plate || 'N/A'}
-  Operario:  ${wash.operator_name || 'N/A'}
-  Estado:    ${wash.status === 'completado' ? 'COMPLETADO' : wash.status === 'desistido' ? 'DESISTIDO' : wash.status === 'en_espera' ? 'EN ESPERA' : wash.status === 'en_lavado' ? 'EN LAVADO' : 'LISTO'}
+  cliente:  ${wash.category_name}
+  identificación:     ${wash.plate || 'N/A'}
+  Especialista:  ${wash.operator_name || 'N/A'}
+  Estado:    ${wash.status === 'completado' ? 'COMPLETADO' : wash.status === 'desistido' ? 'DESISTIDO' : wash.status === 'en_espera' ? 'EN ESPERA' : wash.status === 'en_servicio' ? 'EN servicio' : 'LISTO'}
 
-  Lavado:    $${amount(wash.price).toLocaleString('es-CO')}
+  servicio:    $${amount(wash.price).toLocaleString('es-CO')}
 ${extraLines}${ticketTip(wash) > 0 ? `  Propina:   $${ticketTip(wash).toLocaleString('es-CO')}\n` : ''}
   -------------------------------
   TOTAL:     ${total.toLocaleString('es-CO')}
@@ -101,14 +101,14 @@ export function generateTicketHTML(wash: Wash, business: Business): string {
   </div>
   <div style="border-top: 1px dashed #000; margin: 10px 0;"></div>
   <div style="font-size: 13px;">
-    <div>Vehículo: <strong>${wash.category_name}</strong></div>
-    <div>Placa: <strong>${wash.plate || 'N/A'}</strong></div>
-    <div>Operario: ${wash.operator_name || 'N/A'}</div>
-    <div>Estado: ${wash.status === 'completado' ? 'COMPLETADO' : wash.status === 'desistido' ? 'DESISTIDO' : wash.status === 'en_espera' ? 'EN ESPERA' : wash.status === 'en_lavado' ? 'EN LAVADO' : 'LISTO'}</div>
+    <div>cliente: <strong>${wash.category_name}</strong></div>
+    <div>identificación: <strong>${wash.plate || 'N/A'}</strong></div>
+    <div>Especialista: ${wash.operator_name || 'N/A'}</div>
+    <div>Estado: ${wash.status === 'completado' ? 'COMPLETADO' : wash.status === 'desistido' ? 'DESISTIDO' : wash.status === 'en_espera' ? 'EN ESPERA' : wash.status === 'en_servicio' ? 'EN servicio' : 'LISTO'}</div>
   </div>
   <div style="border-top: 1px dashed #000; margin: 10px 0;"></div>
   <div style="font-size: 13px;">
-    <div style="display: flex; justify-content: space-between;"><span>Lavado:</span><span>$${amount(wash.price).toLocaleString('es-CO')}</span></div>
+    <div style="display: flex; justify-content: space-between;"><span>servicio:</span><span>$${amount(wash.price).toLocaleString('es-CO')}</span></div>
     ${extraRows}
     ${ticketTip(wash) > 0 ? `<div style="display: flex; justify-content: space-between;"><span>Propina:</span><span>$${ticketTip(wash).toLocaleString('es-CO')}</span></div>` : ''}
     <div style="border-top: 1px solid #000; margin: 5px 0;"></div>

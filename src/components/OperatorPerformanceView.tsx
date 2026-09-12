@@ -71,7 +71,7 @@ export function OperatorPerformanceView({ washes }: { washes: Wash[] }) {
   const ranking = useMemo(() => {
     const map = new Map<string, OperatorStats>();
     for (const w of completedInRange) {
-      const name = w.operator_name || 'Sin operario';
+      const name = w.operator_name || 'Sin Especialista';
       const entry = map.get(name) ?? { name, cars: 0, revenue: 0, totalDuration: 0, avgDuration: 0, avgTicket: 0 };
       entry.cars++;
       entry.revenue += washTotal(w);
@@ -97,7 +97,7 @@ export function OperatorPerformanceView({ washes }: { washes: Wash[] }) {
   return (
     <div className="space-y-4 animate-fadeIn">
       <h3 className="text-sm font-semibold text-slate-600 flex items-center gap-2">
-        <Users className="w-4 h-4 text-amber-600" /> Rendimiento de Lavadores
+        <Users className="w-4 h-4 text-amber-600" /> Rendimiento de serviciores
       </h3>
 
       {/* Period selector */}
@@ -225,7 +225,7 @@ export function OperatorPerformanceView({ washes }: { washes: Wash[] }) {
           <div className="text-center py-12">
             <Users className="w-12 h-12 text-slate-700 mx-auto mb-3" />
             <p className="text-slate-500 text-sm">Sin datos en este período</p>
-            <p className="text-slate-500 text-xs mt-1">Los lavados completados aparecerán aquí</p>
+            <p className="text-slate-500 text-xs mt-1">Los servicios completados aparecerán aquí</p>
           </div>
         )}
       </div>

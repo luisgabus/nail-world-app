@@ -90,12 +90,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "description",
         content:
-          "Gestión inteligente de lavaderos de vehículos - Operatividad rápida e inteligencia de negocio",
+          "Gestión inteligente de lavaderos de clientes - Operatividad rápida e inteligencia de negocio",
       },
       { property: "og:title", content: "CarWash Pro" },
       {
         property: "og:description",
-        content: "Gestión inteligente de lavaderos de vehículos",
+        content: "Gestión inteligente de lavaderos de clientes",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

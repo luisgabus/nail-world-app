@@ -130,7 +130,7 @@ export function PlateScannerModal({
             </div>
             <div>
               <h2 className="text-lg font-bold text-slate-900">Fotografía de Soporte</h2>
-              <p className="text-sm text-slate-500">Toma una foto del vehículo</p>
+              <p className="text-sm text-slate-500">Toma una foto del cliente</p>
             </div>
           </div>
           <button

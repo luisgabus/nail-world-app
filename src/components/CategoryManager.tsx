@@ -66,7 +66,7 @@ export function CategoryManager({ categories, businessId, onBack, onSave, onDele
         <button onClick={onBack} className="p-2 rounded-xl bg-white border border-[#E2E8F0] hover:bg-slate-100 transition-all">
           <ArrowLeft className="w-5 h-5" />
         </button>
-        <h1 className="text-lg font-bold">Categorías de Vehículos</h1>
+        <h1 className="text-lg font-bold">Categorías de clientes</h1>
       </header>
 
       <main className="px-4 py-4 pb-24">

@@ -27,7 +27,7 @@ export const ClientRegistration = () => {
           Alta de Nuevo Cliente
         </h2>
         <p className="text-slate-400 text-sm sm:text-base">
-          Registra tus datos y los de tu vehículo para agilizar el ingreso y recibir atención prioritaria.
+          Registra tus datos y los de tu cliente para agilizar el ingreso y recibir atención prioritaria.
         </p>
       </div>
 

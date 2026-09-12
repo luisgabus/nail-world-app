@@ -1,4 +1,4 @@
-export type WashStatus = 'en_espera' | 'en_lavado' | 'listo' | 'completado' | 'desistido';
+export type WashStatus = 'en_espera' | 'en_servicio' | 'listo' | 'completado' | 'desistido';
 
 export type PlanType = 'trial' | 'monthly' | 'annual';
 export type SubscriptionStatus = 'active' | 'grace' | 'suspended';
@@ -57,7 +57,7 @@ export interface AdminProfile {
   created_at: string;
 }
 
-export type WorkerRole = 'socio' | 'encargada' | 'lavador';
+export type WorkerRole = 'socio' | 'encargada' | 'servicior';
 export type PaymentMethod = 'nequi' | 'daviplata' | 'efectivo';
 
 export interface Operator {
