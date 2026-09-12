@@ -22,7 +22,7 @@ export function OperatorManager({ operators, businessId, onBack, onSave, onDelet
       business_id: businessId,
       name: newName.trim(),
       active: true,
-      role: 'lavador',
+      role: 'Especialista',
       phone: null,
       address: null,
       document_id: null,
@@ -46,7 +46,7 @@ export function OperatorManager({ operators, businessId, onBack, onSave, onDelet
         <button onClick={onBack} className="p-2 rounded-xl bg-white border border-[#E2E8F0] hover:bg-slate-100 transition-all">
           <ArrowLeft className="w-5 h-5" />
         </button>
-        <h1 className="text-lg font-bold">Gestión de Operarios</h1>
+        <h1 className="text-lg font-bold">Gestión de Especialistas</h1>
       </header>
 
       <main className="px-4 py-4 pb-24">
@@ -54,7 +54,7 @@ export function OperatorManager({ operators, businessId, onBack, onSave, onDelet
           onClick={() => setShowAdd(true)}
           className="action-control w-full py-3 mb-4 bg-gradient-to-br from-blue-600 to-blue-500 border border-blue-200/80 text-white font-semibold rounded-xl flex items-center justify-center gap-2"
         >
-          <Plus className="w-5 h-5" /> Agregar Operario
+          <Plus className="w-5 h-5" /> Agregar Especialista
         </button>
 
         <div className="space-y-2">
@@ -76,7 +76,7 @@ export function OperatorManager({ operators, businessId, onBack, onSave, onDelet
             </div>
           ))}
           {operators.length === 0 && (
-            <p className="text-center text-slate-500 py-8 text-sm">No hay operarios registrados</p>
+            <p className="text-center text-slate-500 py-8 text-sm">No hay especialistas registrados</p>
           )}
         </div>
       </main>
@@ -85,7 +85,7 @@ export function OperatorManager({ operators, businessId, onBack, onSave, onDelet
         <div className="fixed inset-0 z-50 bg-slate-900/30 backdrop-blur-md flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl border border-[#E2E8F0] p-6 w-full max-w-sm shadow-2xl">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-bold">Nuevo Operario</h2>
+              <h2 className="text-lg font-bold">Nueva especialista</h2>
               <button onClick={() => setShowAdd(false)} className="text-slate-500 hover:text-slate-900">
                 <X className="w-5 h-5" />
               </button>
@@ -95,7 +95,7 @@ export function OperatorManager({ operators, businessId, onBack, onSave, onDelet
               value={newName}
               onChange={(e) => setNewName(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleAdd()}
-              placeholder="Nombre del operario"
+              placeholder="Nombre del especialista"
               className="w-full px-4 py-3 bg-slate-100 border border-[#E2E8F0] rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-200"
               autoFocus
             />
