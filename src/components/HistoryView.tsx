@@ -142,7 +142,7 @@ export function HistoryView({ closures }: { closures: DailyClosure[] }) {
           color="from-blue-600 to-blue-500"
         />
         <KpiCard
-          label="Vehículos Atendidos"
+          label="Servicios Atendidos"
           value={kpis.totalVehicles.toString()}
           Icon={Car}
           color="from-purple-600 to-indigo-500"
@@ -167,7 +167,7 @@ export function HistoryView({ closures }: { closures: DailyClosure[] }) {
                     <div className="font-semibold text-sm">
                       {new Date(c.closure_date + 'T12:00:00').toLocaleDateString('es-CO', { weekday: 'short', day: 'numeric', month: 'short' })}
                     </div>
-                    <div className="text-xs text-slate-500">{c.total_washes} vehículos</div>
+                    <div className="text-xs text-slate-500">{c.total_washes} servicios</div>
                   </div>
                 </div>
                 <button
@@ -255,13 +255,13 @@ function ClosureDetailModal({ closure, onClose }: { closure: DailyClosure; onClo
           </div>
           <div className="flex justify-between items-center text-sm py-2 border-b border-slate-100">
             <span className="text-slate-600 flex items-center gap-2">
-              <Car className="w-4 h-4 text-blue-600" /> Vehículos Atendidos
+              <Car className="w-4 h-4 text-blue-600" /> Servicios Atendidos
             </span>
             <span className="font-bold text-blue-600">{closure.total_washes}</span>
           </div>
           <div className="flex justify-between items-center text-sm py-2 border-b border-slate-100">
             <span className="text-slate-600 flex items-center gap-2">
-              <HandCoins className="w-4 h-4 text-amber-600" /> Pago Operarios ({Math.round(rate * 100)}% + propinas)
+              <HandCoins className="w-4 h-4 text-amber-600" /> Pago Especialistas ({Math.round(rate * 100)}% + propinas)
             </span>
             <span className="font-bold text-amber-600">-${operatorPay.toLocaleString('es-CO')}</span>
           </div>
@@ -278,17 +278,17 @@ function ClosureDetailModal({ closure, onClose }: { closure: DailyClosure; onClo
             </div>
           )}
           <div className="flex justify-between items-center py-3 bg-gradient-to-r from-amber-500/10 to-orange-500/10 rounded-xl px-3 mt-2">
-            <span className="text-sm font-medium text-amber-700">Saldo Neto (Ganancia Lavadero)</span>
+            <span className="text-sm font-medium text-amber-700">Saldo Neto (Ganancia salón)</span>
             <span className="text-xl font-bold text-amber-600">${closure.net_cash.toLocaleString('es-CO')}</span>
           </div>
-          <p className="text-[10px] text-slate-500 text-center">Las propinas entran a caja y salen directo a operarios; no afectan la utilidad del lavadero.</p>
+          <p className="text-[10px] text-slate-500 text-center">Las propinas entran a caja y salen directo a especialistas; no afectan la utilidad del lavadero.</p>
         </div>
 
         {/* Operator liquidation breakdown */}
         {closure.operator_liquidation.length > 0 && (
           <div>
             <h3 className="text-sm font-semibold text-slate-600 mb-3 flex items-center gap-2">
-              <Users className="w-4 h-4 text-amber-600" /> Liquidación por Lavador
+              <Users className="w-4 h-4 text-amber-600" /> Liquidación por Especialista
             </h3>
             <div className="space-y-2">
               {closure.operator_liquidation.map((liq) => {
@@ -302,7 +302,7 @@ function ClosureDetailModal({ closure, onClose }: { closure: DailyClosure; onClo
                         </div>
                         <div>
                           <div className="text-sm font-medium text-slate-900">{liq.operator_name}</div>
-                          <div className="text-[10px] text-slate-500">{liq.washes} lavados</div>
+                          <div className="text-[10px] text-slate-500">{liq.washes} servicios</div>
                         </div>
                       </div>
                       <div className="text-right">
