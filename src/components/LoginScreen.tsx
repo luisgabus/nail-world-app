@@ -1,5 +1,5 @@
 import { useState, useEffect, type FormEvent } from 'react';
-import { Car, Wifi, WifiOff, Loader2, ArrowRight } from 'lucide-react';
+import { Sparkles, Wifi, WifiOff, Loader2, ArrowRight } from 'lucide-react';
 import { useApp } from '@/lib/store';
 import { fetchBusinessByCodigo, createBusiness, seedDefaultCategories, seedDefaultOperators, seedDefaultInventory } from '@/lib/data';
 import { isOnline } from '@/lib/sync';
@@ -82,10 +82,10 @@ export function LoginScreen() {
         {/* Logo */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-br from-blue-600 to-blue-500 shadow-lg shadow-blue-500/30 mb-4">
-            <Car className="w-10 h-10 text-white" strokeWidth={2.5} />
+            <Sparkles className="w-10 h-10 text-white" strokeWidth={2.5} />
           </div>
-          <h1 className="text-3xl font-bold text-slate-900 tracking-tight">CarWash Pro</h1>
-          <p className="text-slate-500 mt-2 text-sm">Gestión inteligente de lavaderos</p>
+          <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Nail World</h1>
+          <p className="text-slate-500 mt-2 text-sm">Gestión inteligente de salones</p>
         </div>
 
         {/* Card */}
@@ -134,7 +134,7 @@ export function LoginScreen() {
                   <Loader2 className="w-5 h-5 animate-spin" />
                 ) : (
                   <>
-                    Ingresar como Piso
+                    Ingresar como Recepción
                     <ArrowRight className="w-5 h-5" />
                   </>
                 )}
@@ -150,7 +150,7 @@ export function LoginScreen() {
                   <Loader2 className="w-5 h-5 animate-spin" />
                 ) : (
                   <>
-                    Ingresar como Dueño
+                    Ingresar como Administrador
                     <ArrowRight className="w-5 h-5" />
                   </>
                 )}
