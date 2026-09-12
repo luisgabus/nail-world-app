@@ -46,7 +46,7 @@ export const ClientRegistration = () => {
               }}
               className="text-xs text-slate-400 hover:text-white underline transition-colors"
             >
-              Registrar otro vehículo
+              Registrar otro servicio
             </button>
           </div>
         ) : (
@@ -88,7 +88,7 @@ export const ClientRegistration = () => {
 
               <div>
                 <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
-                  Placa del Vehículo
+                  Nombre de Cliente
                 </label>
                 <div className="relative">
                   <Tag className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
@@ -105,21 +105,22 @@ export const ClientRegistration = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
-                Tipo de Vehículo
-              </label>
-              <div className="relative">
-                <Car className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 pointer-events-none" />
-                <select
-                  value={formData.vehicleType}
-                  onChange={(e) => setFormData({ ...formData, vehicleType: e.target.value })}
-                  className="w-full bg-[#0B0F17] border border-slate-700/80 rounded-xl py-3 pl-11 pr-4 text-sm text-white focus:outline-none focus:border-indigo-500 transition-colors appearance-none cursor-pointer"
-                >
-                  <option value="Sedán">Automóvil / Sedán</option>
-                  <option value="SUV / Camioneta">SUV / Camioneta</option>
-                  <option value="Pickup / 4x4">Pickup / 4x4</option>
-                  <option value="Moto">Motocicleta</option>
-                </select>
+<label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+  Servicio Principal
+</label>
+<div className="relative">
+  <Sparkles className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 pointer-events-none" />
+  <select
+    value={formData.vehicleType}
+    onChange={(e) => setFormData({ ...formData, vehicleType: e.target.value })}
+    className="w-full bg-[#0B0F17] border border-slate-700/80 rounded-xl py-3 pl-11 pr-4 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all appearance-none"
+  >
+    <option value="Manicure Tradicional">Manicure Tradicional</option>
+    <option value="Pedicure Tradicional">Pedicure Tradicional</option>
+    <option value="Acrilicas / Gel">Uñas Acrílicas / Gel</option>
+    <option value="Spa Manos y Pies">Spa de Manos y Pies</option>
+  </select>
+</div>
               </div>
             </div>
 
