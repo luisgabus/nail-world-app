@@ -1528,10 +1528,10 @@ export function AdminView() {
                 <span className="font-semibold text-rose-600">-${shiftAdvancesCash.toLocaleString('es-CO')}</span>
               </div>
               <div className="border-t border-amber-200 pt-2 flex justify-between items-center">
-                <span className="text-sm font-medium text-amber-700">Saldo Neto en Caja (Ganancia Lavadero)</span>
+                <span className="text-sm font-medium text-amber-700">Saldo Neto en Caja (Ganancia Salón)</span>
                 <span className="text-2xl font-bold text-amber-600">${netCash.toLocaleString('es-CO')}</span>
               </div>
-              <p className="text-[10px] text-slate-500">Las propinas entran a caja y salen directo a especialista; no afectan la utilidad del lavadero.</p>
+              <p className="text-[10px] text-slate-500">Las propinas entran a caja y salen directo a especialista; no afectan la utilidad del Salón.</p>
             </div>
 
             {/* Cash arqueo */}
@@ -1730,7 +1730,7 @@ export function AdminView() {
                     )}
 
                     <p className="text-[11px] text-slate-500">
-                      El lavadero retiene el {100 - commissionInput}% sobre los servicios. Las propinas son 100% para las Especialistas.
+                      El Salón retiene el {100 - commissionInput}% sobre los servicios. Las propinas son 100% para las Especialistas.
                     </p>
                   </div>
 

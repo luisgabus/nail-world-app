@@ -6,17 +6,17 @@ const CarWashApp = lazy(() => import("@/carwash/CarWashApp"));
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "CarWash Pro — Gestión de lavaderos" },
+      { title: "CarWash Pro — Gestión de Salóns" },
       {
         name: "description",
         content:
-          "Gestión inteligente de lavaderos de clientes: operatividad rápida, liquidaciones, tickets e inteligencia de negocio.",
+          "Gestión inteligente de Salóns de clientes: operatividad rápida, liquidaciones, tickets e inteligencia de negocio.",
       },
-      { property: "og:title", content: "CarWash Pro — Gestión de lavaderos" },
+      { property: "og:title", content: "CarWash Pro — Gestión de Salóns" },
       {
         property: "og:description",
         content:
-          "Operación diaria, liquidación de Especialistas, cierres de caja y tickets para tu lavadero.",
+          "Operación diaria, liquidación de Especialistas, cierres de caja y tickets para tu Salón.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

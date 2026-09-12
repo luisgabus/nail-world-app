@@ -44,7 +44,7 @@ export function LoginScreen() {
           return;
         }
         
-        biz = await createBusiness(codigo, 'Lavadero Demo');
+        biz = await createBusiness(codigo, 'Salón Demo');
         if (!biz) {
           setError('No se pudo crear el negocio. Intenta de nuevo.');
           setSubmittingRole(null);

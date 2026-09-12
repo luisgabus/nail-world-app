@@ -17,11 +17,11 @@ Entregaré este script en el chat para que lo ejecutes en el editor SQL de tu Su
 
 - Botón primario "+ Nueva Empresa" (icono `Plus` de Lucide) en la cabecera, con el mismo sistema visual y padding del botón "Configurar pagos y tarifas", en azul principal.
 - Abre un modal accesible (fondo oscurecido, tarjeta blanca `rounded-2xl`, borde `#E2E8F0`, cierre con Escape y clic fuera, foco inicial en el primer campo).
-- Campos: Nombre del Lavadero*, Código de Empresa* (mayúsculas automáticas), Nombre del Administrador*, Correo de contacto*, Teléfono (opcional), Plan Inicial (Prueba / Mensual / Anual).
+- Campos: Nombre del Salón*, Código de Empresa* (mayúsculas automáticas), Nombre del Administrador*, Correo de contacto*, Teléfono (opcional), Plan Inicial (Prueba / Mensual / Anual).
 - Validación en cliente: campos obligatorios, formato de correo, código único (aviso si ya existe).
 - Al guardar: se crea la empresa con estado "Activa" y fecha de cobro automática según plan (Prueba +7 días, Mensual +30, Anual +365). Se cierra el modal, se refresca la lista y aparece un Toast de éxito.
 
-## 3. Editar Información (vista de detalle del lavadero)
+## 3. Editar Información (vista de detalle del Salón)
 
 - Botón secundario "Editar Información" (icono `Pencil`) junto al encabezado con nombre y código de la empresa, en el estilo suave azul/verde del panel.
 - Abre un modal con: Nombre de la empresa, Correo de contacto, Teléfono. También se muestran el administrador y el código (solo lectura el código).

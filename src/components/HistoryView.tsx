@@ -130,7 +130,7 @@ export function HistoryView({ closures }: { closures: DailyClosure[] }) {
           color="from-emerald-600 to-green-500"
         />
         <KpiCard
-          label="Ganancia Neta Lavadero"
+          label="Ganancia Neta Salón"
           value={`$${kpis.netCash.toLocaleString('es-CO')}`}
           Icon={TrendingUp}
           color="from-amber-600 to-orange-500"
@@ -281,7 +281,7 @@ function ClosureDetailModal({ closure, onClose }: { closure: DailyClosure; onClo
             <span className="text-sm font-medium text-amber-700">Saldo Neto (Ganancia salón)</span>
             <span className="text-xl font-bold text-amber-600">${closure.net_cash.toLocaleString('es-CO')}</span>
           </div>
-          <p className="text-[10px] text-slate-500 text-center">Las propinas entran a caja y salen directo a especialistas; no afectan la utilidad del lavadero.</p>
+          <p className="text-[10px] text-slate-500 text-center">Las propinas entran a caja y salen directo a especialistas; no afectan la utilidad del Salón.</p>
         </div>
 
         {/* Operator liquidation breakdown */}

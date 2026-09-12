@@ -1,7 +1,7 @@
 {
   "name": "CarWash Pro",
   "short_name": "CarWash",
-  "description": "Gestión inteligente de lavaderos de clientes",
+  "description": "Gestión inteligente de Salóns de clientes",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0f172a",
