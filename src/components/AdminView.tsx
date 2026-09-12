@@ -1988,9 +1988,9 @@ export function AdminView() {
 
             <div className="space-y-3 mb-4">
               <div>
-                <label className="text-xs text-slate-500 mb-1 block">servicior</label>
+                <label className="text-xs text-slate-500 mb-1 block">servicio</label>
                 <div className="grid grid-cols-2 gap-2">
-                  {operators.filter((o) => o.active && o.role === 'servicior').map((op) => (
+                  {operators.filter((o) => o.active && o.role === 'servicio').map((op) => (
                     <button
                       key={op.id}
                       onClick={() => setAdvanceOperator(op)}

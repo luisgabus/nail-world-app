@@ -196,7 +196,7 @@ export default function LiquidationModal({ wash, operators, onClose, onConfirm }
             </div>
             <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-xl p-3">
               <div className="flex items-center gap-2 text-xs text-slate-500 mb-1">
-                <User className="w-3.5 h-3.5" /> servicior responsable
+                <User className="w-3.5 h-3.5" /> servicio responsable
               </div>
               <select
                 value={selectedOperatorId}

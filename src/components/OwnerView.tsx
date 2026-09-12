@@ -279,7 +279,7 @@ export function OwnerView() {
         {/* LIQUIDATION TAB */}
         {tab === 'liquidation' && (
           <div className="space-y-3 animate-fadeIn">
-            <h3 className="text-sm font-semibold text-slate-600">Liquidación diaria por servicior</h3>
+            <h3 className="text-sm font-semibold text-slate-600">Liquidación diaria por servicio</h3>
             {[...liquidation.values()].sort((a, b) => b.revenue - a.revenue).map((liq) => (
               <div key={liq.name} className="bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-4">
                 <div className="flex items-center justify-between mb-3">

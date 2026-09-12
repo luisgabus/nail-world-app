@@ -57,7 +57,7 @@ export interface AdminProfile {
   created_at: string;
 }
 
-export type WorkerRole = 'socio' | 'encargada' | 'servicior';
+export type WorkerRole = 'socio' | 'encargada' | 'servicio';
 export type PaymentMethod = 'nequi' | 'daviplata' | 'efectivo';
 
 export interface Operator {

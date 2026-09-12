@@ -497,14 +497,14 @@ export async function seedDefaultOperators(businessId: string): Promise<void> {
   const existing = await fetchOperators(businessId);
   if (existing.length > 0) return;
 
-  const defaults = ['servicior 1', 'servicior 2', 'servicior 3'];
+  const defaults = ['servicio 1', 'servicio 2', 'servicio 3'];
   for (let i = 0; i < defaults.length; i++) {
     const op: Operator = {
       id: uuid(),
       business_id: businessId,
       name: defaults[i],
       active: true,
-      role: 'servicior',
+      role: 'servicio',
       phone: null,
       address: null,
       document_id: null,

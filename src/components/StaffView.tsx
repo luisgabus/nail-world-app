@@ -18,7 +18,7 @@ interface Props {
 const ROLE_CONFIG: Record<WorkerRole, { label: string; Icon: typeof Crown; color: string; bg: string }> = {
   socio: { label: 'Socios', Icon: Crown, color: 'text-amber-600', bg: 'from-amber-500/20 to-orange-500/20 border-amber-200' },
   encargada: { label: 'Encargadas', Icon: Wallet, color: 'text-blue-600', bg: 'from-cyan-500/20 to-blue-500/20 border-cyan-200' },
-  servicior: { label: 'Especialistas', Icon: Users, color: 'text-emerald-600', bg: 'from-emerald-500/20 to-green-500/20 border-emerald-200' },
+  servicio: { label: 'Especialistas', Icon: Users, color: 'text-emerald-600', bg: 'from-emerald-500/20 to-green-500/20 border-emerald-200' },
 };
 
 const PAYMENT_LABELS: Record<PaymentMethod, string> = {
@@ -53,11 +53,11 @@ export function StaffView({ operators, businessId, onBack, onSave, onDelete }: P
   const [saving, setSaving] = useState(false);
 
   const grouped = useMemo(() => {
-    const roles: WorkerRole[] = ['socio', 'encargada', 'servicior'];
-    const result: Record<WorkerRole, Operator[]> = { socio: [], encargada: [], servicior: [] };
+    const roles: WorkerRole[] = ['socio', 'encargada', 'servicio'];
+    const result: Record<WorkerRole, Operator[]> = { socio: [], encargada: [], servicio: [] };
     for (const op of operators) {
-      const r = (op.role ?? 'servicior') as WorkerRole;
-      if (!showInactive && !op.active && r === 'servicior') continue;
+      const r = (op.role ?? 'servicio') as WorkerRole;
+      if (!showInactive && !op.active && r === 'servicio') continue;
       if (onShiftOnly && !op.on_shift_today) continue;
       result[r]?.push(op);
     }
@@ -148,7 +148,7 @@ export function StaffView({ operators, businessId, onBack, onSave, onDelete }: P
       </header>
 
       <main className="px-4 py-4 pb-24 space-y-6">
-        {(['socio', 'encargada', 'servicior'] as WorkerRole[]).map((role) => {
+        {(['socio', 'encargada', 'servicio'] as WorkerRole[]).map((role) => {
           const cfg = ROLE_CONFIG[role];
           const list = grouped[role] ?? [];
           return (
@@ -184,7 +184,7 @@ export function StaffView({ operators, businessId, onBack, onSave, onDelete }: P
                       <div className="flex-1 min-w-0">
                         <div className="font-semibold text-sm truncate">{op.name}</div>
                         <div className="text-xs text-slate-500 flex items-center gap-2">
-                          {role === 'servicior' && (
+                          {role === 'servicio' && (
                             <span className={op.active ? 'text-emerald-600' : 'text-slate-500'}>
                               {op.active ? 'Activo' : 'Inactivo'}
                             </span>
@@ -195,7 +195,7 @@ export function StaffView({ operators, businessId, onBack, onSave, onDelete }: P
                           )}
                         </div>
                       </div>
-                      {role === 'servicior' && (
+                      {role === 'servicio' && (
                         <button
                           onClick={(e) => { e.stopPropagation(); toggleActive(op); }}
                           className={`p-2 rounded-lg transition-all ${op.active ? 'bg-emerald-50 text-emerald-600 hover:bg-emerald-100' : 'bg-slate-100 text-slate-500 hover:bg-slate-500/20'}`}
@@ -204,7 +204,7 @@ export function StaffView({ operators, businessId, onBack, onSave, onDelete }: P
                           {op.active ? <UserCheck className="w-4 h-4" /> : <UserX className="w-4 h-4" />}
                         </button>
                       )}
-                      {role === 'servicior' && (
+                      {role === 'servicio' && (
                         <button
                           onClick={(e) => { e.stopPropagation(); toggleOnShift(op); }}
                           className={`p-2 rounded-lg transition-all ${op.on_shift_today ? 'bg-cyan-50 text-blue-600 hover:bg-cyan-100' : 'bg-white text-slate-500 hover:bg-slate-100'}`}
@@ -334,7 +334,7 @@ export function StaffView({ operators, businessId, onBack, onSave, onDelete }: P
                 <div>
                   <label className="text-[11px] text-slate-500 mb-1 block">Rol</label>
                   <div className="grid grid-cols-3 gap-2">
-                    {(['socio', 'encargada', 'servicior'] as WorkerRole[]).map((r) => {
+                    {(['socio', 'encargada', 'servicio'] as WorkerRole[]).map((r) => {
                       const cfg = ROLE_CONFIG[r];
                       return (
                         <button
@@ -355,9 +355,9 @@ export function StaffView({ operators, businessId, onBack, onSave, onDelete }: P
               )}
 
               {/* Active toggle for Especialistas */}
-              {editing.role === 'servicior' && (
+              {editing.role === 'servicio' && (
                 <div className="flex items-center justify-between bg-white border border-[#E2E8F0] shadow-sm rounded-xl p-3">
-                  <span className="text-sm text-slate-600">Estado del servicior</span>
+                  <span className="text-sm text-slate-600">Estado del servicio</span>
                   <button
                     onClick={() => setEditing({ ...editing, active: !editing.active })}
                     className={`relative w-12 h-6 rounded-full transition-all ${editing.active ? 'bg-emerald-500' : 'bg-slate-200'}`}
