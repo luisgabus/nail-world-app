@@ -18,7 +18,7 @@ interface Props {
 const ROLE_CONFIG: Record<WorkerRole, { label: string; Icon: typeof Crown; color: string; bg: string }> = {
   socio: { label: 'Socios', Icon: Crown, color: 'text-amber-600', bg: 'from-amber-500/20 to-orange-500/20 border-amber-200' },
   encargada: { label: 'Encargadas', Icon: Wallet, color: 'text-blue-600', bg: 'from-cyan-500/20 to-blue-500/20 border-cyan-200' },
-  servicior: { label: 'serviciores', Icon: Users, color: 'text-emerald-600', bg: 'from-emerald-500/20 to-green-500/20 border-emerald-200' },
+  servicior: { label: 'Especialistas', Icon: Users, color: 'text-emerald-600', bg: 'from-emerald-500/20 to-green-500/20 border-emerald-200' },
 };
 
 const PAYMENT_LABELS: Record<PaymentMethod, string> = {
@@ -354,7 +354,7 @@ export function StaffView({ operators, businessId, onBack, onSave, onDelete }: P
                 </div>
               )}
 
-              {/* Active toggle for serviciores */}
+              {/* Active toggle for Especialistas */}
               {editing.role === 'servicior' && (
                 <div className="flex items-center justify-between bg-white border border-[#E2E8F0] shadow-sm rounded-xl p-3">
                   <span className="text-sm text-slate-600">Estado del servicior</span>

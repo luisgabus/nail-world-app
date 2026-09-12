@@ -185,7 +185,7 @@ export function OwnerView() {
           { key: 'losses', label: 'Pérdidas', Icon: AlertTriangle },
           { key: 'inventory', label: 'Inventario', Icon: Package },
           { key: 'history', label: 'Historial', Icon: History },
-          { key: 'operators', label: 'serviciores', Icon: Users },
+          { key: 'operators', label: 'Especialistas', Icon: Users },
           { key: 'subscription', label: 'Suscripción', Icon: CreditCard },
         ] as { key: OwnerTab; label: string; Icon: typeof TrendingUp }[]).map(({ key, label, Icon }) => (
           <button

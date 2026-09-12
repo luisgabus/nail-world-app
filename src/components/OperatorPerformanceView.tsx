@@ -97,7 +97,7 @@ export function OperatorPerformanceView({ washes }: { washes: Wash[] }) {
   return (
     <div className="space-y-4 animate-fadeIn">
       <h3 className="text-sm font-semibold text-slate-600 flex items-center gap-2">
-        <Users className="w-4 h-4 text-amber-600" /> Rendimiento de serviciores
+        <Users className="w-4 h-4 text-amber-600" /> Rendimiento de Especialistas
       </h3>
 
       {/* Period selector */}

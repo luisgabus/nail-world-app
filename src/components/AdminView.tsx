@@ -2124,7 +2124,7 @@ export function AdminView() {
                 <LogOut className="w-5 h-5" />
               </button>
               <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-                <ClipboardList className="w-5 h-5 text-indigo-600" /> Liquidación de serviciores
+                <ClipboardList className="w-5 h-5 text-indigo-600" /> Liquidación de Especialistas
               </h2>
             </div>
 
