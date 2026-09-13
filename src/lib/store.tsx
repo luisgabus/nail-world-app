@@ -23,7 +23,7 @@ interface AppState {
 
 const AppContext = createContext<AppState | null>(null);
 
-const STORAGE_KEY = 'carwash_session';
+const STORAGE_KEY = 'nail_world_session';
 
 interface StoredSession {
   business: Business;
@@ -57,8 +57,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }, 4000);
   }, [dismissToast]);
 
- // 1. Cargar sesión inicial al montar con validación defensiva
+  // 1. Cargar sesión inicial al montar con validación defensiva y limpieza de legado
   useEffect(() => {
+    // Eliminar la sesión obsoleta si existe en el navegador del usuario
+    localStorage.removeItem('carwash_session');
+
     const stored = localStorage.getItem(STORAGE_KEY);
     if (!stored) return;
 
