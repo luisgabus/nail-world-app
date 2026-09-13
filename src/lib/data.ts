@@ -468,10 +468,10 @@ export async function fetchInventoryMovements(businessId: string): Promise<Inven
 // ============ Seeding ============
 
 const DEFAULT_CATEGORIES = [
-  { name: 'Moto', base_price: 5000, icon: 'bike', sort_order: 0 },
-  { name: 'Automóvil', base_price: 12000, icon: 'car', sort_order: 1 },
-  { name: 'Camioneta', base_price: 18000, icon: 'truck', sort_order: 2 },
-  { name: 'Camión', base_price: 30000, icon: 'truck', sort_order: 3 },
+  { name: 'Manicura tradicional', base_price: 25000, icon: 'Sparkles', sort_order: 0 },
+  { name: 'Pedicura tradicional', base_price: 25000, icon: 'Sparkles', sort_order: 1 },
+  { name: 'Semipermanente', base_price: 50000, icon: 'Sparkles', sort_order: 2 },
+  { name: 'Acrilicas', base_price: 100000, icon: 'Sparkles', sort_order: 3 },
 ];
 
 export async function seedDefaultCategories(businessId: string): Promise<void> {
