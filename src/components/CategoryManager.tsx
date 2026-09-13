@@ -1,180 +1,198 @@
 import { useState } from 'react';
-import { ArrowLeft, Plus, Trash2, Car, Bike, Truck, X, Pencil } from 'lucide-react';
+import { ArrowLeft, Plus, Sparkles, Trash2, Pencil } from 'lucide-react';
 import type { VehicleCategory } from '@/lib/types';
 import { uuid } from '@/lib/data';
 
-interface Props {
+interface CategoryManagerProps {
   categories: VehicleCategory[];
   businessId: string;
   onBack: () => void;
-  onSave: (cat: VehicleCategory) => Promise<VehicleCategory>;
+  onSave: (category: VehicleCategory) => Promise<void>;
   onDelete: (id: string) => Promise<void>;
 }
 
-const ICON_OPTIONS = [
-  { key: 'car', label: 'Manicura', Icon: Car },
-  { key: 'bike', label: 'Pedicura', Icon: Bike },
-  { key: 'truck', label: 'Semipermante', Icon: Truck },
-];
-
-export function CategoryManager({ categories, businessId, onBack, onSave, onDelete }: Props) {
-  const [showForm, setShowForm] = useState(false);
-  const [editing, setEditing] = useState<VehicleCategory | null>(null);
+export function CategoryManager({
+  categories,
+  businessId,
+  onBack,
+  onSave,
+  onDelete,
+}: CategoryManagerProps) {
+  const [editingCategory, setEditingCategory] = useState<VehicleCategory | null>(null);
   const [name, setName] = useState('');
   const [basePrice, setBasePrice] = useState(0);
-  const [icon, setIcon] = useState('car');
-  const [sortOrder, setSortOrder] = useState(0);
+  const [orderIndex, setOrderIndex] = useState(0);
+  const [icon] = useState('sparkles');
+  const [saving, setSaving] = useState(false);
 
-  const openAdd = () => {
-    setEditing(null);
-    setName('');
-    setBasePrice(0);
-    setIcon('car');
-    setSortOrder(categories.length);
-    setShowForm(true);
-  };
-
-  const openEdit = (cat: VehicleCategory) => {
-    setEditing(cat);
+  const handleEdit = (cat: VehicleCategory) => {
+    setEditingCategory(cat);
     setName(cat.name);
     setBasePrice(cat.base_price);
-    setIcon(cat.icon);
-    setSortOrder(cat.sort_order);
-    setShowForm(true);
+    setOrderIndex(cat.order_index);
   };
 
-  const handleSave = async () => {
-    if (!name.trim()) return;
-    const cat: VehicleCategory = {
-      id: editing?.id ?? uuid(),
+  const handleNew = () => {
+    setEditingCategory({
+      id: uuid(),
       business_id: businessId,
-      name: name.trim(),
-      base_price: basePrice,
-      icon,
-      sort_order: sortOrder,
-      active: editing?.active ?? true,
-      created_at: editing?.created_at ?? new Date().toISOString(),
-    };
-    await onSave(cat);
-    setShowForm(false);
-    onBack();
+      name: '',
+      base_price: 15000,
+      icon: 'sparkles',
+      order_index: categories.length,
+      active: true,
+    });
+    setName('');
+    setBasePrice(15000);
+    setOrderIndex(categories.length);
   };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!name.trim() || !editingCategory || saving) return;
+
+    setSaving(true);
+    try {
+      await onSave({
+        ...editingCategory,
+        name: name.trim(),
+        base_price: basePrice,
+        icon: 'sparkles',
+        order_index: orderIndex,
+      });
+      setEditingCategory(null);
+    } catch (err) {
+      console.error('Error al guardar categoría:', err);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const sortedCategories = [...categories].sort((a, b) => a.order_index - b.order_index);
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] text-slate-900">
+      {/* Header */}
       <header className="sticky top-0 z-30 bg-white backdrop-blur-xl border-b border-[#E2E8F0] px-4 py-3 flex items-center gap-3">
-        <button onClick={onBack} className="p-2 rounded-xl bg-white border border-[#E2E8F0] hover:bg-slate-100 transition-all">
-          <ArrowLeft className="w-5 h-5" />
+        <button
+          onClick={onBack}
+          className="p-2 rounded-xl bg-white border border-[#E2E8F0] hover:bg-slate-100 transition-all"
+        >
+          <ArrowLeft className="w-5 h-5 text-slate-600" />
         </button>
-        <h1 className="text-lg font-bold">Categorías de clientes</h1>
+        <h1 className="text-lg font-bold">Categorías de Servicios</h1>
       </header>
 
-      <main className="px-4 py-4 pb-24">
-        <button
-          onClick={openAdd}
-          className="action-control w-full py-3 mb-4 bg-gradient-to-br from-blue-600 to-blue-500 border border-blue-200/80 text-white font-semibold rounded-xl flex items-center justify-center gap-2"
-        >
-          <Plus className="w-5 h-5" /> Agregar Categoría
-        </button>
+      <main className="p-4 max-w-2xl mx-auto space-y-4">
+        {!editingCategory ? (
+          <>
+            <button
+              onClick={handleNew}
+              className="action-control w-full py-3.5 bg-blue-600 text-white font-semibold rounded-2xl flex items-center justify-center gap-2 hover:bg-blue-500 transition-all shadow-sm"
+            >
+              <Plus className="w-5 h-5" /> Agregar Categoría
+            </button>
 
-        <div className="space-y-2">
-          {categories.map((cat) => {
-            const IconEntry = ICON_OPTIONS.find((i) => i.key === cat.icon);
-            const Icon = IconEntry?.Icon ?? Car;
-            return (
-              <div key={cat.id} className="flex items-center gap-3 p-3 bg-white border border-[#E2E8F0] shadow-sm rounded-xl">
-                <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
-                  <Icon className="w-5 h-5 text-blue-600" />
-                </div>
-                <div className="flex-1">
-                  <div className="font-semibold text-sm">{cat.name}</div>
-                  <div className="text-xs text-slate-500">
-                    ${cat.base_price.toLocaleString('es-CO')} · Orden {cat.sort_order}
+            <div className="space-y-3">
+              {sortedCategories.map((cat) => (
+                <div
+                  key={cat.id}
+                  className="bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-4 flex items-center justify-between"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600">
+                      <Sparkles className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-slate-900">{cat.name}</h3>
+                      <p className="text-xs text-slate-500">
+                        ${cat.base_price.toLocaleString('es-CO')} · Orden {cat.order_index}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => handleEdit(cat)}
+                      className="p-2 rounded-xl bg-slate-50 border border-[#E2E8F0] hover:bg-slate-100 text-slate-600 transition-all"
+                    >
+                      <Pencil className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => onDelete(cat.id)}
+                      className="p-2 rounded-xl bg-red-50 border border-red-100 hover:bg-red-100 text-red-600 transition-all"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
                   </div>
                 </div>
-                <button
-                  onClick={() => openEdit(cat)}
-                  className="action-control action-surface p-2 rounded-lg border border-blue-200/80 text-slate-500"
-                >
-                  <Pencil className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={async () => { await onDelete(cat.id); onBack(); }}
-                  className="action-control p-2 rounded-lg bg-gradient-to-br from-red-50 via-white to-slate-50 border border-blue-200/80 text-red-600"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
-              </div>
-            );
-          })}
-          {categories.length === 0 && (
-            <p className="text-center text-slate-500 py-8 text-sm">No hay categorías registradas</p>
-          )}
-        </div>
-      </main>
+              ))}
+              {sortedCategories.length === 0 && (
+                <div className="text-center py-8 text-slate-500 text-sm">
+                  No hay categorías registradas. Presiona "Agregar Categoría" para crear la primera.
+                </div>
+              )}
+            </div>
+          </>
+        ) : (
+          <form onSubmit={handleSubmit} className="bg-white border border-[#E2E8F0] shadow-sm rounded-3xl p-6 space-y-4">
+            <h2 className="text-lg font-bold text-slate-900">
+              {categories.some((c) => c.id === editingCategory.id) ? 'Editar Servicio' : 'Nuevo Servicio'}
+            </h2>
 
-      {showForm && (
-        <div className="fixed inset-0 z-50 bg-slate-900/30 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl border border-[#E2E8F0] p-6 w-full max-w-sm shadow-2xl">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-bold">{editing ? 'Editar' : 'Nueva'} Categoría</h2>
-              <button onClick={() => setShowForm(false)} className="text-slate-500 hover:text-slate-900">
-                <X className="w-5 h-5" />
+            <div>
+              <label className="text-xs font-semibold text-slate-500 mb-1 block">Nombre del servicio</label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Ej: Manicura Semipermanente, Pedicura Spa..."
+                className="w-full px-4 py-3 bg-slate-50 border border-[#E2E8F0] rounded-xl text-slate-900 text-sm focus:outline-none focus:border-blue-500"
+                required
+                autoFocus
+              />
+            </div>
+
+            <div>
+              <label className="text-xs font-semibold text-slate-500 mb-1 block">Precio Base ($)</label>
+              <input
+                type="number"
+                value={basePrice}
+                onChange={(e) => setBasePrice(Number(e.target.value))}
+                className="w-full px-4 py-3 bg-slate-50 border border-[#E2E8F0] rounded-xl text-slate-900 text-sm focus:outline-none focus:border-blue-500 font-bold"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="text-xs font-semibold text-slate-500 mb-1 block">Orden de visualización</label>
+              <input
+                type="number"
+                value={orderIndex}
+                onChange={(e) => setOrderIndex(Number(e.target.value))}
+                className="w-full px-4 py-3 bg-slate-50 border border-[#E2E8F0] rounded-xl text-slate-900 text-sm focus:outline-none focus:border-blue-500"
+              />
+            </div>
+
+            <div className="flex gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => setEditingCategory(null)}
+                className="action-control action-surface flex-1 py-3 border border-blue-200/80 text-slate-600 font-medium rounded-xl"
+              >
+                Cancelar
+              </button>
+              <button
+                type="submit"
+                disabled={saving || !name.trim()}
+                className="action-control flex-1 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-500 transition-all disabled:opacity-50"
+              >
+                {saving ? 'Guardando...' : 'Guardar'}
               </button>
             </div>
-
-            <label className="text-sm font-medium text-slate-600 mb-1 block">Nombre</label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Ej: Manicura, Pedicura..."
-              className="w-full px-4 py-3 mb-3 bg-slate-100 border border-[#E2E8F0] rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-200"
-              autoFocus
-            />
-
-            <label className="text-sm font-medium text-slate-600 mb-1 block">Precio base</label>
-            <input
-              type="number"
-              value={basePrice}
-              onChange={(e) => setBasePrice(Number(e.target.value))}
-              className="w-full px-4 py-3 mb-3 bg-slate-100 border border-[#E2E8F0] rounded-xl text-slate-900 focus:outline-none focus:border-blue-200"
-            />
-
-            <label className="text-sm font-medium text-slate-600 mb-2 block">Ícono</label>
-            <div className="flex gap-2 mb-3">
-              {ICON_OPTIONS.map(({ key, label, Icon }) => (
-                <button
-                  key={key}
-                  onClick={() => setIcon(key)}
-                  className={`action-control flex-1 flex flex-col items-center gap-1 py-3 rounded-xl border border-blue-200/80 ${
-                    icon === key ? 'bg-gradient-to-br from-blue-100 via-white to-slate-50' : 'action-surface'
-                  }`}
-                >
-                  <Icon className={`w-6 h-6 ${icon === key ? 'text-blue-600' : 'text-slate-500'}`} />
-                  <span className="text-xs">{label}</span>
-                </button>
-              ))}
-            </div>
-
-            <label className="text-sm font-medium text-slate-600 mb-1 block">Orden (menor = primero)</label>
-            <input
-              type="number"
-              value={sortOrder}
-              onChange={(e) => setSortOrder(Number(e.target.value))}
-              className="w-full px-4 py-3 mb-4 bg-slate-100 border border-[#E2E8F0] rounded-xl text-slate-900 focus:outline-none focus:border-blue-200"
-            />
-
-            <button
-              onClick={handleSave}
-              disabled={!name.trim()}
-              className="action-control w-full py-3 bg-gradient-to-br from-blue-600 to-blue-500 border border-blue-200/80 text-white font-semibold rounded-xl disabled:opacity-50"
-            >
-              Guardar
-            </button>
-          </div>
-        </div>
-      )}
+          </form>
+        )}
+      </main>
     </div>
   );
 }
