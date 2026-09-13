@@ -78,7 +78,6 @@ function cardTint(s: WashStatus): string {
   }
 }
 
-
 export function AdminView() {
   const { business, setBusiness, setRole, showToast } = useApp();
   const subState = business ? getSubscriptionState(business) : null;
@@ -92,7 +91,6 @@ export function AdminView() {
   const [selectedOperator, setSelectedOperator] = useState<Operator | null>(null);
   const [price, setPrice] = useState(0);
   const [ticketModal, setTicketModal] = useState<Wash | null>(null);
-  const [lastWash, setLastWash] = useState<Wash | null>(null);
   const [cierreModal, setCierreModal] = useState(false);
   const [cierreConfirm, setCierreConfirm] = useState(false);
   const [cierreSaving, setCierreSaving] = useState(false);
@@ -111,7 +109,7 @@ export function AdminView() {
   const [desistidoTarget, setDesistidoTarget] = useState<Wash | null>(null);
   const [cancellationReason, setCancellationReason] = useState('');
   const [liquidationTarget, setLiquidationTarget] = useState<Wash | null>(null);
- const [commissionModal, setCommissionModal] = useState(false);
+  const [commissionModal, setCommissionModal] = useState(false);
   const [commissionInput, setCommissionInput] = useState(40);
   const [isCustomEditing, setIsCustomEditing] = useState(false);
   const [commissionSaving, setCommissionSaving] = useState(false);
@@ -255,7 +253,7 @@ export function AdminView() {
   const handleRegister = async () => {
     if (!business || !selectedCategory || saving || !plate.trim()) return;
     if (subState?.isBlocked) {
-      showToast('Suscripción suspendida. No se pueden registrar nuevos clientes.', 'error');
+      showToast('Suscripción suspendida. No se pueden registrar nuevos turnos.', 'error');
       return;
     }
 
@@ -294,10 +292,10 @@ export function AdminView() {
       await saveWash(wash);
       resetForm();
       await loadData();
-      showToast('cliente ingresado en cola', 'success');
+      showToast('Turno ingresado en cola', 'success');
     } catch (err) {
       console.error('Error registering wash:', err);
-      showToast('Error al registrar el servicio. Intenta de nuevo.', 'error');
+      showToast('Error al registrar el turno. Intenta de nuevo.', 'error');
     } finally {
       setSaving(false);
     }
@@ -310,7 +308,7 @@ export function AdminView() {
       setWashes((prev) => prev.map((x) => (x.id === w.id ? { ...x, operator_id: op.id, operator_name: op.name } : x)));
       await updateWashStatus(w.id, w.status, { operator_id: op.id, operator_name: op.name });
       await loadData();
-      showToast(`servicio #${w.ticket_number} reasignado a ${op.name}`, 'success');
+      showToast(`Servicio #${w.ticket_number} reasignado a ${op.name}`, 'success');
     } catch (err) {
       console.error('Error reassigning operator:', err);
       showToast('Error al reasignar el especialista', 'error');
@@ -319,7 +317,6 @@ export function AdminView() {
   };
 
   const handleStartWash = async (w: Wash) => {
-
     if (w.operator_id && busyOperatorIds.has(w.operator_id)) {
       showToast(`La especialista ${w.operator_name} debe finalizar su servicio actual antes de iniciar este servicio.`, 'error');
       return;
@@ -328,7 +325,7 @@ export function AdminView() {
       const now = new Date().toISOString();
       await updateWashStatus(w.id, 'en_servicio', { started_at: now });
       await loadData();
-      showToast('servicio iniciado', 'success');
+      showToast('Servicio iniciado', 'success');
     } catch (err) {
       console.error('Error starting wash:', err);
       showToast('Error al iniciar el servicio', 'error');
@@ -400,10 +397,10 @@ export function AdminView() {
       setDeliverPaymentMethod(null);
       await loadData();
       setTicketModal(completedWash);
-      showToast('cliente entregado y cobrado', 'success');
+      showToast('Servicio cobrado con éxito', 'success');
     } catch (err) {
       console.error('Error delivering wash:', err);
-      showToast('Error al entregar el servicio', 'error');
+      showToast('Error al procesar el cobro', 'error');
     } finally {
       setDeliverSaving(false);
     }
@@ -535,19 +532,18 @@ export function AdminView() {
     const fullName = w.customer_name || 'Cliente';
     const washTotal = (w.total_price ?? (w.price + (w.additional_total ?? 0))) + w.tip;
     const total = washTotal.toLocaleString('es-CO');
-    const plateText = w.plate ? ` con identificación ${w.plate}` : '';
-    const msg = `¡Hola ${fullName}! 🚗✨\n\nLe avisamos con gusto que su cliente ${w.category_name}${plateText} (Ticket #${w.ticket_number}) ya está listo para retirar.\n\nValor a pagar: ${total}\n\n¡Gracias por preferirnos! 🙌`;
-    return `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
+    const msg = `¡Hola ${fullName}! ✨💅\n\nLe informamos que su servicio de ${w.category_name} (Ticket #${w.ticket_number}) ha finalizado.\n\nValor total: $${total}\n\n¡Gracias por preferirnos! 🙌`;
+    return `https://wa.me/57${phone}?text=${encodeURIComponent(msg)}`;
   };
 
-  // Operators currently washing (en_servicio only — en_espera is queued, not busy)
+  // Operators currently washing
   const busyOperatorIds = new Set(
     washes
       .filter((w) => w.status === 'en_servicio' && w.operator_id)
       .map((w) => w.operator_id!)
   );
 
-  // Washes since the last closure (current shift)
+  // Washes since the last closure
   const shiftWashes = lastClosureTime
     ? washes.filter((w) => w.created_at > lastClosureTime)
     : washes;
@@ -679,10 +675,11 @@ export function AdminView() {
     tips: shiftTips,
   };
 
-  const iconMap: Record<string, typeof Car> = {
-    car: Car,
-    bike: Bike,
-    truck: Truck,
+  const iconMap: Record<string, typeof Sparkles> = {
+    car: Sparkles,
+    bike: Sparkles,
+    truck: Sparkles,
+    sparkles: Sparkles,
   };
 
   if (view === 'operators') {
@@ -728,11 +725,11 @@ export function AdminView() {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-blue-500 flex items-center justify-center">
-              <Car className="w-5 h-5 text-white" />
+              <Sparkles className="w-5 h-5 text-white" />
             </div>
             <div>
               <h1 className="text-lg font-bold leading-tight">{business?.name}</h1>
-              <p className="text-xs text-slate-500">Modo Piso · {new Date().toLocaleDateString('es-CO')}</p>
+              <p className="text-xs text-slate-500">Modo Recepción · {new Date().toLocaleDateString('es-CO')}</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -822,11 +819,11 @@ export function AdminView() {
           </button>
         </div>
 
-        {/* ===== Active Board: Vehicles in progress ===== */}
+        {/* ===== Active Board: Turnos en progreso ===== */}
         <section>
           <h2 className="text-sm font-semibold text-slate-500 mb-2 flex items-center gap-2">
             <Timer className="w-4 h-4 text-amber-600" />
-            clientes Activos
+            Turnos Activos
             {shiftPending.length > 0 && (
               <span className="px-2 py-0.5 rounded-full bg-amber-50 text-amber-600 text-xs font-bold">
                 {shiftPending.length}
@@ -836,7 +833,7 @@ export function AdminView() {
           <div className="space-y-2">
             {shiftPending.length === 0 && (
               <div className="text-center py-6 text-slate-500 text-sm bg-white border border-[#E2E8F0] shadow-sm rounded-xl">
-                No hay clientes activos. Registra un nuevo servicio abajo.
+                No hay turnos activos. Registra un nuevo servicio abajo.
               </div>
             )}
             {shiftPending.map((w) => {
@@ -918,7 +915,7 @@ export function AdminView() {
                           onClick={() => { setDesistidoTarget(w); setCancellationReason(''); }}
                           className="action-control px-3 py-2.5 bg-gradient-to-br from-red-50 via-white to-slate-50 border border-blue-200/80 text-red-600 font-medium rounded-lg flex items-center justify-center gap-1.5 text-sm"
                         >
-                          <XCircle className="w-4 h-4" /> Desistido
+                          <XCircle className="w-4 h-4" /> Cancelar
                         </button>
                       </>
                     )}
@@ -946,7 +943,7 @@ export function AdminView() {
                           onClick={() => handleDeliverWash(w)}
                           className="action-control flex-1 py-2.5 bg-gradient-to-br from-emerald-50 via-white to-slate-50 border border-blue-200/80 text-emerald-600 font-semibold rounded-lg flex items-center justify-center gap-1.5 text-sm"
                         >
-                          <HandCoins className="w-4 h-4" /> Entregar y Cobrar
+                          <HandCoins className="w-4 h-4" /> Cobrar Servicio
                         </button>
                       </>
                     )}
@@ -966,18 +963,18 @@ export function AdminView() {
         {/* ===== Registration form ===== */}
         <div className="border-t border-[#E2E8F0] pt-4 space-y-4">
           <h2 className="text-sm font-bold text-slate-600 flex items-center gap-2">
-            <Plus className="w-4 h-4 text-emerald-600" /> Registrar Nuevo cliente
+            <Plus className="w-4 h-4 text-emerald-600" /> Registrar Nuevo Turno
           </h2>
 
           {/* Step 1: Category */}
           <section>
             <h3 className="text-sm font-semibold text-slate-500 mb-2 flex items-center gap-2">
               <span className="w-5 h-5 rounded-full bg-blue-500 text-white text-xs flex items-center justify-center font-bold">1</span>
-              Selecciona el cliente
+              Selecciona el servicio
             </h3>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {categories.filter((c) => c.active).map((cat) => {
-                const Icon = iconMap[cat.icon] ?? Car;
+                const Icon = iconMap[cat.icon] ?? Sparkles;
                 const isSelected = selectedCategory?.id === cat.id;
                 return (
                   <button
@@ -1059,7 +1056,7 @@ export function AdminView() {
             <section className="animate-fadeIn">
               <h3 className="text-sm font-semibold text-slate-500 mb-2 flex items-center gap-2">
                 <span className="w-5 h-5 rounded-full bg-blue-500 text-white text-xs flex items-center justify-center font-bold">4</span>
-                identificación del cliente <span className="text-red-600 text-xs">*</span>
+                Identificación del cliente <span className="text-red-600 text-xs">*</span>
               </h3>
               <div className="flex gap-2">
                 <div className="flex-1 bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-3 relative">
@@ -1067,8 +1064,8 @@ export function AdminView() {
                     type="text"
                     value={plate}
                     onChange={(e) => setPlate(e.target.value.toUpperCase().replace(/\s/g, ''))}
-                    placeholder="Ej: XYZ789"
-                    maxLength={10}
+                    placeholder="Ej: 1088123456"
+                    maxLength={15}
                     className="w-full bg-transparent text-lg font-mono font-bold text-blue-600 focus:outline-none placeholder-slate-400 tracking-wider"
                   />
                   {plateLooking && (
@@ -1221,7 +1218,7 @@ export function AdminView() {
                 <AlertTriangle className="w-6 h-6 text-red-600" />
               </div>
               <div>
-                <h2 className="text-lg font-bold text-slate-900">Registrar Desistido</h2>
+                <h2 className="text-lg font-bold text-slate-900">Registrar Cancelación</h2>
                 <p className="text-sm text-slate-500">#{desistidoTarget.ticket_number} · {desistidoTarget.plate ?? 'Sin identificación'}</p>
               </div>
             </div>
@@ -1235,14 +1232,14 @@ export function AdminView() {
             <textarea
               value={cancellationReason}
               onChange={(e) => setCancellationReason(e.target.value)}
-              placeholder="Ej: Cliente se fue por demora, cambio de clima..."
+              placeholder="Ej: Cliente se fue por demora..."
               className="w-full px-4 py-3 bg-slate-100 border border-[#E2E8F0] rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:border-red-200 resize-none"
               rows={3}
               autoFocus
             />
 
             <div className="flex flex-wrap gap-2 mt-2">
-              {['Demora / Congestión', 'Cambio de clima', 'Cliente decidió no lavar', 'Problema técnico'].map((r) => (
+              {['Demora / Congestión', 'Cambio de idea', 'Cliente canceló el servicio', 'Problema técnico'].map((r) => (
                 <button
                   key={r}
                   onClick={() => setCancellationReason(r)}
@@ -1258,7 +1255,7 @@ export function AdminView() {
                 onClick={() => { setDesistidoTarget(null); setCancellationReason(''); }}
                 className="action-control action-surface flex-1 py-3 border border-blue-200/80 text-slate-600 font-medium rounded-xl"
               >
-                Cancelar
+                Volver
               </button>
               <button
                 onClick={handleConfirmDesistido}
@@ -1286,10 +1283,10 @@ export function AdminView() {
 
             <div className="bg-slate-50 rounded-2xl p-4 space-y-2 text-sm font-mono text-slate-800">
               <div className="flex justify-between"><span>Negocio:</span><span className="font-semibold">{business.name}</span></div>
-              <div className="flex justify-between"><span>cliente:</span><span className="font-semibold">{ticketModal.category_name}</span></div>
-              <div className="flex justify-between"><span>identificación:</span><span className="font-semibold">{ticketModal.plate ?? 'N/A'}</span></div>
-              <div className="flex justify-between"><span>especialista:</span><span className="font-semibold">{ticketModal.operator_name || 'N/A'}</span></div>
-              <div className="flex justify-between"><span>servicio:</span><span>${ticketModal.price.toLocaleString('es-CO')}</span></div>
+              <div className="flex justify-between"><span>Servicio:</span><span className="font-semibold">{ticketModal.category_name}</span></div>
+              <div className="flex justify-between"><span>Identificación:</span><span className="font-semibold">{ticketModal.plate ?? 'N/A'}</span></div>
+              <div className="flex justify-between"><span>Especialista:</span><span className="font-semibold">{ticketModal.operator_name || 'N/A'}</span></div>
+              <div className="flex justify-between"><span>Costo base:</span><span>${ticketModal.price.toLocaleString('es-CO')}</span></div>
               {(ticketModal.additionals_detail ?? []).map((d, i) => (
                 <div key={i} className="flex justify-between text-slate-500"><span>+ {d.name}:</span><span>${d.amount.toLocaleString('es-CO')}</span></div>
               ))}
@@ -1299,7 +1296,7 @@ export function AdminView() {
                 <div className="flex justify-between text-sm mt-1.5"><span className="text-slate-500">Medio de Pago:</span><span className="font-semibold text-slate-700">{washPaymentMethodLabel(ticketModal.payment_method)}</span></div>
               )}
               {ticketModal.status === 'desistido' && ticketModal.cancellation_reason && (
-                <div className="text-red-600 text-xs mt-2">Desistido: {ticketModal.cancellation_reason}</div>
+                <div className="text-red-600 text-xs mt-2">Cancelado: {ticketModal.cancellation_reason}</div>
               )}
               {business.loyalty_enabled && ticketModal.plate && (() => {
                 const completedForPlate = washes.filter(
@@ -1310,7 +1307,7 @@ export function AdminView() {
                   return (
                     <div className="mt-3 p-2 rounded-lg bg-amber-50 border border-amber-300 text-amber-800 text-xs flex items-center gap-2">
                       <Gift className="w-4 h-4" />
-                      <span className="font-bold">Premio de Fidelizacion!</span>
+                      <span className="font-bold">¡Premio de Fidelización!</span>
                       <span>
                         {business.loyalty_reward_type === 'free'
                           ? 'Esta visita es un servicio sin costo.'
@@ -1381,9 +1378,9 @@ export function AdminView() {
                 <div className="text-lg font-bold text-orange-600">${shiftExpenses.toLocaleString('es-CO')}</div>
               </div>
               <div className="bg-red-50 border border-red-200 rounded-xl p-3">
-                <div className="text-xs text-red-600/70">Desistidos</div>
+                <div className="text-xs text-red-600/70">Cancelados</div>
                 <div className="text-lg font-bold text-red-600">${shiftLosses.toLocaleString('es-CO')}</div>
-                <div className="text-[10px] text-slate-500 mt-0.5">{shiftDesisted.length} cancelados</div>
+                <div className="text-[10px] text-slate-500 mt-0.5">{shiftDesisted.length} servicios</div>
               </div>
             </div>
 
@@ -1480,7 +1477,7 @@ export function AdminView() {
             {/* Wash detail list */}
             {shiftCompleted.length > 0 && (
               <div className="mb-4">
-                <h3 className="text-sm font-semibold text-slate-600 mb-2">servicios cobrados del turno</h3>
+                <h3 className="text-sm font-semibold text-slate-600 mb-2">Servicios cobrados del turno</h3>
                 <div className="space-y-1.5 max-h-40 overflow-y-auto">
                   {shiftCompleted.map((w) => (
                     <div key={w.id} className="flex items-center justify-between bg-white border border-[#E2E8F0] shadow-sm rounded-lg px-3 py-2 text-xs">
@@ -1666,111 +1663,111 @@ export function AdminView() {
         </div>
       )}
 
-{/* Commission Modal */}
-          {commissionModal && (
-            <div className="fixed inset-0 z-50 bg-slate-900/30 backdrop-blur-md flex items-center justify-center p-4">
-              <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 relative">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center text-purple-600">
-                    <Percent className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-bold text-slate-900">Comisión de Especialistas</h3>
-                    <p className="text-xs text-slate-500">Porcentaje pagado a Especialistas</p>
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  <div className="mt-3 space-y-3">
-                    <div className="flex gap-2">
-                      {[30, 40, 50, 60].map((p) => (
-                        <button
-                          key={p}
-                          type="button"
-                          onClick={() => {
-                            setCommissionInput(p);
-                            setIsCustomEditing(false);
-                          }}
-                          className={`action-control flex-1 py-2 rounded-lg text-sm font-medium border border-blue-200/80 transition-all ${
-                            !isCustomEditing && commissionInput === p 
-                              ? 'bg-gradient-to-br from-purple-50 via-white to-slate-50 text-purple-600 border-purple-300 shadow-sm' 
-                              : 'action-surface text-slate-500'
-                          }`}
-                        >
-                          {p}%
-                        </button>
-                      ))}
-
-                      <button
-                        type="button"
-                        onClick={() => setIsCustomEditing(true)}
-                        className={`action-control flex-1 py-2 px-1 rounded-lg text-sm font-medium border border-blue-200/80 flex items-center justify-center gap-1 transition-all ${
-                          isCustomEditing || ![30, 40, 50, 60].includes(commissionInput)
-                            ? 'bg-gradient-to-br from-purple-50 via-white to-slate-50 text-purple-600 border-purple-300 shadow-sm' 
-                            : 'action-surface text-slate-500'
-                        }`}
-                        title="Personalizar valor"
-                      >
-                        <Pencil className="w-4 h-4" />
-                        <span>{isCustomEditing || ![30, 40, 50, 60].includes(commissionInput) ? `${commissionInput}%` : 'Editar'}</span>
-                      </button>
-                    </div>
-
-                    {isCustomEditing && (
-                      <div className="flex items-center justify-center gap-2 bg-slate-50/50 p-2 rounded-lg border border-slate-200/80">
-                        <span className="text-xs text-slate-500 font-medium">Valor personalizado (%):</span>
-                        <input
-                          type="number"
-                          value={commissionInput}
-                          onChange={(e) => setCommissionInput(Math.min(100, Math.max(0, Number(e.target.value))))}
-                          className="w-20 bg-white border border-slate-300 rounded px-2 py-1 text-center font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                          autoFocus
-                        />
-                      </div>
-                    )}
-
-                    <p className="text-[11px] text-slate-500">
-                      El Salón retiene el {100 - commissionInput}% sobre los servicios. Las propinas son 100% para las Especialistas.
-                    </p>
-                  </div>
-
-                  <div className="flex gap-3 mt-4">
-                    <button
-                      type="button"
-                      onClick={() => setCommissionModal(false)}
-                      className="action-control action-surface flex-1 py-3 border border-blue-200/80 text-slate-600 font-medium rounded-xl"
-                    >
-                      Cancelar
-                    </button>
-                    <button
-                      type="button"
-                      onClick={async () => {
-                        if (!business || commissionSaving) return;
-                        setCommissionSaving(true);
-                        try {
-                          const updated = { ...business, commission_rate: commissionInput / 100 };
-                          await updateBusiness(updated);
-                          setLocalCommissionRate(commissionInput / 100);
-                          setBusiness(updated);
-                          setCommissionModal(false);
-                          showToast('Comisión actualizada', 'success');
-                        } catch (err) {
-                          console.error('Error updating commission:', err);
-                          showToast('Error al actualizar comisión', 'error');
-                        } finally {
-                          setCommissionSaving(false);
-                        }
-                      }}
-                      disabled={commissionSaving}
-                      className="action-control flex-1 py-3 bg-gradient-to-br from-purple-500 to-purple-600 border border-blue-200/80 text-white font-semibold rounded-xl disabled:opacity-50"
-                    >
-                      {commissionSaving ? 'Guardando...' : 'Guardar'}
-                    </button>
-                  </div>
-                </div>
+      {/* Commission Modal */}
+      {commissionModal && (
+        <div className="fixed inset-0 z-50 bg-slate-900/30 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 relative">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center text-purple-600">
+                <Percent className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-slate-900">Comisión de Especialistas</h3>
+                <p className="text-xs text-slate-500">Porcentaje pagado a Especialistas</p>
               </div>
             </div>
-          )}
+
+            <div className="space-y-4">
+              <div className="mt-3 space-y-3">
+                <div className="flex gap-2">
+                  {[30, 40, 50, 60].map((p) => (
+                    <button
+                      key={p}
+                      type="button"
+                      onClick={() => {
+                        setCommissionInput(p);
+                        setIsCustomEditing(false);
+                      }}
+                      className={`action-control flex-1 py-2 rounded-lg text-sm font-medium border border-blue-200/80 transition-all ${
+                        !isCustomEditing && commissionInput === p 
+                          ? 'bg-gradient-to-br from-purple-50 via-white to-slate-50 text-purple-600 border-purple-300 shadow-sm' 
+                          : 'action-surface text-slate-500'
+                      }`}
+                    >
+                      {p}%
+                    </button>
+                  ))}
+
+                  <button
+                    type="button"
+                    onClick={() => setIsCustomEditing(true)}
+                    className={`action-control flex-1 py-2 px-1 rounded-lg text-sm font-medium border border-blue-200/80 flex items-center justify-center gap-1 transition-all ${
+                      isCustomEditing || ![30, 40, 50, 60].includes(commissionInput)
+                        ? 'bg-gradient-to-br from-purple-50 via-white to-slate-50 text-purple-600 border-purple-300 shadow-sm' 
+                        : 'action-surface text-slate-500'
+                    }`}
+                    title="Personalizar valor"
+                  >
+                    <Pencil className="w-4 h-4" />
+                    <span>{isCustomEditing || ![30, 40, 50, 60].includes(commissionInput) ? `${commissionInput}%` : 'Editar'}</span>
+                  </button>
+                </div>
+
+                {isCustomEditing && (
+                  <div className="flex items-center justify-center gap-2 bg-slate-50/50 p-2 rounded-lg border border-slate-200/80">
+                    <span className="text-xs text-slate-500 font-medium">Valor personalizado (%):</span>
+                    <input
+                      type="number"
+                      value={commissionInput}
+                      onChange={(e) => setCommissionInput(Math.min(100, Math.max(0, Number(e.target.value))))}
+                      className="w-20 bg-white border border-slate-300 rounded px-2 py-1 text-center font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      autoFocus
+                    />
+                  </div>
+                )}
+
+                <p className="text-[11px] text-slate-500">
+                  El Salón retiene el {100 - commissionInput}% sobre los servicios. Las propinas son 100% para las Especialistas.
+                </p>
+              </div>
+
+              <div className="flex gap-3 mt-4">
+                <button
+                  type="button"
+                  onClick={() => setCommissionModal(false)}
+                  className="action-control action-surface flex-1 py-3 border border-blue-200/80 text-slate-600 font-medium rounded-xl"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="button"
+                  onClick={async () => {
+                    if (!business || commissionSaving) return;
+                    setCommissionSaving(true);
+                    try {
+                      const updated = { ...business, commission_rate: commissionInput / 100 };
+                      await updateBusiness(updated);
+                      setLocalCommissionRate(commissionInput / 100);
+                      setBusiness(updated);
+                      setCommissionModal(false);
+                      showToast('Comisión actualizada', 'success');
+                    } catch (err) {
+                      console.error('Error updating commission:', err);
+                      showToast('Error al actualizar comisión', 'error');
+                    } finally {
+                      setCommissionSaving(false);
+                    }
+                  }}
+                  disabled={commissionSaving}
+                  className="action-control flex-1 py-3 bg-gradient-to-br from-purple-500 to-purple-600 border border-blue-200/80 text-white font-semibold rounded-xl disabled:opacity-50"
+                >
+                  {commissionSaving ? 'Guardando...' : 'Guardar'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Plate Scanner Modal */}
       {scannerOpen && (
@@ -1811,7 +1808,7 @@ export function AdminView() {
                   type="text"
                   value={expenseDesc}
                   onChange={(e) => setExpenseDesc(e.target.value)}
-                  placeholder="Ej: Compra de shampoo, refrigerios..."
+                  placeholder="Ej: Insumos de uñas, tintes..."
                   className="w-full px-4 py-3 bg-slate-100 border border-[#E2E8F0] rounded-xl text-slate-900 text-sm focus:outline-none focus:border-orange-200 placeholder-slate-400"
                   autoFocus
                 />
@@ -1922,7 +1919,7 @@ export function AdminView() {
                 <HandCoins className="w-6 h-6 text-emerald-600" />
               </div>
               <div>
-                <h2 className="text-lg font-bold text-slate-900">Entregar y Cobrar</h2>
+                <h2 className="text-lg font-bold text-slate-900">Cobrar Servicio</h2>
                 <p className="text-sm text-slate-500">#{deliverTarget.ticket_number} · {deliverTarget.category_name}</p>
               </div>
             </div>
@@ -1988,7 +1985,7 @@ export function AdminView() {
 
             <div className="space-y-3 mb-4">
               <div>
-                <label className="text-xs text-slate-500 mb-1 block">servicio</label>
+                <label className="text-xs text-slate-500 mb-1 block">Especialista</label>
                 <div className="grid grid-cols-2 gap-2">
                   {operators.filter((o) => o.active && o.role === 'servicio').map((op) => (
                     <button
@@ -2257,7 +2254,7 @@ function LoyaltyConfigModal({
           {enabled && (
             <div className="space-y-4 animate-fadeIn">
               <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-xl p-4">
-                <label className="text-xs text-slate-500 mb-2 block">servicios necesarios para premio</label>
+                <label className="text-xs text-slate-500 mb-2 block">Servicios necesarios para premio</label>
                 <input
                   type="number"
                   value={threshold}
@@ -2290,7 +2287,7 @@ function LoyaltyConfigModal({
                         : 'action-surface text-slate-500'
                     }`}
                   >
-                    servicio Gratis
+                    Servicio Gratis
                   </button>
                   <button
                     onClick={() => setRewardType('discount')}
