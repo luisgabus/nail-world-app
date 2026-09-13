@@ -12,9 +12,9 @@ interface Props {
 }
 
 const ICON_OPTIONS = [
-  { key: 'car', label: 'Auto', Icon: Car },
-  { key: 'bike', label: 'Moto', Icon: Bike },
-  { key: 'truck', label: 'Camión', Icon: Truck },
+  { key: 'car', label: 'Manicura', Icon: Car },
+  { key: 'bike', label: 'Pedicura', Icon: Bike },
+  { key: 'truck', label: 'Semipermante', Icon: Truck },
 ];
 
 export function CategoryManager({ categories, businessId, onBack, onSave, onDelete }: Props) {
@@ -128,7 +128,7 @@ export function CategoryManager({ categories, businessId, onBack, onSave, onDele
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="Ej: Moto, Automóvil..."
+              placeholder="Ej: Manicura, Pedicura..."
               className="w-full px-4 py-3 mb-3 bg-slate-100 border border-[#E2E8F0] rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-200"
               autoFocus
             />
