@@ -2,24 +2,25 @@ import React, { useState } from 'react';
 import { Sparkles, ArrowRight, Loader2 } from 'lucide-react';
 
 interface LoginScreenProps {
-  onLogin: (businessId: string, role: 'owner' | 'reception') => void;
+  onLogin?: (businessId: string, role: 'owner' | 'reception') => void;
 }
 
 export function LoginScreen({ onLogin }: LoginScreenProps) {
   const [businessId, setBusinessId] = useState('');
   const [submittingRole, setSubmittingRole] = useState<'owner' | 'reception' | null>(null);
 
-const handleLogin = (role: 'owner' | 'reception') => {
+  const handleLogin = (role: 'owner' | 'reception') => {
     const trimmedId = businessId.trim().toUpperCase();
     if (!trimmedId) {
       alert('Por favor ingresa el ID del Negocio');
       return;
     }
     setSubmittingRole(role);
-    try {
+
+    if (typeof onLogin === 'function') {
       onLogin(trimmedId, role);
-    } catch (err) {
-      console.error(err);
+    } else {
+      console.error('La función onLogin no está definida en el componente padre.');
       setSubmittingRole(null);
     }
   };
