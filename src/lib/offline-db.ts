@@ -4,7 +4,7 @@ const DB_VERSION = 5;
 const STORES = [
   'businesses',
   'operators',
-  'vehicle_categories',
+  'categories',
   'washes',
   'inventory_items',
   'inventory_movements',

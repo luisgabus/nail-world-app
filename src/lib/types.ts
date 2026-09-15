@@ -84,7 +84,7 @@ export interface VehicleCategory {
   name: string;
   base_price: number;
   icon: string;
-  sort_order: number;
+  order_index: number;
   active: boolean;
   created_at: string;
 }

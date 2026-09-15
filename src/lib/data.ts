@@ -252,38 +252,38 @@ export async function lookupPlateHistory(businessId: string, plate: string): Pro
 export async function fetchCategories(businessId: string): Promise<VehicleCategory[]> {
   if (isOnline()) {
     const { data, error } = await supabase
-      .from('vehicle_categories')
+      .from('categories')
       .select('*')
       .eq('business_id', businessId)
-      .order('sort_order');
+      .order('order_index');
     if (!error && data) {
       return data as VehicleCategory[];
     }
   }
-  const local = await dbGetAll<VehicleCategory>('vehicle_categories');
+  const local = await dbGetAll<VehicleCategory>('categories');
   return local
     .filter((c) => c.business_id === businessId)
-    .sort((a, b) => a.sort_order - b.sort_order);
+    .sort((a, b) => a.order_index - b.order_index);
 }
 
 export async function saveCategory(cat: VehicleCategory): Promise<VehicleCategory> {
-  await dbPut('vehicle_categories', cat);
+  await dbPut('categories', cat);
   if (isOnline()) {
-    const { error } = await supabase.from('vehicle_categories').upsert(cat);
-    if (error) await enqueueOperation('vehicle_categories', 'insert', cat.id, cat as unknown as Record<string, unknown>);
+    const { error } = await supabase.from('categories').upsert(cat);
+    if (error) await enqueueOperation('categories', 'insert', cat.id, cat as unknown as Record<string, unknown>);
   } else {
-    await enqueueOperation('vehicle_categories', 'insert', cat.id, cat as unknown as Record<string, unknown>);
+    await enqueueOperation('categories', 'insert', cat.id, cat as unknown as Record<string, unknown>);
   }
   return cat;
 }
 
 export async function deleteCategory(id: string): Promise<void> {
-  await dbDelete('vehicle_categories', id);
+  await dbDelete('categories', id);
   if (isOnline()) {
-    const { error } = await supabase.from('vehicle_categories').delete().eq('id', id);
-    if (error) await enqueueOperation('vehicle_categories', 'delete', id, {});
+    const { error } = await supabase.from('categories').delete().eq('id', id);
+    if (error) await enqueueOperation('categories', 'delete', id, {});
   } else {
-    await enqueueOperation('vehicle_categories', 'delete', id, {});
+    await enqueueOperation('categories', 'delete', id, {});
   }
 }
 
@@ -468,10 +468,10 @@ export async function fetchInventoryMovements(businessId: string): Promise<Inven
 // ============ Seeding ============
 
 const DEFAULT_CATEGORIES = [
-  { name: 'Manicura tradicional', base_price: 25000, icon: 'Sparkles', sort_order: 0 },
-  { name: 'Pedicura tradicional', base_price: 25000, icon: 'Sparkles', sort_order: 1 },
-  { name: 'Semipermanente', base_price: 50000, icon: 'Sparkles', sort_order: 2 },
-  { name: 'Acrilicas', base_price: 100000, icon: 'Sparkles', sort_order: 3 },
+  { name: 'Manicura tradicional', base_price: 25000, icon: 'Sparkles', order_index: 0 },
+  { name: 'Pedicura tradicional', base_price: 25000, icon: 'Sparkles', order_index: 1 },
+  { name: 'Semipermanente', base_price: 50000, icon: 'Sparkles', order_index: 2 },
+  { name: 'Acrilicas', base_price: 100000, icon: 'Sparkles', order_index: 3 },
 ];
 
 export async function seedDefaultCategories(businessId: string): Promise<void> {
@@ -485,7 +485,7 @@ export async function seedDefaultCategories(businessId: string): Promise<void> {
       name: cat.name,
       base_price: cat.base_price,
       icon: cat.icon,
-      sort_order: cat.sort_order,
+      order_index: cat.order_index,
       active: true,
       created_at: new Date().toISOString(),
     };

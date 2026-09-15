@@ -62,7 +62,7 @@ export async function enqueueOperation(
 const SYNC_TABLES: { table: string; store: StoreName }[] = [
   { table: 'businesses', store: 'businesses' },
   { table: 'operators', store: 'operators' },
-  { table: 'vehicle_categories', store: 'vehicle_categories' },
+  { table: 'categories', store: 'categories' },
   { table: 'washes', store: 'washes' },
   { table: 'inventory_items', store: 'inventory_items' },
   { table: 'inventory_movements', store: 'inventory_movements' },
