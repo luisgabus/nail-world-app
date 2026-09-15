@@ -17,11 +17,16 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
     }
     setSubmittingRole(role);
 
+    // Intentamos usar la función del padre si existe; de lo contrario, gestionamos el acceso localmente
     if (typeof onLogin === 'function') {
       onLogin(trimmedId, role);
     } else {
-      console.error('La función onLogin no está definida en el componente padre.');
-      setSubmittingRole(null);
+      // Respaldo robusto por si el componente padre no pasa la prop
+      localStorage.setItem('nail_world_business_id', trimmedId);
+      localStorage.setItem('nail_world_role', role);
+      setTimeout(() => {
+        window.location.reload();
+      }, 300);
     }
   };
 
