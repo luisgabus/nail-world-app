@@ -123,46 +123,36 @@ export function LoginScreen() {
               <p className="text-red-600 text-sm mt-3 animate-pulse">{error}</p>
             )}
 
-            {/* Buttons */}
-            <div className="mt-6 space-y-3">
-              <button
-                type="submit"
-                disabled={!!submittingRole}
-                className="action-control w-full py-4 bg-gradient-to-br from-rose-600 to-rose-500 border border-rose-200/80 text-white font-semibold rounded-xl flex items-center justify-center gap-2 disabled:opacity-50 transition-opacity"
-              >
-                {submittingRole === 'admin' ? (
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                ) : (
-                  <>
-                    Ingresar como Recepción
-                    <ArrowRight className="w-5 h-5" />
-                  </>
-                )}
-              </button>
-              
-              <button
-                type="button"
-                onClick={() => handleLogin('owner')}
-                disabled={!!submittingRole}
-                className="action-control action-surface w-full py-4 border border-rose-200/80 text-slate-700 font-semibold rounded-xl flex items-center justify-center gap-2 disabled:opacity-50 transition-opacity"
-              >
-                {submittingRole === 'owner' ? (
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                ) : (
-                  <>
-                    Ingresar como Administrador
-                    <ArrowRight className="w-5 h-5" />
-                  </>
-                )}
-              </button>
-            </div>
-          </form>
+{/* Buttons */}
+<div className="mt-6 space-y-3">
+  <button
+    type="submit"
+    disabled={!!submittingRole}
+    className="action-control w-full py-4 bg-rose-300 hover:bg-rose-400 border border-rose-200 text-slate-800 font-semibold rounded-xl flex items-center justify-center gap-2 disabled:opacity-50 transition-colors shadow-sm shadow-rose-200/50"
+  >
+    {submittingRole === 'admin' ? (
+      <Loader2 className="w-5 h-5 animate-spin" />
+    ) : (
+      <>
+        Ingresar como Recepción
+        <ArrowRight className="w-5 h-5" />
+      </>
+    )}
+  </button>
 
-          <p className="text-center text-xs text-slate-500 mt-6">
-            Demo: usa <span className="font-mono text-rose-500 font-bold">NAIL01</span> para entrar
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-}
+  <button
+    type="button"
+    onClick={() => handleLogin('owner')}
+    disabled={!!submittingRole}
+    className="action-control action-surface w-full py-4 bg-rose-50 hover:bg-rose-100 border border-rose-200 text-slate-700 font-semibold rounded-xl flex items-center justify-center gap-2 disabled:opacity-50 transition-colors"
+  >
+    {submittingRole === 'owner' ? (
+      <Loader2 className="w-5 h-5 animate-spin" />
+    ) : (
+      <>
+        Ingresar como Administrador
+        <ArrowRight className="w-5 h-5" />
+      </>
+    )}
+  </button>
+</div>
