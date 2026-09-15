@@ -139,7 +139,7 @@ export function HistoryView({ closures }: { closures: DailyClosure[] }) {
           label="Comisiones + Propinas"
           value={`$${kpis.operatorPay.toLocaleString('es-CO')}`}
           Icon={HandCoins}
-          color="from-blue-600 to-blue-500"
+          color="from-rose-600 to-rose-500"
         />
         <KpiCard
           label="Servicios Atendidos"

@@ -237,9 +237,9 @@ export default function LiquidationModal({ wash, operators, onClose, onConfirm }
                   <button
                     key={svc.name}
                     onClick={() => toggleService(svc.name)}
-                    className={`action-control px-3 py-2 rounded-xl text-sm font-medium border border-blue-200/80 ${
+                    className={`action-control px-3 py-2 rounded-xl text-sm font-medium border border-rose-200/80 ${
                       isSel
-                        ? 'bg-gradient-to-br from-blue-100 via-white to-slate-50 text-blue-700'
+                        ? 'bg-gradient-to-br from-rose-100 via-white to-slate-50 text-rose-700'
                         : 'action-surface text-slate-500'
                     }`}
                   >
@@ -271,7 +271,7 @@ export default function LiquidationModal({ wash, operators, onClose, onConfirm }
               <button
                 onClick={addCustomService}
                 disabled={!customName.trim() || customAmount <= 0}
-                className="action-control action-surface px-3 py-2 border border-blue-200/80 text-rose-500 rounded-xl disabled:opacity-40"
+                className="action-control action-surface px-3 py-2 border border-rose-200/80 text-rose-500 rounded-xl disabled:opacity-40"
               >
                 <Plus className="w-4 h-4" />
               </button>
@@ -321,7 +321,7 @@ export default function LiquidationModal({ wash, operators, onClose, onConfirm }
               <button
                 onClick={addConsumo}
                 disabled={!consumoName.trim() || consumoAmount <= 0}
-                className="action-control px-3 py-2 bg-gradient-to-br from-amber-50 via-white to-slate-50 border border-blue-200/80 text-amber-600 rounded-xl disabled:opacity-40"
+                className="action-control px-3 py-2 bg-gradient-to-br from-amber-50 via-white to-slate-50 border border-rose-200/80 text-amber-600 rounded-xl disabled:opacity-40"
               >
                 <Plus className="w-4 h-4" />
               </button>
@@ -362,7 +362,7 @@ export default function LiquidationModal({ wash, operators, onClose, onConfirm }
                 <button
                   key={t}
                   onClick={() => setTip(t)}
-                  className={`action-control flex-1 py-2 rounded-lg text-sm font-medium border border-blue-200/80 ${
+                  className={`action-control flex-1 py-2 rounded-lg text-sm font-medium border border-rose-200/80 ${
                     tip === t ? 'bg-gradient-to-br from-emerald-50 via-white to-slate-50 text-emerald-600' : 'action-surface text-slate-500'
                   }`}
                 >
@@ -407,7 +407,7 @@ export default function LiquidationModal({ wash, operators, onClose, onConfirm }
           <button
             onClick={handleConfirm}
             disabled={saving}
-            className="action-control w-full py-3.5 bg-gradient-to-br from-emerald-600 to-green-500 border border-blue-200/80 text-white font-bold rounded-xl flex items-center justify-center gap-2 disabled:opacity-50"
+            className="action-control w-full py-3.5 bg-gradient-to-br from-emerald-600 to-green-500 border border-rose-200/80 text-white font-bold rounded-xl flex items-center justify-center gap-2 disabled:opacity-50"
           >
             <CheckCircle2 className="w-5 h-5" />
             {saving ? 'Guardando...' : 'Confirmar y Finalizar'}

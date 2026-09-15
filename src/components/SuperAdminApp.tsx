@@ -276,7 +276,7 @@ export function SuperAdminApp() {
   if (loading && view === 'login') {
     return (
       <div className="min-h-screen bg-slate-900 text-white flex items-center justify-center">
-        <RefreshCw className="w-8 h-8 animate-spin text-blue-500" />
+        <RefreshCw className="w-8 h-8 animate-spin text-rose-500" />
       </div>
     );
   }
@@ -305,7 +305,7 @@ export function SuperAdminApp() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value.trim().toLowerCase())}
                   required
-                  className="w-full bg-slate-900 border border-slate-700 rounded-lg pl-10 pr-4 py-2.5 text-white focus:outline-none focus:border-blue-500"
+                  className="w-full bg-slate-900 border border-slate-700 rounded-lg pl-10 pr-4 py-2.5 text-white focus:outline-none focus:border-rose-500"
                 />
               </div>
             </div>
@@ -318,14 +318,14 @@ export function SuperAdminApp() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="w-full bg-slate-900 border border-slate-700 rounded-lg pl-10 pr-4 py-2.5 text-white focus:outline-none focus:border-blue-500"
+                  className="w-full bg-slate-900 border border-slate-700 rounded-lg pl-10 pr-4 py-2.5 text-white focus:outline-none focus:border-rose-500"
                 />
               </div>
             </div>
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-primary hover:bg-blue-500 text-white font-medium py-2.5 rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+              className="w-full bg-primary hover:bg-rose-500 text-white font-medium py-2.5 rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
             >
               {loading ? <RefreshCw className="w-5 h-5 animate-spin" /> : 'Inicializar Sesión'}
             </button>
@@ -345,7 +345,7 @@ export function SuperAdminApp() {
       
       <header className="bg-slate-800 border-b border-slate-700 px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Building2 className="w-6 h-6 text-blue-400" />
+          <Building2 className="w-6 h-6 text-rose-400" />
           <h1 className="text-xl font-bold">Panel Central Administrativo</h1>
         </div>
         <div className="flex items-center gap-4">
@@ -384,7 +384,7 @@ export function SuperAdminApp() {
           )}
           {dashboardLoading ? (
              <div className="py-20 flex flex-col items-center justify-center text-slate-400">
-               <RefreshCw className="w-8 h-8 animate-spin text-blue-500 mb-3" />
+               <RefreshCw className="w-8 h-8 animate-spin text-rose-500 mb-3" />
              </div>
           ) : businesses.length === 0 ? (
              <div className="py-20 text-center bg-slate-800/50 rounded-xl border border-slate-700/50 text-slate-400">
@@ -393,7 +393,7 @@ export function SuperAdminApp() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {businesses.map((b) => (
-                <div key={b.id} onClick={() => openBusinessDetail(b)} className="bg-slate-800 border border-slate-700 rounded-xl p-5 hover:border-blue-500/50 transition-colors cursor-pointer">
+                <div key={b.id} onClick={() => openBusinessDetail(b)} className="bg-slate-800 border border-slate-700 rounded-xl p-5 hover:border-rose-500/50 transition-colors cursor-pointer">
                   <h3 className="text-lg font-medium text-white">{b.name}</h3>
                   <p className="text-sm text-slate-400 font-mono mb-4">{b.codigo}</p>
                   <div className="flex justify-between items-center border-t border-slate-700/50 pt-3">
@@ -420,7 +420,7 @@ export function SuperAdminApp() {
               <button 
                 onClick={() => handleRenew(1)} 
                 disabled={actionLoading}
-                className="px-4 py-2 bg-primary hover:bg-blue-500 text-white text-sm rounded-lg disabled:opacity-50 flex items-center gap-2"
+                className="px-4 py-2 bg-primary hover:bg-rose-500 text-white text-sm rounded-lg disabled:opacity-50 flex items-center gap-2"
               >
                 {actionLoading && <RefreshCw className="w-4 h-4 animate-spin" />}
                 Renovar 1 Mes

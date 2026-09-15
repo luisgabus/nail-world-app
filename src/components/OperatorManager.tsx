@@ -52,7 +52,7 @@ export function OperatorManager({ operators, businessId, onBack, onSave, onDelet
       <main className="px-4 py-4 pb-24">
         <button
           onClick={() => setShowAdd(true)}
-          className="action-control w-full py-3 mb-4 bg-gradient-to-br from-blue-600 to-blue-500 border border-blue-200/80 text-white font-semibold rounded-xl flex items-center justify-center gap-2"
+          className="action-control w-full py-3 mb-4 bg-gradient-to-br from-rose-600 to-rose-500 border border-rose-200/80 text-white font-semibold rounded-xl flex items-center justify-center gap-2"
         >
           <Plus className="w-5 h-5" /> Agregar Especialista
         </button>
@@ -60,7 +60,7 @@ export function OperatorManager({ operators, businessId, onBack, onSave, onDelet
         <div className="space-y-2">
           {operators.map((op) => (
             <div key={op.id} className="flex items-center gap-3 p-3 bg-white border border-[#E2E8F0] shadow-sm rounded-xl">
-              <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-rose-50 flex items-center justify-center">
                 <User className="w-5 h-5 text-rose-500" />
               </div>
               <div className="flex-1">
@@ -69,7 +69,7 @@ export function OperatorManager({ operators, businessId, onBack, onSave, onDelet
               </div>
               <button
                 onClick={async () => { await onDelete(op.id); onBack(); }}
-                className="action-control p-2 rounded-lg bg-gradient-to-br from-red-50 via-white to-slate-50 border border-blue-200/80 text-red-600"
+                className="action-control p-2 rounded-lg bg-gradient-to-br from-red-50 via-white to-slate-50 border border-rose-200/80 text-red-600"
               >
                 <Trash2 className="w-4 h-4" />
               </button>
@@ -96,13 +96,13 @@ export function OperatorManager({ operators, businessId, onBack, onSave, onDelet
               onChange={(e) => setNewName(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleAdd()}
               placeholder="Nombre del especialista"
-              className="w-full px-4 py-3 bg-slate-100 border border-[#E2E8F0] rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-200"
+              className="w-full px-4 py-3 bg-slate-100 border border-[#E2E8F0] rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:border-rose-200"
               autoFocus
             />
             <button
               onClick={handleAdd}
               disabled={!newName.trim()}
-              className="action-control w-full mt-4 py-3 bg-gradient-to-br from-blue-600 to-blue-500 border border-blue-200/80 text-white font-semibold rounded-xl disabled:opacity-50"
+              className="action-control w-full mt-4 py-3 bg-gradient-to-br from-rose-600 to-rose-500 border border-rose-200/80 text-white font-semibold rounded-xl disabled:opacity-50"
             >
               Guardar
             </button>

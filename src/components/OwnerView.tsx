@@ -157,13 +157,13 @@ export function OwnerView() {
               type="date"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
-              className="flex-1 px-3 py-2 bg-slate-100 border border-[#E2E8F0] rounded-xl text-slate-900 text-sm focus:outline-none focus:border-blue-200"
+              className="flex-1 px-3 py-2 bg-slate-100 border border-[#E2E8F0] rounded-xl text-slate-900 text-sm focus:outline-none focus:border-rose-200"
             />
             <input
               type="date"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
-              className="flex-1 px-3 py-2 bg-slate-100 border border-[#E2E8F0] rounded-xl text-slate-900 text-sm focus:outline-none focus:border-blue-200"
+              className="flex-1 px-3 py-2 bg-slate-100 border border-[#E2E8F0] rounded-xl text-slate-900 text-sm focus:outline-none focus:border-rose-200"
             />
           </div>
         )}
@@ -209,8 +209,8 @@ export function OwnerView() {
             {/* KPI cards */}
             <div className="grid grid-cols-2 gap-3">
               <KPICard label="Ingresos" value={`$${totalRevenue.toLocaleString('es-CO')}`} Icon={DollarSign} color="from-emerald-600 to-green-500" />
-              <KPICard label="Propinas" value={`$${totalTips.toLocaleString('es-CO')}`} Icon={TrendingUp} color="from-blue-600 to-blue-500" />
-              <KPICard label="servicios" value={completed.length.toString()} Icon={Receipt} color="from-blue-600 to-indigo-500" />
+              <KPICard label="Propinas" value={`$${totalTips.toLocaleString('es-CO')}`} Icon={TrendingUp} color="from-rose-600 to-rose-500" />
+              <KPICard label="servicios" value={completed.length.toString()} Icon={Receipt} color="from-rose-600 to-indigo-500" />
               <KPICard label="Desistidos" value={desisted.length.toString()} Icon={AlertTriangle} color="from-red-600 to-rose-500" />
             </div>
 
@@ -248,7 +248,7 @@ export function OwnerView() {
                   <div key={hour} className="flex-1 flex flex-col items-center justify-end group relative">
                     <div
                       className={`w-full rounded-t transition-all duration-300 ${
-                        count > 0 ? 'bg-gradient-to-t from-blue-600 to-blue-500' : 'bg-slate-100'
+                        count > 0 ? 'bg-gradient-to-t from-rose-600 to-rose-500' : 'bg-slate-100'
                       }`}
                       style={{ height: `${(count / maxHourly) * 100}%`, minHeight: count > 0 ? '4px' : '2px' }}
                     />
@@ -448,7 +448,7 @@ export function OwnerView() {
                     <div className="text-2xl font-bold text-rose-500">${paymentConfig.monthly_price.toLocaleString('es-CO')}</div>
                     <div className="text-[10px] text-slate-500">por mes</div>
                   </div>
-                  <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 text-center">
+                  <div className="bg-rose-50 border border-rose-200 rounded-xl p-3 text-center">
                     <div className="text-xs text-rose-500/70">Plan Anual</div>
                     <div className="text-2xl font-bold text-rose-500">${paymentConfig.annual_price.toLocaleString('es-CO')}</div>
                     <div className="text-[10px] text-slate-500">por año (ahorra 25%)</div>
@@ -475,7 +475,7 @@ export function OwnerView() {
                 )}
 
                 {paymentConfig.bank_account && (
-                  <div className="flex items-center gap-3 bg-blue-50 border border-blue-200 rounded-xl p-3">
+                  <div className="flex items-center gap-3 bg-rose-50 border border-rose-200 rounded-xl p-3">
                     <Banknote className="w-5 h-5 text-rose-500 shrink-0" />
                     <div className="flex-1">
                       <div className="text-xs text-slate-500">Cuenta bancaria</div>
@@ -606,7 +606,7 @@ function InventoryManager({ businessId }: { businessId: string }) {
     <div className="space-y-4 animate-fadeIn">
       <button
         onClick={() => setShowAdd(true)}
-        className="action-control w-full py-3 bg-gradient-to-br from-blue-600 to-blue-500 border border-blue-200/80 text-white font-semibold rounded-xl flex items-center justify-center gap-2"
+        className="action-control w-full py-3 bg-gradient-to-br from-rose-600 to-rose-500 border border-rose-200/80 text-white font-semibold rounded-xl flex items-center justify-center gap-2"
       >
         <Plus className="w-5 h-5" /> Agregar Insumo
       </button>
@@ -618,7 +618,7 @@ function InventoryManager({ businessId }: { businessId: string }) {
             <div key={item.id} className={`p-3 rounded-2xl border ${low ? 'bg-red-50 border-red-200' : 'bg-white border-[#E2E8F0]'}`}>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${low ? 'bg-red-50' : 'bg-blue-50'}`}>
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${low ? 'bg-red-50' : 'bg-rose-50'}`}>
                     <Boxes className={`w-5 h-5 ${low ? 'text-red-600' : 'text-rose-500'}`} />
                   </div>
                   <div>
@@ -649,7 +649,7 @@ function InventoryManager({ businessId }: { businessId: string }) {
           <div className="space-y-1">
             {movements.slice(0, 15).map((m) => (
               <div key={m.id} className="flex items-center gap-2 p-2 bg-white rounded-lg text-xs">
-                <span className={`px-1.5 py-0.5 rounded font-mono ${m.type === 'in' ? 'bg-emerald-50 text-emerald-600' : m.type === 'out' ? 'bg-amber-50 text-amber-600' : 'bg-blue-50 text-rose-500'}`}>
+                <span className={`px-1.5 py-0.5 rounded font-mono ${m.type === 'in' ? 'bg-emerald-50 text-emerald-600' : m.type === 'out' ? 'bg-amber-50 text-amber-600' : 'bg-rose-50 text-rose-500'}`}>
                   {m.type === 'in' ? '+' : m.type === 'out' ? '-' : '='}
                 </span>
                 <span className="text-slate-600 flex-1">{m.quantity}</span>
@@ -668,13 +668,13 @@ function InventoryManager({ businessId }: { businessId: string }) {
               <h2 className="text-lg font-bold">Nuevo Insumo</h2>
               <button onClick={() => setShowAdd(false)} className="text-slate-500 hover:text-slate-900">X</button>
             </div>
-            <input type="text" value={newName} onChange={(e) => setNewName(e.target.value)} placeholder="Nombre" className="w-full px-4 py-3 mb-2 bg-slate-100 border border-[#E2E8F0] rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-200" autoFocus />
+            <input type="text" value={newName} onChange={(e) => setNewName(e.target.value)} placeholder="Nombre" className="w-full px-4 py-3 mb-2 bg-slate-100 border border-[#E2E8F0] rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:border-rose-200" autoFocus />
             <div className="flex gap-2 mb-2">
-              <input type="text" value={newUnit} onChange={(e) => setNewUnit(e.target.value)} placeholder="Unidad" className="flex-1 px-4 py-3 bg-slate-100 border border-[#E2E8F0] rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-200" />
-              <input type="number" value={newQty} onChange={(e) => setNewQty(Number(e.target.value))} placeholder="Cantidad" className="w-24 px-4 py-3 bg-slate-100 border border-[#E2E8F0] rounded-xl text-slate-900 focus:outline-none focus:border-blue-200" />
+              <input type="text" value={newUnit} onChange={(e) => setNewUnit(e.target.value)} placeholder="Unidad" className="flex-1 px-4 py-3 bg-slate-100 border border-[#E2E8F0] rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:border-rose-200" />
+              <input type="number" value={newQty} onChange={(e) => setNewQty(Number(e.target.value))} placeholder="Cantidad" className="w-24 px-4 py-3 bg-slate-100 border border-[#E2E8F0] rounded-xl text-slate-900 focus:outline-none focus:border-rose-200" />
             </div>
-            <input type="number" value={newMin} onChange={(e) => setNewMin(Number(e.target.value))} placeholder="Stock mínimo" className="w-full px-4 py-3 mb-4 bg-slate-100 border border-[#E2E8F0] rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-200" />
-            <button onClick={handleAdd} disabled={!newName.trim()} className="action-control w-full py-3 bg-gradient-to-br from-blue-600 to-blue-500 border border-blue-200/80 text-white font-semibold rounded-xl disabled:opacity-50">Guardar</button>
+            <input type="number" value={newMin} onChange={(e) => setNewMin(Number(e.target.value))} placeholder="Stock mínimo" className="w-full px-4 py-3 mb-4 bg-slate-100 border border-[#E2E8F0] rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:border-rose-200" />
+            <button onClick={handleAdd} disabled={!newName.trim()} className="action-control w-full py-3 bg-gradient-to-br from-rose-600 to-rose-500 border border-rose-200/80 text-white font-semibold rounded-xl disabled:opacity-50">Guardar</button>
           </div>
         </div>
       )}
@@ -690,13 +690,13 @@ function InventoryManager({ businessId }: { businessId: string }) {
             <p className="text-sm text-slate-500 mb-3">Stock actual: {adjustItem.quantity} {adjustItem.unit}</p>
             <div className="flex gap-2 mb-3">
               {(['in', 'out', 'adjust'] as const).map((t) => (
-                <button key={t} onClick={() => setAdjustType(t)} className={`action-control flex-1 py-2 rounded-lg text-sm font-medium border border-blue-200/80 ${adjustType === t ? 'bg-gradient-to-br from-blue-100 via-white to-slate-50 text-rose-500' : 'action-surface text-slate-500'}`}>
+                <button key={t} onClick={() => setAdjustType(t)} className={`action-control flex-1 py-2 rounded-lg text-sm font-medium border border-rose-200/80 ${adjustType === t ? 'bg-gradient-to-br from-rose-100 via-white to-slate-50 text-rose-500' : 'action-surface text-slate-500'}`}>
                   {t === 'in' ? 'Entrada' : t === 'out' ? 'Salida' : 'Ajuste'}
                 </button>
               ))}
             </div>
-            <input type="number" value={adjustQty} onChange={(e) => setAdjustQty(Number(e.target.value))} placeholder="Cantidad" className="w-full px-4 py-3 mb-4 bg-slate-100 border border-[#E2E8F0] rounded-xl text-slate-900 focus:outline-none focus:border-blue-200" autoFocus />
-            <button onClick={handleAdjust} disabled={adjustQty === 0} className="action-control w-full py-3 bg-gradient-to-br from-blue-600 to-blue-500 border border-blue-200/80 text-white font-semibold rounded-xl disabled:opacity-50">Confirmar</button>
+            <input type="number" value={adjustQty} onChange={(e) => setAdjustQty(Number(e.target.value))} placeholder="Cantidad" className="w-full px-4 py-3 mb-4 bg-slate-100 border border-[#E2E8F0] rounded-xl text-slate-900 focus:outline-none focus:border-rose-200" autoFocus />
+            <button onClick={handleAdjust} disabled={adjustQty === 0} className="action-control w-full py-3 bg-gradient-to-br from-rose-600 to-rose-500 border border-rose-200/80 text-white font-semibold rounded-xl disabled:opacity-50">Confirmar</button>
           </div>
         </div>
       )}

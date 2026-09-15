@@ -120,7 +120,7 @@ export function OperatorPerformanceView({ washes }: { washes: Wash[] }) {
       {/* KPI cards */}
       <div className="grid grid-cols-3 gap-3">
         <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-3">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-blue-500 flex items-center justify-center mb-2">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-rose-600 to-rose-500 flex items-center justify-center mb-2">
             <Car className="w-4 h-4 text-white" />
           </div>
           <div className="text-lg font-bold text-slate-900">{kpis.totalCars}</div>
@@ -159,7 +159,7 @@ export function OperatorPerformanceView({ washes }: { washes: Wash[] }) {
           onClick={() => setSortMode('cars')}
           className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-1 ${
             sortMode === 'cars'
-              ? 'bg-blue-50 text-rose-500 border border-blue-200'
+              ? 'bg-rose-50 text-rose-500 border border-rose-200'
               : 'bg-white text-slate-500 border border-[#E2E8F0]'
           }`}
         >

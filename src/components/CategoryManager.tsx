@@ -88,7 +88,7 @@ export function CategoryManager({
           <>
             <button
               onClick={handleNew}
-              className="action-control w-full py-3.5 bg-primary text-white font-semibold rounded-2xl flex items-center justify-center gap-2 hover:bg-blue-500 transition-all shadow-sm"
+              className="action-control w-full py-3.5 bg-primary text-white font-semibold rounded-2xl flex items-center justify-center gap-2 hover:bg-rose-500 transition-all shadow-sm"
             >
               <Plus className="w-5 h-5" /> Agregar Categoría
             </button>
@@ -100,7 +100,7 @@ export function CategoryManager({
                   className="bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-4 flex items-center justify-between"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-rose-500">
+                    <div className="w-10 h-10 rounded-xl bg-rose-50 flex items-center justify-center text-rose-500">
                       <Sparkles className="w-5 h-5" />
                     </div>
                     <div>
@@ -147,7 +147,7 @@ export function CategoryManager({
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Ej: Manicura Semipermanente, Pedicura Spa..."
-                className="w-full px-4 py-3 bg-slate-50 border border-[#E2E8F0] rounded-xl text-slate-900 text-sm focus:outline-none focus:border-blue-500"
+                className="w-full px-4 py-3 bg-slate-50 border border-[#E2E8F0] rounded-xl text-slate-900 text-sm focus:outline-none focus:border-rose-500"
                 required
                 autoFocus
               />
@@ -159,7 +159,7 @@ export function CategoryManager({
                 type="number"
                 value={basePrice}
                 onChange={(e) => setBasePrice(Number(e.target.value))}
-                className="w-full px-4 py-3 bg-slate-50 border border-[#E2E8F0] rounded-xl text-slate-900 text-sm focus:outline-none focus:border-blue-500 font-bold"
+                className="w-full px-4 py-3 bg-slate-50 border border-[#E2E8F0] rounded-xl text-slate-900 text-sm focus:outline-none focus:border-rose-500 font-bold"
                 required
               />
             </div>
@@ -170,7 +170,7 @@ export function CategoryManager({
                 type="number"
                 value={orderIndex}
                 onChange={(e) => setOrderIndex(Number(e.target.value))}
-                className="w-full px-4 py-3 bg-slate-50 border border-[#E2E8F0] rounded-xl text-slate-900 text-sm focus:outline-none focus:border-blue-500"
+                className="w-full px-4 py-3 bg-slate-50 border border-[#E2E8F0] rounded-xl text-slate-900 text-sm focus:outline-none focus:border-rose-500"
               />
             </div>
 
@@ -178,14 +178,14 @@ export function CategoryManager({
               <button
                 type="button"
                 onClick={() => setEditingCategory(null)}
-                className="action-control action-surface flex-1 py-3 border border-blue-200/80 text-slate-600 font-medium rounded-xl"
+                className="action-control action-surface flex-1 py-3 border border-rose-200/80 text-slate-600 font-medium rounded-xl"
               >
                 Cancelar
               </button>
               <button
                 type="submit"
                 disabled={saving || !name.trim()}
-                className="action-control flex-1 py-3 bg-primary text-white font-semibold rounded-xl hover:bg-blue-500 transition-all disabled:opacity-50"
+                className="action-control flex-1 py-3 bg-primary text-white font-semibold rounded-xl hover:bg-rose-500 transition-all disabled:opacity-50"
               >
                 {saving ? 'Guardando...' : 'Guardar'}
               </button>

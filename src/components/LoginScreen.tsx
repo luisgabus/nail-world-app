@@ -77,11 +77,11 @@ export function LoginScreen() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-rose-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-br from-blue-600 to-blue-500 shadow-lg shadow-blue-500/30 mb-4">
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-br from-rose-600 to-rose-500 shadow-lg shadow-rose-500/30 mb-4">
             <Sparkles className="w-10 h-10 text-white" strokeWidth={2.5} />
           </div>
           <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Nail World</h1>
@@ -114,7 +114,7 @@ export function LoginScreen() {
               value={businessId}
               onChange={(e) => setBusinessId(e.target.value)}
               placeholder="Ej: NAIL01"
-              className="w-full px-4 py-4 text-lg font-mono uppercase tracking-wider bg-white border border-[#E2E8F0] shadow-sm rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-200 focus:ring-2 focus:ring-blue-500/20 transition-all"
+              className="w-full px-4 py-4 text-lg font-mono uppercase tracking-wider bg-white border border-[#E2E8F0] shadow-sm rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:border-rose-200 focus:ring-2 focus:ring-rose-500/20 transition-all"
               autoFocus
               disabled={!!submittingRole}
             />
@@ -128,7 +128,7 @@ export function LoginScreen() {
               <button
                 type="submit"
                 disabled={!!submittingRole}
-                className="action-control w-full py-4 bg-gradient-to-br from-blue-600 to-blue-500 border border-blue-200/80 text-white font-semibold rounded-xl flex items-center justify-center gap-2 disabled:opacity-50 transition-opacity"
+                className="action-control w-full py-4 bg-gradient-to-br from-rose-600 to-rose-500 border border-rose-200/80 text-white font-semibold rounded-xl flex items-center justify-center gap-2 disabled:opacity-50 transition-opacity"
               >
                 {submittingRole === 'admin' ? (
                   <Loader2 className="w-5 h-5 animate-spin" />
@@ -144,7 +144,7 @@ export function LoginScreen() {
                 type="button"
                 onClick={() => handleLogin('owner')}
                 disabled={!!submittingRole}
-                className="action-control action-surface w-full py-4 border border-blue-200/80 text-slate-700 font-semibold rounded-xl flex items-center justify-center gap-2 disabled:opacity-50 transition-opacity"
+                className="action-control action-surface w-full py-4 border border-rose-200/80 text-slate-700 font-semibold rounded-xl flex items-center justify-center gap-2 disabled:opacity-50 transition-opacity"
               >
                 {submittingRole === 'owner' ? (
                   <Loader2 className="w-5 h-5 animate-spin" />

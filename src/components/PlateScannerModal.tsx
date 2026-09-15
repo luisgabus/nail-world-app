@@ -169,10 +169,10 @@ export function PlateScannerModal({
           {showVideo && (
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
               <div className="relative w-[80%] h-[60%] border-2 border-cyan-300 rounded-xl shadow-[0_0_20px_rgba(34,211,238,0.3)]">
-                <div className="absolute -top-1 -left-1 w-4 h-4 border-t-2 border-l-2 border-blue-300 rounded-tl-lg" />
-                <div className="absolute -top-1 -right-1 w-4 h-4 border-t-2 border-r-2 border-blue-300 rounded-tr-lg" />
-                <div className="absolute -bottom-1 -left-1 w-4 h-4 border-b-2 border-l-2 border-blue-300 rounded-bl-lg" />
-                <div className="absolute -bottom-1 -right-1 w-4 h-4 border-b-2 border-r-2 border-blue-300 rounded-br-lg" />
+                <div className="absolute -top-1 -left-1 w-4 h-4 border-t-2 border-l-2 border-rose-300 rounded-tl-lg" />
+                <div className="absolute -top-1 -right-1 w-4 h-4 border-t-2 border-r-2 border-rose-300 rounded-tr-lg" />
+                <div className="absolute -bottom-1 -left-1 w-4 h-4 border-b-2 border-l-2 border-rose-300 rounded-bl-lg" />
+                <div className="absolute -bottom-1 -right-1 w-4 h-4 border-b-2 border-r-2 border-rose-300 rounded-br-lg" />
               </div>
             </div>
           )}
@@ -191,7 +191,7 @@ export function PlateScannerModal({
             <button
               onClick={captureFrame}
               disabled={!cameraReady}
-              className="action-control w-full py-4 bg-gradient-to-br from-cyan-500 to-blue-600 border border-blue-200/80 text-white font-bold rounded-xl flex items-center justify-center gap-2 disabled:opacity-50"
+              className="action-control w-full py-4 bg-gradient-to-br from-cyan-500 to-rose-600 border border-rose-200/80 text-white font-bold rounded-xl flex items-center justify-center gap-2 disabled:opacity-50"
             >
               <Camera className="w-5 h-5" /> Capturar Foto
             </button>
@@ -200,13 +200,13 @@ export function PlateScannerModal({
             <div className="flex gap-3">
               <button
                 onClick={retake}
-                className="action-control action-surface flex-1 py-3 border border-blue-200/80 text-slate-600 font-medium rounded-xl flex items-center justify-center gap-2"
+                className="action-control action-surface flex-1 py-3 border border-rose-200/80 text-slate-600 font-medium rounded-xl flex items-center justify-center gap-2"
               >
                 <RefreshCw className="w-4 h-4" /> {tab === 'camera' ? 'Tomar otra' : 'Cambiar'}
               </button>
               <button
                 onClick={confirmPhoto}
-                className="action-control flex-1 py-3 bg-gradient-to-br from-emerald-500 to-emerald-600 border border-blue-200/80 text-white font-semibold rounded-xl flex items-center justify-center gap-2"
+                className="action-control flex-1 py-3 bg-gradient-to-br from-emerald-500 to-emerald-600 border border-rose-200/80 text-white font-semibold rounded-xl flex items-center justify-center gap-2"
               >
                 <CheckCircle2 className="w-4 h-4" /> Usar esta Foto
               </button>

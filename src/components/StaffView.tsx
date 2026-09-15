@@ -83,7 +83,7 @@ export function StaffView({
           <>
             <button
               onClick={handleNew}
-              className="action-control w-full py-3.5 bg-primary text-white font-semibold rounded-2xl flex items-center justify-center gap-2 hover:bg-blue-500 transition-all shadow-sm"
+              className="action-control w-full py-3.5 bg-primary text-white font-semibold rounded-2xl flex items-center justify-center gap-2 hover:bg-rose-500 transition-all shadow-sm"
             >
               <Plus className="w-5 h-5" /> Agregar Especialista
             </button>
@@ -147,7 +147,7 @@ export function StaffView({
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Ej: Camila Restrepo"
-                className="w-full px-4 py-3 bg-slate-50 border border-[#E2E8F0] rounded-xl text-slate-900 text-sm focus:outline-none focus:border-blue-500"
+                className="w-full px-4 py-3 bg-slate-50 border border-[#E2E8F0] rounded-xl text-slate-900 text-sm focus:outline-none focus:border-rose-500"
                 required
                 autoFocus
               />
@@ -161,7 +161,7 @@ export function StaffView({
                   onClick={() => setRole('servicio')}
                   className={`py-3 px-3 rounded-xl text-sm font-medium border transition-all ${
                     role === 'servicio'
-                      ? 'bg-blue-50 border-blue-300 text-blue-700 font-semibold'
+                      ? 'bg-rose-50 border-rose-300 text-rose-700 font-semibold'
                       : 'bg-slate-50 border-[#E2E8F0] text-slate-600'
                   }`}
                 >
@@ -172,7 +172,7 @@ export function StaffView({
                   onClick={() => setRole('recepcion')}
                   className={`py-3 px-3 rounded-xl text-sm font-medium border transition-all ${
                     role === 'recepcion'
-                      ? 'bg-blue-50 border-blue-300 text-blue-700 font-semibold'
+                      ? 'bg-rose-50 border-rose-300 text-rose-700 font-semibold'
                       : 'bg-slate-50 border-[#E2E8F0] text-slate-600'
                   }`}
                 >
@@ -196,14 +196,14 @@ export function StaffView({
               <button
                 type="button"
                 onClick={() => setEditingOperator(null)}
-                className="action-control action-surface flex-1 py-3 border border-blue-200/80 text-slate-600 font-medium rounded-xl"
+                className="action-control action-surface flex-1 py-3 border border-rose-200/80 text-slate-600 font-medium rounded-xl"
               >
                 Cancelar
               </button>
               <button
                 type="submit"
                 disabled={saving || !name.trim()}
-                className="action-control flex-1 py-3 bg-primary text-white font-semibold rounded-xl hover:bg-blue-500 transition-all disabled:opacity-50"
+                className="action-control flex-1 py-3 bg-primary text-white font-semibold rounded-xl hover:bg-rose-500 transition-all disabled:opacity-50"
               >
                 {saving ? 'Guardando...' : 'Guardar'}
               </button>

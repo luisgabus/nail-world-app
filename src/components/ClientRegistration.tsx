@@ -113,7 +113,7 @@ export const ClientRegistration = () => {
   <select
     value={formData.vehicleType}
     onChange={(e) => setFormData({ ...formData, vehicleType: e.target.value })}
-    className="w-full bg-[#0B0F17] border border-slate-700/80 rounded-xl py-3 pl-11 pr-4 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all appearance-none"
+    className="w-full bg-[#0B0F17] border border-slate-700/80 rounded-xl py-3 pl-11 pr-4 text-white focus:outline-none focus:ring-2 focus:ring-rose-500/50 transition-all appearance-none"
   >
     <option value="Manicure Tradicional">Manicure Tradicional</option>
     <option value="Pedicure Tradicional">Pedicure Tradicional</option>

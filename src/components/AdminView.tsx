@@ -63,7 +63,7 @@ function statusColor(s: WashStatus): string {
   switch (s) {
     case 'en_espera': return 'text-amber-700 bg-amber-100';
     case 'en_servicio': return 'text-emerald-700 bg-emerald-100';
-    case 'listo': return 'text-blue-700 bg-blue-100';
+    case 'listo': return 'text-rose-700 bg-rose-100';
     case 'completado': return 'text-emerald-700 bg-emerald-100';
     case 'desistido': return 'text-red-700 bg-red-100';
   }
@@ -73,7 +73,7 @@ function cardTint(s: WashStatus): string {
   switch (s) {
     case 'en_espera': return 'bg-amber-50/70 border-amber-200';
     case 'en_servicio': return 'bg-emerald-50/70 border-emerald-200';
-    case 'listo': return 'bg-blue-50/70 border-blue-200';
+    case 'listo': return 'bg-rose-50/70 border-rose-200';
     default: return 'bg-white border-[#E2E8F0]';
   }
 }
@@ -724,7 +724,7 @@ export function AdminView() {
       <header className="sticky top-0 z-30 bg-white backdrop-blur-xl border-b border-[#E2E8F0] px-4 py-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-blue-500 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-rose-600 to-rose-500 flex items-center justify-center">
               <Sparkles className="w-5 h-5 text-white" />
             </div>
             <div>
@@ -767,25 +767,25 @@ export function AdminView() {
         <div className="flex flex-nowrap overflow-x-auto scrollbar-none w-full gap-2 [&>*]:shrink-0">
           <button
             onClick={() => setView('staff')}
-            className="action-control action-surface flex-1 flex items-center justify-center gap-2 py-3 border border-blue-200/80 rounded-xl text-sm font-medium text-slate-600"
+            className="action-control action-surface flex-1 flex items-center justify-center gap-2 py-3 border border-rose-200/80 rounded-xl text-sm font-medium text-slate-600"
           >
             <Users className="w-4 h-4" /> Personal
           </button>
           <button
             onClick={() => setView('categories')}
-            className="action-control action-surface flex-1 flex items-center justify-center gap-2 py-3 border border-blue-200/80 rounded-xl text-sm font-medium text-slate-600"
+            className="action-control action-surface flex-1 flex items-center justify-center gap-2 py-3 border border-rose-200/80 rounded-xl text-sm font-medium text-slate-600"
           >
             <Settings className="w-4 h-4" /> Categorías
           </button>
           <button
             onClick={() => { setCommissionInput(Math.round(commissionRate * 100)); setCommissionModal(true); }}
-            className="action-control flex-1 flex items-center justify-center gap-2 py-3 bg-gradient-to-br from-purple-50 via-white to-slate-50 border border-blue-200/80 rounded-xl text-sm font-medium text-purple-600"
+            className="action-control flex-1 flex items-center justify-center gap-2 py-3 bg-gradient-to-br from-purple-50 via-white to-slate-50 border border-rose-200/80 rounded-xl text-sm font-medium text-purple-600"
           >
             <Percent className="w-4 h-4" /> {Math.round(commissionRate * 100)}
           </button>
           <button
             onClick={() => setLoyaltyModal(true)}
-            className={`action-control flex-1 flex items-center justify-center gap-2 py-3 rounded-xl border border-blue-200/80 text-sm font-medium ${
+            className={`action-control flex-1 flex items-center justify-center gap-2 py-3 rounded-xl border border-rose-200/80 text-sm font-medium ${
               business?.loyalty_enabled
                 ? 'bg-gradient-to-br from-amber-50 via-white to-slate-50 text-amber-600'
                 : 'action-surface text-slate-500'
@@ -795,25 +795,25 @@ export function AdminView() {
           </button>
           <button
             onClick={() => setExpensesModal(true)}
-            className="action-control flex-1 flex items-center justify-center gap-2 py-3 bg-gradient-to-br from-orange-50 via-white to-slate-50 border border-blue-200/80 rounded-xl text-sm font-medium text-orange-600"
+            className="action-control flex-1 flex items-center justify-center gap-2 py-3 bg-gradient-to-br from-orange-50 via-white to-slate-50 border border-rose-200/80 rounded-xl text-sm font-medium text-orange-600"
           >
             <ShoppingCart className="w-4 h-4" /> Gastos
           </button>
           <button
             onClick={() => setAdvancesModal(true)}
-            className="action-control flex-1 flex items-center justify-center gap-2 py-3 bg-gradient-to-br from-rose-50 via-white to-slate-50 border border-blue-200/80 rounded-xl text-sm font-medium text-rose-600"
+            className="action-control flex-1 flex items-center justify-center gap-2 py-3 bg-gradient-to-br from-rose-50 via-white to-slate-50 border border-rose-200/80 rounded-xl text-sm font-medium text-rose-600"
           >
             <Wallet className="w-4 h-4" /> Vales
           </button>
           <button
             onClick={() => setLiquidationView(true)}
-            className="action-control flex-1 flex items-center justify-center gap-2 py-3 bg-gradient-to-br from-indigo-50 via-white to-slate-50 border border-blue-200/80 rounded-xl text-sm font-medium text-indigo-600"
+            className="action-control flex-1 flex items-center justify-center gap-2 py-3 bg-gradient-to-br from-indigo-50 via-white to-slate-50 border border-rose-200/80 rounded-xl text-sm font-medium text-indigo-600"
           >
             <ClipboardList className="w-4 h-4" /> Liquidar
           </button>
           <button
             onClick={() => setCierreModal(true)}
-            className="action-control flex-1 flex items-center justify-center gap-2 py-3 bg-gradient-to-br from-amber-50 via-white to-slate-50 border border-blue-200/80 rounded-xl text-sm font-medium text-amber-600"
+            className="action-control flex-1 flex items-center justify-center gap-2 py-3 bg-gradient-to-br from-amber-50 via-white to-slate-50 border border-rose-200/80 rounded-xl text-sm font-medium text-amber-600"
           >
             <Wallet className="w-4 h-4" /> Cierre
           </button>
@@ -872,7 +872,7 @@ export function AdminView() {
                       {(w.status === 'en_espera' || w.status === 'en_servicio') ? (
                         <button
                           onClick={() => setReassignTarget(reassignTarget === w.id ? null : w.id)}
-                          className="action-control action-surface flex items-center gap-1.5 px-1.5 py-1 -ml-1.5 rounded-lg border border-blue-200/80 text-slate-500"
+                          className="action-control action-surface flex items-center gap-1.5 px-1.5 py-1 -ml-1.5 rounded-lg border border-rose-200/80 text-slate-500"
                         >
                           <span>{w.operator_name || 'Sin especialista'} · {new Date(w.created_at).toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' })}</span>
                           <Pencil className="w-3 h-3 text-rose-500" />
@@ -887,7 +887,7 @@ export function AdminView() {
                             <button
                               key={op.id}
                               onClick={() => handleReassignOperator(w, op)}
-                              className={`action-control action-surface w-full text-left px-2 py-2 rounded-lg border border-blue-200/80 text-xs ${op.id === w.operator_id ? 'text-blue-700 font-semibold' : 'text-slate-600'}`}
+                              className={`action-control action-surface w-full text-left px-2 py-2 rounded-lg border border-rose-200/80 text-xs ${op.id === w.operator_id ? 'text-rose-700 font-semibold' : 'text-slate-600'}`}
                             >
                               {op.name}
                             </button>
@@ -907,13 +907,13 @@ export function AdminView() {
                       <>
                         <button
                           onClick={() => handleStartWash(w)}
-                          className="action-control action-surface flex-1 py-2.5 border border-blue-200/80 font-semibold rounded-lg flex items-center justify-center gap-1.5 text-sm text-rose-500"
+                          className="action-control action-surface flex-1 py-2.5 border border-rose-200/80 font-semibold rounded-lg flex items-center justify-center gap-1.5 text-sm text-rose-500"
                         >
                           <Play className="w-4 h-4" /> Iniciar servicio
                         </button>
                         <button
                           onClick={() => { setDesistidoTarget(w); setCancellationReason(''); }}
-                          className="action-control px-3 py-2.5 bg-gradient-to-br from-red-50 via-white to-slate-50 border border-blue-200/80 text-red-600 font-medium rounded-lg flex items-center justify-center gap-1.5 text-sm"
+                          className="action-control px-3 py-2.5 bg-gradient-to-br from-red-50 via-white to-slate-50 border border-rose-200/80 text-red-600 font-medium rounded-lg flex items-center justify-center gap-1.5 text-sm"
                         >
                           <XCircle className="w-4 h-4" /> Cancelar
                         </button>
@@ -922,7 +922,7 @@ export function AdminView() {
                     {w.status === 'en_servicio' && (
                       <button
                         onClick={() => handleFinishWash(w)}
-                        className="action-control action-surface flex-1 py-2.5 border border-blue-200/80 text-rose-500 font-semibold rounded-lg flex items-center justify-center gap-1.5 text-sm"
+                        className="action-control action-surface flex-1 py-2.5 border border-rose-200/80 text-rose-500 font-semibold rounded-lg flex items-center justify-center gap-1.5 text-sm"
                       >
                         <Square className="w-4 h-4" /> Finalizar servicio
                       </button>
@@ -934,14 +934,14 @@ export function AdminView() {
                             href={waUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="action-control flex-1 py-2.5 bg-gradient-to-br from-green-500 to-emerald-600 border border-blue-200/80 text-white font-bold rounded-lg flex items-center justify-center gap-1.5 text-sm animate-fadeIn"
+                            className="action-control flex-1 py-2.5 bg-gradient-to-br from-green-500 to-emerald-600 border border-rose-200/80 text-white font-bold rounded-lg flex items-center justify-center gap-1.5 text-sm animate-fadeIn"
                           >
                             <MessageCircle className="w-4 h-4" /> Avisar por WhatsApp
                           </a>
                         )}
                         <button
                           onClick={() => handleDeliverWash(w)}
-                          className="action-control flex-1 py-2.5 bg-gradient-to-br from-emerald-50 via-white to-slate-50 border border-blue-200/80 text-emerald-600 font-semibold rounded-lg flex items-center justify-center gap-1.5 text-sm"
+                          className="action-control flex-1 py-2.5 bg-gradient-to-br from-emerald-50 via-white to-slate-50 border border-rose-200/80 text-emerald-600 font-semibold rounded-lg flex items-center justify-center gap-1.5 text-sm"
                         >
                           <HandCoins className="w-4 h-4" /> Cobrar Servicio
                         </button>
@@ -949,7 +949,7 @@ export function AdminView() {
                     )}
                     <button
                       onClick={() => setTicketModal(w)}
-                      className="action-control action-surface px-3 py-2.5 border border-blue-200/80 text-slate-500 rounded-lg"
+                      className="action-control action-surface px-3 py-2.5 border border-rose-200/80 text-slate-500 rounded-lg"
                     >
                       <Receipt className="w-4 h-4" />
                     </button>
@@ -969,7 +969,7 @@ export function AdminView() {
           {/* Step 1: Category */}
           <section>
             <h3 className="text-sm font-semibold text-slate-500 mb-2 flex items-center gap-2">
-              <span className="w-5 h-5 rounded-full bg-blue-500 text-white text-xs flex items-center justify-center font-bold">1</span>
+              <span className="w-5 h-5 rounded-full bg-rose-500 text-white text-xs flex items-center justify-center font-bold">1</span>
               Selecciona el servicio
             </h3>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -982,15 +982,15 @@ export function AdminView() {
                     onClick={() => handleCategorySelect(cat)}
                     className={`relative p-4 rounded-2xl border transition-all duration-200 active:scale-95 active:shadow-sm ${
                       isSelected
-                        ? 'border-blue-400 bg-gradient-to-br from-blue-50/80 via-white to-slate-50 shadow-md shadow-blue-900/10 hover:shadow-lg hover:shadow-blue-900/15 hover:-translate-y-1 hover:border-blue-400'
-                        : 'border border-blue-200/80 bg-gradient-to-br from-blue-50/80 via-white to-slate-50 shadow-md shadow-blue-900/10 hover:shadow-lg hover:shadow-blue-900/15 hover:border-blue-400 hover:-translate-y-1'
+                        ? 'border-rose-400 bg-gradient-to-br from-rose-50/80 via-white to-slate-50 shadow-md shadow-rose-900/10 hover:shadow-lg hover:shadow-rose-900/15 hover:-translate-y-1 hover:border-rose-400'
+                        : 'border border-rose-200/80 bg-gradient-to-br from-rose-50/80 via-white to-slate-50 shadow-md shadow-rose-900/10 hover:shadow-lg hover:shadow-rose-900/15 hover:border-rose-400 hover:-translate-y-1'
                     }`}
                   >
                     <Icon className={`w-8 h-8 mb-2 ${isSelected ? 'text-rose-500' : 'text-slate-500'}`} />
                     <div className="text-sm font-semibold">{cat.name}</div>
                     <div className="text-xs text-slate-500">${cat.base_price.toLocaleString('es-CO')}</div>
                     {isSelected && (
-                      <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center">
+                      <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-rose-500 flex items-center justify-center">
                         <CheckCircle2 className="w-3.5 h-3.5 text-white" />
                       </div>
                     )}
@@ -1004,7 +1004,7 @@ export function AdminView() {
           {selectedCategory && (
             <section className="animate-fadeIn">
               <h3 className="text-sm font-semibold text-slate-500 mb-2 flex items-center gap-2">
-                <span className="w-5 h-5 rounded-full bg-blue-500 text-white text-xs flex items-center justify-center font-bold">2</span>
+                <span className="w-5 h-5 rounded-full bg-rose-500 text-white text-xs flex items-center justify-center font-bold">2</span>
                 Selecciona la especialista
               </h3>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -1015,7 +1015,7 @@ export function AdminView() {
                     <button
                       key={op.id}
                       onClick={() => setSelectedOperator(op)}
-                      className={`action-control flex items-center gap-2 p-3 rounded-xl border border-blue-200/80 ${
+                      className={`action-control flex items-center gap-2 p-3 rounded-xl border border-rose-200/80 ${
                         isSelected
                           ? 'bg-gradient-to-br from-emerald-50 via-white to-slate-50 text-emerald-700'
                           : 'action-surface text-slate-700'
@@ -1036,7 +1036,7 @@ export function AdminView() {
           {selectedCategory && (
             <section className="animate-fadeIn">
               <h3 className="text-sm font-semibold text-slate-500 mb-2 flex items-center gap-2">
-                <span className="w-5 h-5 rounded-full bg-blue-500 text-white text-xs flex items-center justify-center font-bold">3</span>
+                <span className="w-5 h-5 rounded-full bg-rose-500 text-white text-xs flex items-center justify-center font-bold">3</span>
                 Ajusta precio del servicio
               </h3>
               <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-4">
@@ -1055,7 +1055,7 @@ export function AdminView() {
           {selectedCategory && (
             <section className="animate-fadeIn">
               <h3 className="text-sm font-semibold text-slate-500 mb-2 flex items-center gap-2">
-                <span className="w-5 h-5 rounded-full bg-blue-500 text-white text-xs flex items-center justify-center font-bold">4</span>
+                <span className="w-5 h-5 rounded-full bg-rose-500 text-white text-xs flex items-center justify-center font-bold">4</span>
                 Identificación del cliente <span className="text-red-600 text-xs">*</span>
               </h3>
               <div className="flex gap-2">
@@ -1076,7 +1076,7 @@ export function AdminView() {
                 </div>
                 <button
                   onClick={() => setScannerOpen(true)}
-                  className="action-control action-surface px-4 border border-blue-200/80 rounded-2xl text-rose-500 flex items-center gap-2"
+                  className="action-control action-surface px-4 border border-rose-200/80 rounded-2xl text-rose-500 flex items-center gap-2"
                   title="Tomar foto de soporte"
                 >
                   <Camera className="w-5 h-5" />
@@ -1123,7 +1123,7 @@ export function AdminView() {
           {selectedCategory && (
             <section className="animate-fadeIn">
               <h3 className="text-sm font-semibold text-slate-500 mb-2 flex items-center gap-2">
-                <span className="w-5 h-5 rounded-full bg-blue-500 text-white text-xs flex items-center justify-center font-bold">5</span>
+                <span className="w-5 h-5 rounded-full bg-rose-500 text-white text-xs flex items-center justify-center font-bold">5</span>
                 Datos del cliente (opcional)
               </h3>
               <div className="grid grid-cols-2 gap-3">
@@ -1157,7 +1157,7 @@ export function AdminView() {
               <button
                 onClick={handleRegister}
                 disabled={!selectedCategory || saving || !plate.trim() || subState?.isBlocked}
-                className="action-control w-full py-5 bg-gradient-to-br from-emerald-600 to-green-500 border border-blue-200/80 text-white font-bold text-lg rounded-2xl flex items-center justify-center gap-3 disabled:opacity-50"
+                className="action-control w-full py-5 bg-gradient-to-br from-emerald-600 to-green-500 border border-rose-200/80 text-white font-bold text-lg rounded-2xl flex items-center justify-center gap-3 disabled:opacity-50"
               >
                 <CheckCircle2 className="w-6 h-6" />
                 {subState?.isBlocked ? 'Suscripción suspendida' : saving ? 'Guardando...' : 'Registrar e Ingresar'}
@@ -1243,7 +1243,7 @@ export function AdminView() {
                 <button
                   key={r}
                   onClick={() => setCancellationReason(r)}
-                  className="action-control action-surface px-3 py-1.5 text-xs border border-blue-200/80 rounded-lg text-slate-500"
+                  className="action-control action-surface px-3 py-1.5 text-xs border border-rose-200/80 rounded-lg text-slate-500"
                 >
                   {r}
                 </button>
@@ -1253,14 +1253,14 @@ export function AdminView() {
             <div className="flex gap-3 mt-6">
               <button
                 onClick={() => { setDesistidoTarget(null); setCancellationReason(''); }}
-                className="action-control action-surface flex-1 py-3 border border-blue-200/80 text-slate-600 font-medium rounded-xl"
+                className="action-control action-surface flex-1 py-3 border border-rose-200/80 text-slate-600 font-medium rounded-xl"
               >
                 Volver
               </button>
               <button
                 onClick={handleConfirmDesistido}
                 disabled={!cancellationReason.trim()}
-                className="action-control flex-1 py-3 bg-gradient-to-br from-red-500 to-red-600 border border-blue-200/80 text-white font-semibold rounded-xl disabled:opacity-50"
+                className="action-control flex-1 py-3 bg-gradient-to-br from-red-500 to-red-600 border border-rose-200/80 text-white font-semibold rounded-xl disabled:opacity-50"
               >
                 Confirmar
               </button>
@@ -1338,7 +1338,7 @@ export function AdminView() {
               </button>
               <button
                 onClick={() => printTicket(ticketModal, business)}
-                className="flex-1 py-3 bg-primary text-white font-semibold rounded-xl hover:bg-blue-500 transition-all flex items-center justify-center gap-2"
+                className="flex-1 py-3 bg-primary text-white font-semibold rounded-xl hover:bg-rose-500 transition-all flex items-center justify-center gap-2"
               >
                 <Printer className="w-4 h-4" /> Imprimir
               </button>
@@ -1625,14 +1625,14 @@ export function AdminView() {
               <div className="flex gap-3">
                 <button
                   onClick={() => setCierreModal(false)}
-                  className="action-control action-surface flex-1 py-3 border border-blue-200/80 text-slate-600 font-medium rounded-xl"
+                  className="action-control action-surface flex-1 py-3 border border-rose-200/80 text-slate-600 font-medium rounded-xl"
                 >
                   Cancelar
                 </button>
                 <button
                   onClick={() => setCierreConfirm(true)}
                   disabled={shiftWashes.length === 0}
-                  className="action-control flex-1 py-3 bg-gradient-to-br from-amber-400 to-amber-500 border border-blue-200/80 text-slate-900 font-semibold rounded-xl disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="action-control flex-1 py-3 bg-gradient-to-br from-amber-400 to-amber-500 border border-rose-200/80 text-slate-900 font-semibold rounded-xl disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   <Lock className="w-4 h-4" /> Cerrar Caja
                 </button>
@@ -1645,14 +1645,14 @@ export function AdminView() {
                 <div className="flex gap-3">
                   <button
                     onClick={() => setCierreConfirm(false)}
-                    className="action-control action-surface flex-1 py-3 border border-blue-200/80 text-slate-600 font-medium rounded-xl"
+                    className="action-control action-surface flex-1 py-3 border border-rose-200/80 text-slate-600 font-medium rounded-xl"
                   >
                     Volver
                   </button>
                   <button
                     onClick={handleCierreCaja}
                     disabled={cierreSaving}
-                    className="action-control flex-1 py-3 bg-gradient-to-br from-red-500 to-red-600 border border-blue-200/80 text-white font-semibold rounded-xl disabled:opacity-50 flex items-center justify-center gap-2"
+                    className="action-control flex-1 py-3 bg-gradient-to-br from-red-500 to-red-600 border border-rose-200/80 text-white font-semibold rounded-xl disabled:opacity-50 flex items-center justify-center gap-2"
                   >
                     {cierreSaving ? 'Guardando...' : 'Confirmar Cierre'}
                   </button>
@@ -1688,7 +1688,7 @@ export function AdminView() {
                         setCommissionInput(p);
                         setIsCustomEditing(false);
                       }}
-                      className={`action-control flex-1 py-2 rounded-lg text-sm font-medium border border-blue-200/80 transition-all ${
+                      className={`action-control flex-1 py-2 rounded-lg text-sm font-medium border border-rose-200/80 transition-all ${
                         !isCustomEditing && commissionInput === p 
                           ? 'bg-gradient-to-br from-purple-50 via-white to-slate-50 text-purple-600 border-purple-300 shadow-sm' 
                           : 'action-surface text-slate-500'
@@ -1701,7 +1701,7 @@ export function AdminView() {
                   <button
                     type="button"
                     onClick={() => setIsCustomEditing(true)}
-                    className={`action-control flex-1 py-2 px-1 rounded-lg text-sm font-medium border border-blue-200/80 flex items-center justify-center gap-1 transition-all ${
+                    className={`action-control flex-1 py-2 px-1 rounded-lg text-sm font-medium border border-rose-200/80 flex items-center justify-center gap-1 transition-all ${
                       isCustomEditing || ![30, 40, 50, 60].includes(commissionInput)
                         ? 'bg-gradient-to-br from-purple-50 via-white to-slate-50 text-purple-600 border-purple-300 shadow-sm' 
                         : 'action-surface text-slate-500'
@@ -1735,7 +1735,7 @@ export function AdminView() {
                 <button
                   type="button"
                   onClick={() => setCommissionModal(false)}
-                  className="action-control action-surface flex-1 py-3 border border-blue-200/80 text-slate-600 font-medium rounded-xl"
+                  className="action-control action-surface flex-1 py-3 border border-rose-200/80 text-slate-600 font-medium rounded-xl"
                 >
                   Cancelar
                 </button>
@@ -1759,7 +1759,7 @@ export function AdminView() {
                     }
                   }}
                   disabled={commissionSaving}
-                  className="action-control flex-1 py-3 bg-gradient-to-br from-purple-500 to-purple-600 border border-blue-200/80 text-white font-semibold rounded-xl disabled:opacity-50"
+                  className="action-control flex-1 py-3 bg-gradient-to-br from-purple-500 to-purple-600 border border-rose-200/80 text-white font-semibold rounded-xl disabled:opacity-50"
                 >
                   {commissionSaving ? 'Guardando...' : 'Guardar'}
                 </button>
@@ -1820,7 +1820,7 @@ export function AdminView() {
                     <button
                       key={cat.value}
                       onClick={() => setExpenseCategory(cat.value)}
-                      className={`action-control py-2.5 px-3 rounded-xl text-sm font-medium border border-blue-200/80 ${
+                      className={`action-control py-2.5 px-3 rounded-xl text-sm font-medium border border-rose-200/80 ${
                         expenseCategory === cat.value
                           ? 'bg-gradient-to-br from-orange-50 via-white to-slate-50 text-orange-700'
                           : 'action-surface text-slate-500'
@@ -1844,7 +1844,7 @@ export function AdminView() {
               <button
                 onClick={handleAddExpense}
                 disabled={!expenseDesc.trim() || expenseAmount <= 0 || expenseSaving}
-                className="action-control w-full py-3 bg-gradient-to-br from-orange-500 to-orange-600 border border-blue-200/80 text-white font-semibold rounded-xl disabled:opacity-50 flex items-center justify-center gap-2"
+                className="action-control w-full py-3 bg-gradient-to-br from-orange-500 to-orange-600 border border-rose-200/80 text-white font-semibold rounded-xl disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 <Plus className="w-4 h-4" />
                 {expenseSaving ? 'Guardando...' : 'Agregar Gasto'}
@@ -1892,7 +1892,7 @@ export function AdminView() {
 
             <button
               onClick={() => { setExpensesModal(false); setExpenseDesc(''); setExpenseAmount(0); setExpenseCategory(null); }}
-              className="action-control action-surface w-full py-3 border border-blue-200/80 text-slate-600 font-medium rounded-xl"
+              className="action-control action-surface w-full py-3 border border-rose-200/80 text-slate-600 font-medium rounded-xl"
             >
               Cerrar
             </button>
@@ -1937,7 +1937,7 @@ export function AdminView() {
                   <button
                     key={pm.value}
                     onClick={() => setDeliverPaymentMethod(pm.value)}
-                    className={`action-control py-3 px-3 rounded-xl text-sm font-medium border border-blue-200/80 flex items-center gap-2 ${
+                    className={`action-control py-3 px-3 rounded-xl text-sm font-medium border border-rose-200/80 flex items-center gap-2 ${
                       deliverPaymentMethod === pm.value
                         ? 'bg-gradient-to-br from-emerald-50 via-white to-slate-50 text-emerald-700'
                         : 'action-surface text-slate-500'
@@ -1952,14 +1952,14 @@ export function AdminView() {
             <div className="flex gap-3">
               <button
                 onClick={() => { setDeliverTarget(null); setDeliverPaymentMethod(null); }}
-                className="action-control action-surface flex-1 py-3 border border-blue-200/80 text-slate-600 font-medium rounded-xl"
+                className="action-control action-surface flex-1 py-3 border border-rose-200/80 text-slate-600 font-medium rounded-xl"
               >
                 Cancelar
               </button>
               <button
                 onClick={handleConfirmDeliver}
                 disabled={!deliverPaymentMethod || deliverSaving}
-                className="action-control flex-1 py-3 bg-gradient-to-br from-emerald-500 to-emerald-600 border border-blue-200/80 text-white font-semibold rounded-xl disabled:opacity-50 flex items-center justify-center gap-2"
+                className="action-control flex-1 py-3 bg-gradient-to-br from-emerald-500 to-emerald-600 border border-rose-200/80 text-white font-semibold rounded-xl disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 <CheckCircle2 className="w-4 h-4" />
                 {deliverSaving ? 'Guardando...' : 'Confirmar Cobro'}
@@ -1991,7 +1991,7 @@ export function AdminView() {
                     <button
                       key={op.id}
                       onClick={() => setAdvanceOperator(op)}
-                      className={`action-control py-2.5 px-3 rounded-xl text-sm font-medium border border-blue-200/80 ${
+                      className={`action-control py-2.5 px-3 rounded-xl text-sm font-medium border border-rose-200/80 ${
                         advanceOperator?.id === op.id
                           ? 'bg-gradient-to-br from-rose-50 via-white to-slate-50 text-rose-700'
                           : 'action-surface text-slate-500'
@@ -2027,7 +2027,7 @@ export function AdminView() {
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     onClick={() => setAdvancePaidInCash(true)}
-                    className={`action-control py-2.5 rounded-xl text-sm font-medium border border-blue-200/80 ${
+                    className={`action-control py-2.5 rounded-xl text-sm font-medium border border-rose-200/80 ${
                       advancePaidInCash
                         ? 'bg-gradient-to-br from-emerald-50 via-white to-slate-50 text-emerald-700'
                         : 'action-surface text-slate-500'
@@ -2037,9 +2037,9 @@ export function AdminView() {
                   </button>
                   <button
                     onClick={() => setAdvancePaidInCash(false)}
-                    className={`action-control py-2.5 rounded-xl text-sm font-medium border border-blue-200/80 ${
+                    className={`action-control py-2.5 rounded-xl text-sm font-medium border border-rose-200/80 ${
                       !advancePaidInCash
-                        ? 'action-surface text-blue-700'
+                        ? 'action-surface text-rose-700'
                         : 'action-surface text-slate-500'
                     }`}
                   >
@@ -2050,7 +2050,7 @@ export function AdminView() {
               <button
                 onClick={handleAddAdvance}
                 disabled={!advanceOperator || advanceAmount <= 0 || !advanceConcept.trim() || advanceSaving}
-                className="action-control w-full py-3 bg-gradient-to-br from-rose-500 to-rose-600 border border-blue-200/80 text-white font-semibold rounded-xl disabled:opacity-50 flex items-center justify-center gap-2"
+                className="action-control w-full py-3 bg-gradient-to-br from-rose-500 to-rose-600 border border-rose-200/80 text-white font-semibold rounded-xl disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 <Plus className="w-4 h-4" />
                 {advanceSaving ? 'Guardando...' : 'Registrar Adelanto'}
@@ -2101,7 +2101,7 @@ export function AdminView() {
 
             <button
               onClick={() => { setAdvancesModal(false); setAdvanceOperator(null); setAdvanceAmount(0); setAdvanceConcept(''); setAdvancePaidInCash(true); }}
-              className="action-control action-surface w-full py-3 border border-blue-200/80 text-slate-600 font-medium rounded-xl"
+              className="action-control action-surface w-full py-3 border border-rose-200/80 text-slate-600 font-medium rounded-xl"
             >
               Cerrar
             </button>
@@ -2182,7 +2182,7 @@ export function AdminView() {
                       <button
                         onClick={() => handlePayOperator(liq.operator_id!)}
                         disabled={opAdvances.length === 0}
-                        className="action-control w-full mt-4 py-3 bg-gradient-to-br from-indigo-500 to-blue-600 border border-blue-200/80 text-white font-semibold rounded-xl disabled:opacity-50 flex items-center justify-center gap-2"
+                        className="action-control w-full mt-4 py-3 bg-gradient-to-br from-indigo-500 to-rose-600 border border-rose-200/80 text-white font-semibold rounded-xl disabled:opacity-50 flex items-center justify-center gap-2"
                       >
                         <CheckCircle2 className="w-4 h-4" />
                         {opAdvances.length > 0 ? 'Pagar y Saldar Vales' : 'Vales ya saldados'}
@@ -2266,7 +2266,7 @@ function LoyaltyConfigModal({
                     <button
                       key={t}
                       onClick={() => setThreshold(t)}
-                      className={`action-control flex-1 py-2 rounded-lg text-sm font-medium border border-blue-200/80 ${
+                      className={`action-control flex-1 py-2 rounded-lg text-sm font-medium border border-rose-200/80 ${
                         threshold === t ? 'bg-gradient-to-br from-amber-50 via-white to-slate-50 text-amber-600' : 'action-surface text-slate-500'
                       }`}
                     >
@@ -2281,7 +2281,7 @@ function LoyaltyConfigModal({
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     onClick={() => setRewardType('free')}
-                    className={`action-control py-3 rounded-xl text-sm font-medium border border-blue-200/80 ${
+                    className={`action-control py-3 rounded-xl text-sm font-medium border border-rose-200/80 ${
                       rewardType === 'free'
                         ? 'bg-gradient-to-br from-emerald-50 via-white to-slate-50 text-emerald-600'
                         : 'action-surface text-slate-500'
@@ -2291,7 +2291,7 @@ function LoyaltyConfigModal({
                   </button>
                   <button
                     onClick={() => setRewardType('discount')}
-                    className={`action-control py-3 rounded-xl text-sm font-medium border border-blue-200/80 ${
+                    className={`action-control py-3 rounded-xl text-sm font-medium border border-rose-200/80 ${
                       rewardType === 'discount'
                         ? 'action-surface text-rose-500'
                         : 'action-surface text-slate-500'
@@ -2316,8 +2316,8 @@ function LoyaltyConfigModal({
                       <button
                         key={p}
                         onClick={() => setDiscountPercent(p)}
-                        className={`action-control flex-1 py-2 rounded-lg text-sm font-medium border border-blue-200/80 ${
-                          discountPercent === p ? 'bg-gradient-to-br from-blue-100 via-white to-slate-50 text-rose-500' : 'action-surface text-slate-500'
+                        className={`action-control flex-1 py-2 rounded-lg text-sm font-medium border border-rose-200/80 ${
+                          discountPercent === p ? 'bg-gradient-to-br from-rose-100 via-white to-slate-50 text-rose-500' : 'action-surface text-slate-500'
                         }`}
                       >
                         {p}%
@@ -2341,14 +2341,14 @@ function LoyaltyConfigModal({
         <div className="flex gap-3 mt-6">
           <button
             onClick={onClose}
-            className="action-control action-surface flex-1 py-3 border border-blue-200/80 text-slate-600 font-medium rounded-xl"
+            className="action-control action-surface flex-1 py-3 border border-rose-200/80 text-slate-600 font-medium rounded-xl"
           >
             Cancelar
           </button>
           <button
             onClick={() => onSave({ loyalty_enabled: enabled, loyalty_threshold: threshold, loyalty_reward_type: rewardType, loyalty_discount_percent: discountPercent })}
             disabled={saving}
-            className="action-control flex-1 py-3 bg-gradient-to-br from-amber-400 to-amber-500 border border-blue-200/80 text-slate-900 font-semibold rounded-xl disabled:opacity-50 flex items-center justify-center gap-2"
+            className="action-control flex-1 py-3 bg-gradient-to-br from-amber-400 to-amber-500 border border-rose-200/80 text-slate-900 font-semibold rounded-xl disabled:opacity-50 flex items-center justify-center gap-2"
           >
             <Gift className="w-4 h-4" />
             {saving ? 'Guardando...' : 'Guardar'}
