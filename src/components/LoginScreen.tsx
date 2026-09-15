@@ -9,21 +9,14 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
   const [businessId, setBusinessId] = useState('');
   const [submittingRole, setSubmittingRole] = useState<'owner' | 'reception' | null>(null);
 
-const handleLogin = (role: 'owner' | 'reception') => {
+  const handleLogin = (role: 'owner' | 'reception') => {
     const trimmedId = businessId.trim().toUpperCase();
     if (!trimmedId) {
       alert('Por favor ingresa el ID del Negocio');
       return;
     }
     setSubmittingRole(role);
-    
-    // Ejecutamos la autenticación de inmediato de forma fluida
     onLogin(trimmedId, role);
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    handleLogin('reception');
   };
 
   const handleSubmit = (e: React.FormEvent) => {
