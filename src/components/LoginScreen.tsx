@@ -81,7 +81,7 @@ export function LoginScreen() {
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-br from-rose-600 to-rose-500 shadow-lg shadow-rose-500/30 mb-4">
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-br from-rose-400 to-rose-400 shadow-lg shadow-rose-300/40 mb-4">
             <Sparkles className="w-10 h-10 text-white" strokeWidth={2.5} />
           </div>
           <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Nail World</h1>
