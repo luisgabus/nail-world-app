@@ -157,3 +157,12 @@ export function LoginScreen() {
               )}
             </button>
           </div>
+        </form>
+
+        <p className="text-center text-xs text-slate-500 mt-6">
+          Demo: usa <span className="font-mono text-rose-400 font-bold">NAIL01</span> para entrar
+        </p>
+      </div>
+    </div>
+  );
+}
