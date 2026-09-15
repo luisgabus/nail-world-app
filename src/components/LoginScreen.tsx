@@ -125,44 +125,35 @@ export function LoginScreen() {
 
 {/* Buttons */}
 <div className="space-y-3">
-            <button
-              type="button"
-              onClick={() => handleLogin('reception')}
-              disabled={!!submittingRole}
-              className="w-full py-4 bg-rose-400 hover:bg-rose-500 text-white font-semibold rounded-xl flex items-center justify-center gap-2 disabled:opacity-50 transition-colors shadow-sm"
-            >
-              {submittingRole === 'reception' ? (
-                <Loader2 className="w-5 h-5 animate-spin" />
-              ) : (
-                <>
-                  Ingresar como Recepción
-                  <ArrowRight className="w-5 h-5" />
-                </>
-              )}
-            </button>
+  <button
+    type="button"
+    onClick={() => handleLogin('reception')}
+    disabled={!!submittingRole}
+    className="w-full py-4 bg-rose-400 hover:bg-rose-500 text-white font-semibold rounded-xl flex items-center justify-center gap-2 disabled:opacity-50 transition-colors shadow-sm"
+  >
+    {submittingRole === 'reception' ? (
+      <Loader2 className="w-5 h-5 animate-spin" />
+    ) : (
+      <>
+        Ingresar como Recepción
+        <ArrowRight className="w-5 h-5" />
+      </>
+    )}
+  </button>
 
-            <button
-              type="button"
-              onClick={() => handleLogin('owner')}
-              disabled={!!submittingRole}
-              className="action-control action-surface w-full py-4 bg-rose-50 hover:bg-rose-100 border border-rose-200 text-slate-700 font-semibold rounded-xl flex items-center justify-center gap-2 disabled:opacity-50 transition-colors"
-            >
-              {submittingRole === 'owner' ? (
-                <Loader2 className="w-5 h-5 animate-spin" />
-              ) : (
-                <>
-                  Ingresar como Administrador
-                  <ArrowRight className="w-5 h-5" />
-                </>
-              )}
-            </button>
-          </div>
-        </form>
-
-        <p className="text-center text-xs text-slate-500 mt-6">
-          Demo: usa <span className="font-mono text-rose-400 font-bold">NAIL01</span> para entrar
-        </p>
-      </div>
-    </div>
-  );
-}
+  <button
+    type="button"
+    onClick={() => handleLogin('owner')}
+    disabled={!!submittingRole}
+    className="action-control action-surface w-full py-4 bg-rose-50 hover:bg-rose-100 border border-rose-200 text-slate-700 font-semibold rounded-xl flex items-center justify-center gap-2 disabled:opacity-50 transition-colors"
+  >
+    {submittingRole === 'owner' ? (
+      <Loader2 className="w-5 h-5 animate-spin" />
+    ) : (
+      <>
+        Ingresar como Administrador
+        <ArrowRight className="w-5 h-5" />
+      </>
+    )}
+  </button>
+</div>
