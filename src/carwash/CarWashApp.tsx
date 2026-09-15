@@ -25,8 +25,8 @@ function AppContent() {
     return <SuperAdminApp />;
   }
 
-  // 3. Vista de Administrador / Operador
-  if (role === 'admin') {
+  // 3. Vista de Administrador / Recepción / Operador
+  if (role === 'admin' || role === 'reception') {
     return <AdminView />;
   }
 
