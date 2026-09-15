@@ -29,7 +29,7 @@ export async function fetchBusinessByCodigo(codigo: string): Promise<Business | 
     const { data, error } = await supabase
       .from('businesses')
       .select('*')
-      .eq('codigo', codigo.toUpperCase())
+      .eq('id', codigo.toUpperCase())
       .maybeSingle();
     if (error) {
       console.error('fetchBusinessByCodigo:', error.message);
@@ -61,7 +61,7 @@ export async function updateBusiness(business: Business): Promise<Business> {
 
 export async function createBusiness(codigo: string, name: string): Promise<Business | null> {
   const newBiz = {
-    codigo: codigo.toUpperCase(),
+    id: codigo.toUpperCase(),
     name,
     owner_pin: '1234',
   };
@@ -104,7 +104,7 @@ export async function createBusinessFull(input: NewBusinessInput): Promise<Busin
   billing.setDate(billing.getDate() + PLAN_DAYS[input.plan_type]);
 
   const payload = {
-    codigo: input.codigo.trim().toUpperCase(),
+    id: input.codigo.trim().toUpperCase(),
     name: input.name.trim(),
     admin_name: input.admin_name.trim() || null,
     email: input.email.trim() || null,
