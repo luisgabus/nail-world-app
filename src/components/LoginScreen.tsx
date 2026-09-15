@@ -103,57 +103,60 @@ export function LoginScreen() {
             )}
           </div>
 
-          <form onSubmit={handleSubmit}>
-            {/* Input */}
-            <label htmlFor="businessId" className="block text-sm font-medium text-slate-600 mb-2">
-              ID del Negocio
-            </label>
-            <input
-              id="businessId"
-              type="text"
-              value={businessId}
-              onChange={(e) => setBusinessId(e.target.value)}
-              placeholder="Ej: NAIL01"
-              className="w-full px-4 py-4 text-lg font-mono uppercase tracking-wider bg-white border border-[#E2E8F0] shadow-sm rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:border-rose-200 focus:ring-2 focus:ring-rose-500/20 transition-all"
-              autoFocus
-              disabled={!!submittingRole}
-            />
+<form onSubmit={handleSubmit} className="space-y-4">
+  {/* Input */}
+  <div>
+    <label htmlFor="businessId" className="block text-sm font-medium text-slate-600 mb-2">
+      ID del Negocio
+    </label>
+    <input
+      id="businessId"
+      type="text"
+      value={businessId}
+      onChange={(e) => setBusinessId(e.target.value)}
+      placeholder="Ej: NAIL01"
+      className="w-full px-4 py-4 text-lg font-mono uppercase tracking-wider bg-white border border-rose-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-400 focus:border-transparent transition-all shadow-sm"
+      autoFocus
+      disabled={!!submittingRole}
+    />
+  </div>
 
-            {error && (
-              <p className="text-red-600 text-sm mt-3 animate-pulse">{error}</p>
-            )}
+  {/* Buttons */}
+  <div className="space-y-3 pt-2">
+    <button
+      type="button"
+      onClick={() => handleLogin('reception')}
+      disabled={!!submittingRole}
+      className="w-full py-4 bg-rose-400 hover:bg-rose-500 text-white font-semibold rounded-xl flex items-center justify-center gap-2 disabled:opacity-50 transition-colors shadow-sm"
+    >
+      {submittingRole === 'reception' ? (
+        <Loader2 className="w-5 h-5 animate-spin" />
+      ) : (
+        <>
+          Ingresar como Recepción
+          <ArrowRight className="w-5 h-5" />
+        </>
+      )}
+    </button>
 
-{/* Buttons */}
-<div className="space-y-3">
-  <button
-    type="button"
-    onClick={() => handleLogin('reception')}
-    disabled={!!submittingRole}
-    className="w-full py-4 bg-rose-400 hover:bg-rose-500 text-white font-semibold rounded-xl flex items-center justify-center gap-2 disabled:opacity-50 transition-colors shadow-sm"
-  >
-    {submittingRole === 'reception' ? (
-      <Loader2 className="w-5 h-5 animate-spin" />
-    ) : (
-      <>
-        Ingresar como Recepción
-        <ArrowRight className="w-5 h-5" />
-      </>
-    )}
-  </button>
+    <button
+      type="button"
+      onClick={() => handleLogin('owner')}
+      disabled={!!submittingRole}
+      className="action-control action-surface w-full py-4 bg-rose-50 hover:bg-rose-100 border border-rose-200 text-slate-700 font-semibold rounded-xl flex items-center justify-center gap-2 disabled:opacity-50 transition-colors"
+    >
+      {submittingRole === 'owner' ? (
+        <Loader2 className="w-5 h-5 animate-spin" />
+      ) : (
+        <>
+          Ingresar como Administrador
+          <ArrowRight className="w-5 h-5" />
+        </>
+      )}
+    </button>
+  </div>
+</form>
 
-  <button
-    type="button"
-    onClick={() => handleLogin('owner')}
-    disabled={!!submittingRole}
-    className="action-control action-surface w-full py-4 bg-rose-50 hover:bg-rose-100 border border-rose-200 text-slate-700 font-semibold rounded-xl flex items-center justify-center gap-2 disabled:opacity-50 transition-colors"
-  >
-    {submittingRole === 'owner' ? (
-      <Loader2 className="w-5 h-5 animate-spin" />
-    ) : (
-      <>
-        Ingresar como Administrador
-        <ArrowRight className="w-5 h-5" />
-      </>
-    )}
-  </button>
-</div>
+<p className="text-center text-xs text-slate-500 mt-6">
+  Demo: usa <span className="font-mono text-rose-400 font-bold">NAIL01</span> para entrar
+</p>
