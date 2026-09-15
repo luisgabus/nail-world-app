@@ -59,7 +59,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   // 1. Cargar sesión inicial al montar con validación defensiva y limpieza de legado
   useEffect(() => {
-    // Eliminar la sesión obsoleta si existe en el navegador del usuario
+    // Eliminar la sesión obsoleta si existe en el navegador
     localStorage.removeItem('carwash_session');
 
     const stored = localStorage.getItem(STORAGE_KEY);
