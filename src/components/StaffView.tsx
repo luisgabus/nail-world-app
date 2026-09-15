@@ -83,7 +83,7 @@ export function StaffView({
           <>
             <button
               onClick={handleNew}
-              className="action-control w-full py-3.5 bg-blue-600 text-white font-semibold rounded-2xl flex items-center justify-center gap-2 hover:bg-blue-500 transition-all shadow-sm"
+              className="action-control w-full py-3.5 bg-primary text-white font-semibold rounded-2xl flex items-center justify-center gap-2 hover:bg-blue-500 transition-all shadow-sm"
             >
               <Plus className="w-5 h-5" /> Agregar Especialista
             </button>
@@ -203,7 +203,7 @@ export function StaffView({
               <button
                 type="submit"
                 disabled={saving || !name.trim()}
-                className="action-control flex-1 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-500 transition-all disabled:opacity-50"
+                className="action-control flex-1 py-3 bg-primary text-white font-semibold rounded-xl hover:bg-blue-500 transition-all disabled:opacity-50"
               >
                 {saving ? 'Guardando...' : 'Guardar'}
               </button>

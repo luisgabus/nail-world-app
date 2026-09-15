@@ -159,7 +159,7 @@ export function OperatorPerformanceView({ washes }: { washes: Wash[] }) {
           onClick={() => setSortMode('cars')}
           className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-1 ${
             sortMode === 'cars'
-              ? 'bg-blue-50 text-blue-600 border border-blue-200'
+              ? 'bg-blue-50 text-rose-500 border border-blue-200'
               : 'bg-white text-slate-500 border border-[#E2E8F0]'
           }`}
         >
@@ -202,7 +202,7 @@ export function OperatorPerformanceView({ washes }: { washes: Wash[] }) {
                   <div className="flex items-center justify-center gap-1 text-[10px] text-slate-500 mb-1">
                     <Car className="w-3 h-3" /> Carros
                   </div>
-                  <div className="font-bold text-blue-600">{op.cars}</div>
+                  <div className="font-bold text-rose-500">{op.cars}</div>
                 </div>
                 <div className="bg-slate-100 rounded-lg p-2 text-center">
                   <div className="flex items-center justify-center gap-1 text-[10px] text-slate-500 mb-1">

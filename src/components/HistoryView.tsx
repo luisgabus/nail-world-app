@@ -190,7 +190,7 @@ export function HistoryView({ closures }: { closures: DailyClosure[] }) {
                 </div>
                 <div className="bg-slate-100 rounded-lg p-2">
                   <div className="text-[10px] text-slate-500">Liquidación Op.</div>
-                  <div className="font-bold text-blue-600">${operatorTotal.toLocaleString('es-CO')}</div>
+                  <div className="font-bold text-rose-500">${operatorTotal.toLocaleString('es-CO')}</div>
                 </div>
                 <div className="bg-amber-50 border border-amber-200 rounded-lg p-2">
                   <div className="text-[10px] text-amber-600/70">Saldo Neto</div>
@@ -255,9 +255,9 @@ function ClosureDetailModal({ closure, onClose }: { closure: DailyClosure; onClo
           </div>
           <div className="flex justify-between items-center text-sm py-2 border-b border-slate-100">
             <span className="text-slate-600 flex items-center gap-2">
-              <Car className="w-4 h-4 text-blue-600" /> Servicios Atendidos
+              <Car className="w-4 h-4 text-rose-500" /> Servicios Atendidos
             </span>
-            <span className="font-bold text-blue-600">{closure.total_washes}</span>
+            <span className="font-bold text-rose-500">{closure.total_washes}</span>
           </div>
           <div className="flex justify-between items-center text-sm py-2 border-b border-slate-100">
             <span className="text-slate-600 flex items-center gap-2">
@@ -321,7 +321,7 @@ function ClosureDetailModal({ closure, onClose }: { closure: DailyClosure; onClo
                       </div>
                       <div className="bg-slate-100 rounded-lg p-1.5 text-center">
                         <div className="text-[9px] text-slate-500">Propinas</div>
-                        <div className="font-semibold text-blue-600">${liq.tips.toLocaleString('es-CO')}</div>
+                        <div className="font-semibold text-rose-500">${liq.tips.toLocaleString('es-CO')}</div>
                       </div>
                     </div>
                   </div>

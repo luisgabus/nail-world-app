@@ -241,7 +241,7 @@ export function OwnerView() {
             {/* Hourly congestion chart */}
             <section className="bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-4">
               <h3 className="text-sm font-semibold text-slate-600 mb-3 flex items-center gap-2">
-                <Clock className="w-4 h-4 text-blue-600" /> Distribución por hora (congestión)
+                <Clock className="w-4 h-4 text-rose-500" /> Distribución por hora (congestión)
               </h3>
               <div className="flex items-end gap-0.5 h-24">
                 {hourly.map((count, hour) => (
@@ -253,7 +253,7 @@ export function OwnerView() {
                       style={{ height: `${(count / maxHourly) * 100}%`, minHeight: count > 0 ? '4px' : '2px' }}
                     />
                     {count > 0 && (
-                      <span className="absolute -top-5 text-[10px] text-blue-600 font-mono opacity-0 group-hover:opacity-100 transition-opacity">
+                      <span className="absolute -top-5 text-[10px] text-rose-500 font-mono opacity-0 group-hover:opacity-100 transition-opacity">
                         {count}
                       </span>
                     )}
@@ -304,7 +304,7 @@ export function OwnerView() {
                   </div>
                   <div className="bg-slate-100 rounded-lg p-2">
                     <div className="text-xs text-slate-500">Propinas</div>
-                    <div className="font-bold text-blue-600">${liq.tips.toLocaleString('es-CO')}</div>
+                    <div className="font-bold text-rose-500">${liq.tips.toLocaleString('es-CO')}</div>
                   </div>
                   <div className="col-span-2 bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-200 rounded-lg p-2 flex justify-between items-center">
                     <span className="text-sm font-medium text-amber-700">Total a liquidar</span>
@@ -424,7 +424,7 @@ export function OwnerView() {
             <div className="grid grid-cols-2 gap-3">
               <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-4">
                 <div className="text-xs text-slate-500 mb-1">Plan actual</div>
-                <div className="text-xl font-bold text-blue-600">{planLabel(business.plan_type)}</div>
+                <div className="text-xl font-bold text-rose-500">{planLabel(business.plan_type)}</div>
               </div>
               <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-4">
                 <div className="text-xs text-slate-500 mb-1">Estado</div>
@@ -440,17 +440,17 @@ export function OwnerView() {
             {paymentConfig && (
               <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-4 space-y-3">
                 <h3 className="text-sm font-semibold text-slate-600 flex items-center gap-2">
-                  <CreditCard className="w-4 h-4 text-blue-600" /> Tarifas disponibles
+                  <CreditCard className="w-4 h-4 text-rose-500" /> Tarifas disponibles
                 </h3>
                 <div className="grid grid-cols-2 gap-3">
                   <div className="bg-cyan-50 border border-cyan-200 rounded-xl p-3 text-center">
-                    <div className="text-xs text-blue-600/70">Plan Mensual</div>
-                    <div className="text-2xl font-bold text-blue-600">${paymentConfig.monthly_price.toLocaleString('es-CO')}</div>
+                    <div className="text-xs text-rose-500/70">Plan Mensual</div>
+                    <div className="text-2xl font-bold text-rose-500">${paymentConfig.monthly_price.toLocaleString('es-CO')}</div>
                     <div className="text-[10px] text-slate-500">por mes</div>
                   </div>
                   <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 text-center">
-                    <div className="text-xs text-blue-600/70">Plan Anual</div>
-                    <div className="text-2xl font-bold text-blue-600">${paymentConfig.annual_price.toLocaleString('es-CO')}</div>
+                    <div className="text-xs text-rose-500/70">Plan Anual</div>
+                    <div className="text-2xl font-bold text-rose-500">${paymentConfig.annual_price.toLocaleString('es-CO')}</div>
                     <div className="text-[10px] text-slate-500">por año (ahorra 25%)</div>
                   </div>
                 </div>
@@ -476,7 +476,7 @@ export function OwnerView() {
 
                 {paymentConfig.bank_account && (
                   <div className="flex items-center gap-3 bg-blue-50 border border-blue-200 rounded-xl p-3">
-                    <Banknote className="w-5 h-5 text-blue-600 shrink-0" />
+                    <Banknote className="w-5 h-5 text-rose-500 shrink-0" />
                     <div className="flex-1">
                       <div className="text-xs text-slate-500">Cuenta bancaria</div>
                       <div className="text-sm font-bold text-slate-900">{paymentConfig.bank_account}</div>
@@ -487,7 +487,7 @@ export function OwnerView() {
 
                 {paymentConfig.breb_key && (
                   <div className="flex items-center gap-3 bg-cyan-50 border border-cyan-200 rounded-xl p-3">
-                    <Smartphone className="w-5 h-5 text-blue-600 shrink-0" />
+                    <Smartphone className="w-5 h-5 text-rose-500 shrink-0" />
                     <div className="flex-1">
                       <div className="text-xs text-slate-500">Bre-B / Interoperable</div>
                       <div className="text-sm font-bold text-slate-900">{paymentConfig.breb_key}</div>
@@ -619,7 +619,7 @@ function InventoryManager({ businessId }: { businessId: string }) {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${low ? 'bg-red-50' : 'bg-blue-50'}`}>
-                    <Boxes className={`w-5 h-5 ${low ? 'text-red-600' : 'text-blue-600'}`} />
+                    <Boxes className={`w-5 h-5 ${low ? 'text-red-600' : 'text-rose-500'}`} />
                   </div>
                   <div>
                     <div className="font-semibold text-sm">{item.name}</div>
@@ -649,7 +649,7 @@ function InventoryManager({ businessId }: { businessId: string }) {
           <div className="space-y-1">
             {movements.slice(0, 15).map((m) => (
               <div key={m.id} className="flex items-center gap-2 p-2 bg-white rounded-lg text-xs">
-                <span className={`px-1.5 py-0.5 rounded font-mono ${m.type === 'in' ? 'bg-emerald-50 text-emerald-600' : m.type === 'out' ? 'bg-amber-50 text-amber-600' : 'bg-blue-50 text-blue-600'}`}>
+                <span className={`px-1.5 py-0.5 rounded font-mono ${m.type === 'in' ? 'bg-emerald-50 text-emerald-600' : m.type === 'out' ? 'bg-amber-50 text-amber-600' : 'bg-blue-50 text-rose-500'}`}>
                   {m.type === 'in' ? '+' : m.type === 'out' ? '-' : '='}
                 </span>
                 <span className="text-slate-600 flex-1">{m.quantity}</span>
@@ -690,7 +690,7 @@ function InventoryManager({ businessId }: { businessId: string }) {
             <p className="text-sm text-slate-500 mb-3">Stock actual: {adjustItem.quantity} {adjustItem.unit}</p>
             <div className="flex gap-2 mb-3">
               {(['in', 'out', 'adjust'] as const).map((t) => (
-                <button key={t} onClick={() => setAdjustType(t)} className={`action-control flex-1 py-2 rounded-lg text-sm font-medium border border-blue-200/80 ${adjustType === t ? 'bg-gradient-to-br from-blue-100 via-white to-slate-50 text-blue-600' : 'action-surface text-slate-500'}`}>
+                <button key={t} onClick={() => setAdjustType(t)} className={`action-control flex-1 py-2 rounded-lg text-sm font-medium border border-blue-200/80 ${adjustType === t ? 'bg-gradient-to-br from-blue-100 via-white to-slate-50 text-rose-500' : 'action-surface text-slate-500'}`}>
                   {t === 'in' ? 'Entrada' : t === 'out' ? 'Salida' : 'Ajuste'}
                 </button>
               ))}

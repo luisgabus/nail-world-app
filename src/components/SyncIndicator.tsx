@@ -6,7 +6,7 @@ export function SyncIndicator() {
 
   const config = {
     idle: { icon: CheckCircle2, color: 'text-emerald-600', label: 'Sincronizado' },
-    syncing: { icon: Loader2, color: 'text-blue-600', label: 'Sincronizando...' },
+    syncing: { icon: Loader2, color: 'text-rose-500', label: 'Sincronizando...' },
     offline: { icon: CloudOff, color: 'text-amber-600', label: 'Sin conexión' },
     error: { icon: CloudOff, color: 'text-red-600', label: 'Error de sync' },
   };

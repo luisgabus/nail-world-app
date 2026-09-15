@@ -325,7 +325,7 @@ export function SuperAdminApp() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium py-2.5 rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+              className="w-full bg-primary hover:bg-blue-500 text-white font-medium py-2.5 rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
             >
               {loading ? <RefreshCw className="w-5 h-5 animate-spin" /> : 'Inicializar Sesión'}
             </button>
@@ -420,7 +420,7 @@ export function SuperAdminApp() {
               <button 
                 onClick={() => handleRenew(1)} 
                 disabled={actionLoading}
-                className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-sm rounded-lg disabled:opacity-50 flex items-center gap-2"
+                className="px-4 py-2 bg-primary hover:bg-blue-500 text-white text-sm rounded-lg disabled:opacity-50 flex items-center gap-2"
               >
                 {actionLoading && <RefreshCw className="w-4 h-4 animate-spin" />}
                 Renovar 1 Mes

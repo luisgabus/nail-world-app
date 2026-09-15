@@ -61,7 +61,7 @@ export function OperatorManager({ operators, businessId, onBack, onSave, onDelet
           {operators.map((op) => (
             <div key={op.id} className="flex items-center gap-3 p-3 bg-white border border-[#E2E8F0] shadow-sm rounded-xl">
               <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
-                <User className="w-5 h-5 text-blue-600" />
+                <User className="w-5 h-5 text-rose-500" />
               </div>
               <div className="flex-1">
                 <div className="font-semibold text-sm">{op.name}</div>

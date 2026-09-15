@@ -747,10 +747,10 @@ export function AdminView() {
 
       {/* Stats bar */}
       <div className="px-4 py-3 grid grid-cols-4 gap-2">
-        <StatChip label="Hoy" value={todayStats.total.toString()} icon={<Clock className="w-3.5 h-3.5" />} color="text-blue-600" />
+        <StatChip label="Hoy" value={todayStats.total.toString()} icon={<Clock className="w-3.5 h-3.5" />} color="text-rose-500" />
         <StatChip label="Cobrados" value={todayStats.completed.toString()} icon={<CheckCircle2 className="w-3.5 h-3.5" />} color="text-emerald-600" />
         <StatChip label="Pendientes" value={todayStats.pending.toString()} icon={<Clock3 className="w-3.5 h-3.5" />} color="text-amber-600" />
-        <StatChip label="Ingresos" value={`${(todayStats.revenue / 1000).toFixed(0)}k`} icon={<TrendingUp className="w-3.5 h-3.5" />} color="text-blue-600" />
+        <StatChip label="Ingresos" value={`${(todayStats.revenue / 1000).toFixed(0)}k`} icon={<TrendingUp className="w-3.5 h-3.5" />} color="text-rose-500" />
       </div>
 
       {/* Subscription banner */}
@@ -857,7 +857,7 @@ export function AdminView() {
                       <img src={w.photo_url} alt="Foto" className="w-10 h-10 rounded-lg object-cover border border-[#E2E8F0]" />
                     )}
                     <span className="font-bold text-sm">#{w.ticket_number}</span>
-                    {w.plate && <span className="text-xs font-mono font-bold text-blue-600 bg-cyan-50 px-1.5 py-0.5 rounded">{w.plate}</span>}
+                    {w.plate && <span className="text-xs font-mono font-bold text-rose-500 bg-cyan-50 px-1.5 py-0.5 rounded">{w.plate}</span>}
                     <span className="text-sm text-slate-600 truncate flex-1">{w.category_name}</span>
                     <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${statusColor(w.status)}`}>
                       {statusLabelForWash(w)}
@@ -875,7 +875,7 @@ export function AdminView() {
                           className="action-control action-surface flex items-center gap-1.5 px-1.5 py-1 -ml-1.5 rounded-lg border border-blue-200/80 text-slate-500"
                         >
                           <span>{w.operator_name || 'Sin especialista'} · {new Date(w.created_at).toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' })}</span>
-                          <Pencil className="w-3 h-3 text-blue-600" />
+                          <Pencil className="w-3 h-3 text-rose-500" />
                         </button>
                       ) : (
                         <span>{w.operator_name || 'Sin especialista'} · {new Date(w.created_at).toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' })}</span>
@@ -907,7 +907,7 @@ export function AdminView() {
                       <>
                         <button
                           onClick={() => handleStartWash(w)}
-                          className="action-control action-surface flex-1 py-2.5 border border-blue-200/80 font-semibold rounded-lg flex items-center justify-center gap-1.5 text-sm text-blue-600"
+                          className="action-control action-surface flex-1 py-2.5 border border-blue-200/80 font-semibold rounded-lg flex items-center justify-center gap-1.5 text-sm text-rose-500"
                         >
                           <Play className="w-4 h-4" /> Iniciar servicio
                         </button>
@@ -922,7 +922,7 @@ export function AdminView() {
                     {w.status === 'en_servicio' && (
                       <button
                         onClick={() => handleFinishWash(w)}
-                        className="action-control action-surface flex-1 py-2.5 border border-blue-200/80 text-blue-600 font-semibold rounded-lg flex items-center justify-center gap-1.5 text-sm"
+                        className="action-control action-surface flex-1 py-2.5 border border-blue-200/80 text-rose-500 font-semibold rounded-lg flex items-center justify-center gap-1.5 text-sm"
                       >
                         <Square className="w-4 h-4" /> Finalizar servicio
                       </button>
@@ -986,7 +986,7 @@ export function AdminView() {
                         : 'border border-blue-200/80 bg-gradient-to-br from-blue-50/80 via-white to-slate-50 shadow-md shadow-blue-900/10 hover:shadow-lg hover:shadow-blue-900/15 hover:border-blue-400 hover:-translate-y-1'
                     }`}
                   >
-                    <Icon className={`w-8 h-8 mb-2 ${isSelected ? 'text-blue-600' : 'text-slate-500'}`} />
+                    <Icon className={`w-8 h-8 mb-2 ${isSelected ? 'text-rose-500' : 'text-slate-500'}`} />
                     <div className="text-sm font-semibold">{cat.name}</div>
                     <div className="text-xs text-slate-500">${cat.base_price.toLocaleString('es-CO')}</div>
                     {isSelected && (
@@ -1066,7 +1066,7 @@ export function AdminView() {
                     onChange={(e) => setPlate(e.target.value.toUpperCase().replace(/\s/g, ''))}
                     placeholder="Ej: 1088123456"
                     maxLength={15}
-                    className="w-full bg-transparent text-lg font-mono font-bold text-blue-600 focus:outline-none placeholder-slate-400 tracking-wider"
+                    className="w-full bg-transparent text-lg font-mono font-bold text-rose-500 focus:outline-none placeholder-slate-400 tracking-wider"
                   />
                   {plateLooking && (
                     <div className="absolute right-3 top-1/2 -translate-y-1/2">
@@ -1076,7 +1076,7 @@ export function AdminView() {
                 </div>
                 <button
                   onClick={() => setScannerOpen(true)}
-                  className="action-control action-surface px-4 border border-blue-200/80 rounded-2xl text-blue-600 flex items-center gap-2"
+                  className="action-control action-surface px-4 border border-blue-200/80 rounded-2xl text-rose-500 flex items-center gap-2"
                   title="Tomar foto de soporte"
                 >
                   <Camera className="w-5 h-5" />
@@ -1107,7 +1107,7 @@ export function AdminView() {
               {photoUrl && (
                 <div className="mt-2 flex items-center gap-3 bg-cyan-50 border border-cyan-200 rounded-xl p-2">
                   <img src={photoUrl} alt="Foto de soporte" className="w-14 h-14 rounded-lg object-cover" />
-                  <span className="text-xs text-blue-600 font-medium">Foto de soporte adjunta</span>
+                  <span className="text-xs text-rose-500 font-medium">Foto de soporte adjunta</span>
                   <button
                     onClick={() => setPhotoUrl(null)}
                     className="ml-auto p-1.5 rounded-lg bg-white hover:bg-slate-100 transition-all"
@@ -1182,7 +1182,7 @@ export function AdminView() {
                   <div className="flex items-center gap-2">
                     <span className="font-semibold text-sm">#{w.ticket_number}</span>
                     <span className="text-sm text-slate-600">{w.category_name}</span>
-                    {w.plate && <span className="text-xs font-mono font-bold text-blue-600 bg-cyan-50 px-1.5 py-0.5 rounded">{w.plate}</span>}
+                    {w.plate && <span className="text-xs font-mono font-bold text-rose-500 bg-cyan-50 px-1.5 py-0.5 rounded">{w.plate}</span>}
                   </div>
                   <div className="text-xs text-slate-500">
                     {w.operator_name || 'Sin Especialista'} · {new Date(w.created_at).toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' })}
@@ -1338,7 +1338,7 @@ export function AdminView() {
               </button>
               <button
                 onClick={() => printTicket(ticketModal, business)}
-                className="flex-1 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-500 transition-all flex items-center justify-center gap-2"
+                className="flex-1 py-3 bg-primary text-white font-semibold rounded-xl hover:bg-blue-500 transition-all flex items-center justify-center gap-2"
               >
                 <Printer className="w-4 h-4" /> Imprimir
               </button>
@@ -1395,7 +1395,7 @@ export function AdminView() {
                     <div key={w.id} className="flex items-center justify-between bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 text-xs">
                       <div className="flex items-center gap-2 min-w-0">
                         <span className="font-semibold text-slate-600">#{w.ticket_number}</span>
-                        {w.plate && <span className="font-mono font-bold text-blue-600 bg-cyan-50 px-1.5 py-0.5 rounded">{w.plate}</span>}
+                        {w.plate && <span className="font-mono font-bold text-rose-500 bg-cyan-50 px-1.5 py-0.5 rounded">{w.plate}</span>}
                         <span className="text-slate-500 truncate">{w.category_name}</span>
                         <span className={`px-1.5 py-0.5 rounded-full text-[10px] ${statusColor(w.status)}`}>{statusLabelForWash(w)}</span>
                       </div>
@@ -1483,7 +1483,7 @@ export function AdminView() {
                     <div key={w.id} className="flex items-center justify-between bg-white border border-[#E2E8F0] shadow-sm rounded-lg px-3 py-2 text-xs">
                       <div className="flex items-center gap-2 min-w-0">
                         <span className="font-semibold text-slate-600">#{w.ticket_number}</span>
-                        {w.plate && <span className="font-mono font-bold text-blue-600 bg-cyan-50 px-1.5 py-0.5 rounded">{w.plate}</span>}
+                        {w.plate && <span className="font-mono font-bold text-rose-500 bg-cyan-50 px-1.5 py-0.5 rounded">{w.plate}</span>}
                         <span className="text-slate-500 truncate">{w.category_name}</span>
                       </div>
                       <span className="font-bold text-emerald-600 ml-2">${washTotal(w).toLocaleString('es-CO')}</span>
@@ -1501,8 +1501,8 @@ export function AdminView() {
                 <span className="font-semibold text-emerald-600">${cashRevenue.toLocaleString('es-CO')}</span>
               </div>
               <div className="flex justify-between items-center text-sm">
-                <span className="text-slate-600 flex items-center gap-1.5"><Smartphone className="w-3.5 h-3.5 text-blue-600" /> Nequi/Daviplata + Tarjeta</span>
-                <span className="font-semibold text-blue-600">${digitalRevenue.toLocaleString('es-CO')}</span>
+                <span className="text-slate-600 flex items-center gap-1.5"><Smartphone className="w-3.5 h-3.5 text-rose-500" /> Nequi/Daviplata + Tarjeta</span>
+                <span className="font-semibold text-rose-500">${digitalRevenue.toLocaleString('es-CO')}</span>
               </div>
               <div className="flex justify-between items-center text-sm">
                 <span className="text-slate-600 flex items-center gap-1.5"><FileText className="w-3.5 h-3.5 text-amber-600" /> Crédito (Convenio)</span>
@@ -1611,7 +1611,7 @@ export function AdminView() {
                     cashDifference === 0
                       ? 'text-emerald-600'
                       : cashDifference > 0
-                      ? 'text-blue-600'
+                      ? 'text-rose-500'
                       : 'text-red-600'
                   }`}>
                     {cashDifference > 0 ? '+' : ''}${cashDifference.toLocaleString('es-CO')}
@@ -2068,7 +2068,7 @@ export function AdminView() {
                       <div className="text-sm font-medium text-slate-900 truncate">{a.operator_name}</div>
                       <div className="text-xs text-slate-500 flex items-center gap-1.5">
                         {a.concept}
-                        <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-medium ${a.paid_in_cash ? 'bg-emerald-50 text-emerald-600' : 'bg-cyan-50 text-blue-600'}`}>
+                        <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-medium ${a.paid_in_cash ? 'bg-emerald-50 text-emerald-600' : 'bg-cyan-50 text-rose-500'}`}>
                           {a.paid_in_cash ? 'Efectivo' : 'Digital'}
                         </span>
                         {a.settled && <span className="px-1.5 py-0.5 rounded-full text-[10px] font-medium bg-slate-100 text-slate-500">Saldado</span>}
@@ -2153,7 +2153,7 @@ export function AdminView() {
                         </div>
                         <div className="flex justify-between">
                           <span className="text-slate-500">Propinas</span>
-                          <span className="font-medium text-blue-600">${liq.tips.toLocaleString('es-CO')}</span>
+                          <span className="font-medium text-rose-500">${liq.tips.toLocaleString('es-CO')}</span>
                         </div>
                         {liq.advances > 0 && (
                           <div className="flex justify-between">
@@ -2293,7 +2293,7 @@ function LoyaltyConfigModal({
                     onClick={() => setRewardType('discount')}
                     className={`action-control py-3 rounded-xl text-sm font-medium border border-blue-200/80 ${
                       rewardType === 'discount'
-                        ? 'action-surface text-blue-600'
+                        ? 'action-surface text-rose-500'
                         : 'action-surface text-slate-500'
                     }`}
                   >
@@ -2317,7 +2317,7 @@ function LoyaltyConfigModal({
                         key={p}
                         onClick={() => setDiscountPercent(p)}
                         className={`action-control flex-1 py-2 rounded-lg text-sm font-medium border border-blue-200/80 ${
-                          discountPercent === p ? 'bg-gradient-to-br from-blue-100 via-white to-slate-50 text-blue-600' : 'action-surface text-slate-500'
+                          discountPercent === p ? 'bg-gradient-to-br from-blue-100 via-white to-slate-50 text-rose-500' : 'action-surface text-slate-500'
                         }`}
                       >
                         {p}%

@@ -192,7 +192,7 @@ export default function LiquidationModal({ wash, operators, onClose, onConfirm }
               <div className="flex items-center gap-2 text-xs text-slate-500 mb-1">
                 <Timer className="w-3.5 h-3.5" /> Tiempo total
               </div>
-              <div className="text-xl font-bold text-blue-600 tabular-nums">{formatDuration(elapsedSeconds)}</div>
+              <div className="text-xl font-bold text-rose-500 tabular-nums">{formatDuration(elapsedSeconds)}</div>
             </div>
             <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-xl p-3">
               <div className="flex items-center gap-2 text-xs text-slate-500 mb-1">
@@ -228,7 +228,7 @@ export default function LiquidationModal({ wash, operators, onClose, onConfirm }
           {/* Quick service chips */}
           <div>
             <h3 className="text-sm font-semibold text-slate-600 mb-2 flex items-center gap-2">
-              <Wrench className="w-4 h-4 text-blue-600" /> Servicios adicionales
+              <Wrench className="w-4 h-4 text-rose-500" /> Servicios adicionales
             </h3>
             <div className="flex flex-wrap gap-2">
               {QUICK_SERVICES.map((svc) => {
@@ -271,7 +271,7 @@ export default function LiquidationModal({ wash, operators, onClose, onConfirm }
               <button
                 onClick={addCustomService}
                 disabled={!customName.trim() || customAmount <= 0}
-                className="action-control action-surface px-3 py-2 border border-blue-200/80 text-blue-600 rounded-xl disabled:opacity-40"
+                className="action-control action-surface px-3 py-2 border border-blue-200/80 text-rose-500 rounded-xl disabled:opacity-40"
               >
                 <Plus className="w-4 h-4" />
               </button>
@@ -284,7 +284,7 @@ export default function LiquidationModal({ wash, operators, onClose, onConfirm }
                   <div key={s.id} className="flex items-center justify-between bg-cyan-50 border border-cyan-200 rounded-lg px-3 py-2">
                     <span className="text-sm text-slate-600">{s.name}</span>
                     <div className="flex items-center gap-2">
-                      <span className="text-sm font-bold text-blue-600">${s.amount.toLocaleString('es-CO')}</span>
+                      <span className="text-sm font-bold text-rose-500">${s.amount.toLocaleString('es-CO')}</span>
                       <button onClick={() => removeCustomService(s.id)} className="p-1 rounded hover:bg-slate-100">
                         <Trash2 className="w-3.5 h-3.5 text-slate-500" />
                       </button>
@@ -381,7 +381,7 @@ export default function LiquidationModal({ wash, operators, onClose, onConfirm }
               <span>${basePrice.toLocaleString('es-CO')}</span>
             </div>
             {totalAdicionales > 0 && (
-              <div className="flex justify-between text-xs text-blue-600">
+              <div className="flex justify-between text-xs text-rose-500">
                 <span>Servicios adicionales</span>
                 <span>+${totalAdicionales.toLocaleString('es-CO')}</span>
               </div>

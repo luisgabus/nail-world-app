@@ -126,7 +126,7 @@ export function PlateScannerModal({
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 rounded-2xl bg-cyan-50 flex items-center justify-center">
-              <Camera className="w-6 h-6 text-blue-600" />
+              <Camera className="w-6 h-6 text-rose-500" />
             </div>
             <div>
               <h2 className="text-lg font-bold text-slate-900">Fotografía de Soporte</h2>
@@ -220,7 +220,7 @@ export function PlateScannerModal({
             onClick={() => switchTab('camera')}
             className={`flex-1 py-2.5 rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-2 ${
               tab === 'camera'
-                ? 'bg-cyan-50 text-blue-600 border border-cyan-200'
+                ? 'bg-cyan-50 text-rose-500 border border-cyan-200'
                 : 'text-slate-500 hover:bg-slate-50'
             }`}
           >
@@ -230,7 +230,7 @@ export function PlateScannerModal({
             onClick={() => switchTab('gallery')}
             className={`flex-1 py-2.5 rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-2 ${
               tab === 'gallery'
-                ? 'bg-cyan-50 text-blue-600 border border-cyan-200'
+                ? 'bg-cyan-50 text-rose-500 border border-cyan-200'
                 : 'text-slate-500 hover:bg-slate-50'
             }`}
           >

@@ -89,7 +89,7 @@ export function PinPad({ title, expectedPin, onSuccess, onCancel }: PinPadProps)
                 error
                   ? 'bg-red-500 animate-pulse scale-110'
                   : i < pin.length
-                  ? 'bg-blue-600 scale-110 shadow-sm shadow-blue-500/50'
+                  ? 'bg-primary scale-110 shadow-sm shadow-blue-500/50'
                   : 'bg-slate-200'
               }`}
             />
