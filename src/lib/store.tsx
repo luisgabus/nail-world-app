@@ -10,12 +10,12 @@ export interface Toast {
 
 interface AppState {
   business: Business | null;
-  role: 'admin' | 'owner' | null;
+  role: 'admin' | 'owner' | 'reception' | null;
   syncStatus: SyncStatus;
   pendingCount: number;
   toasts: Toast[];
   setBusiness: (b: Business | null) => void;
-  setRole: (r: 'admin' | 'owner' | null) => void;
+  setRole: (r: 'admin' | 'owner' | 'reception' | null) => void;
   triggerSync: () => void;
   showToast: (message: string, type?: Toast['type']) => void;
   dismissToast: (id: string) => void;
@@ -27,17 +27,16 @@ const STORAGE_KEY = 'nail_world_session';
 
 interface StoredSession {
   business: Business;
-  role: 'admin' | 'owner';
+  role: 'admin' | 'owner' | 'reception';
 }
 
 export function AppProvider({ children }: { children: ReactNode }) {
   const [business, setBusinessState] = useState<Business | null>(null);
-  const [role, setRoleState] = useState<'admin' | 'owner' | null>(null);
+  const [role, setRoleState] = useState<'admin' | 'owner' | 'reception' | null>(null);
   const [syncStatus, setSyncStatus] = useState<SyncStatus>('idle');
   const [pendingCount, setPendingCount] = useState(0);
   const [toasts, setToasts] = useState<Toast[]>([]);
 
-  // Función helper segura para IDs de Toast
   const generateId = () => {
     if (typeof crypto !== 'undefined' && crypto.randomUUID) {
       return crypto.randomUUID();
@@ -57,11 +56,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }, 4000);
   }, [dismissToast]);
 
-  // 1. Cargar sesión inicial al montar con validación defensiva y limpieza de legado
   useEffect(() => {
-    // Eliminar la sesión obsoleta si existe en el navegador
     localStorage.removeItem('carwash_session');
-
     const stored = localStorage.getItem(STORAGE_KEY);
     if (!stored) return;
 
@@ -74,7 +70,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         'role' in session &&
         (session as StoredSession).business &&
         typeof (session as StoredSession).business === 'object' &&
-        ['admin', 'owner'].includes((session as StoredSession).role)
+        ['admin', 'owner', 'reception'].includes((session as StoredSession).role)
       ) {
         const validSession = session as StoredSession;
         setBusinessState(validSession.business);
@@ -87,7 +83,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  // 2. Persistencia centralizada de sesión en localStorage
   useEffect(() => {
     if (business && role) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({ business, role }));
@@ -96,7 +91,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }
   }, [business, role]);
 
-  // 3. Sincronización del watcher
   useEffect(() => {
     const unsub = subscribeToSync((status, count) => {
       setSyncStatus(status);
@@ -112,7 +106,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     if (!b) setRoleState(null);
   }, []);
 
-  const setRole = useCallback((r: 'admin' | 'owner' | null) => {
+  const setRole = useCallback((r: 'admin' | 'owner' | 'reception' | null) => {
     setRoleState(r);
   }, []);
 
