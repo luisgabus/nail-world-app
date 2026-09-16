@@ -30,10 +30,6 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
       }
     }
 
-    // Forzamos la recarga limpia para que la app cargue el panel principal con el ID activo
-    setTimeout(() => {
-      window.location.reload();
-    }, 250);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
