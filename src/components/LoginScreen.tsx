@@ -16,20 +16,10 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
       return;
     }
     setSubmittingRole(role);
-
-    // Guardamos la sesión preventivamente en el almacenamiento local para evitar el rebote
-    localStorage.setItem('nail_world_business_id', trimmedId);
-    localStorage.setItem('nail_world_role', role);
-    localStorage.setItem('business_id', trimmedId);
-
+    // Solo llamamos a la función del padre. El Store se encarga del resto.
     if (typeof onLogin === 'function') {
-      try {
-        onLogin(trimmedId, role);
-      } catch (err) {
-        console.error('Error en onLogin del padre:', err);
-      }
-    }
-
+      onLogin(trimmedId, role);
+    } 
   };
 
   const handleSubmit = (e: React.FormEvent) => {
