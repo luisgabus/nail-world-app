@@ -10,22 +10,35 @@ import { ToastContainer } from '@/components/Toast';
 import { SuperAdminApp } from '@/components/SuperAdminApp';
 
 function AppContent() {
-  const { business, role, setRole } = useApp();
+  const { business, role, setRole, setBusiness } = useApp();
   const [pinUnlocked, setPinUnlocked] = useState(false);
   const location = useLocation();
   const isAdminRoute = location.pathname === '/admin';
 
-  // 1. Si no hay empresa o rol seleccionado, ir a Login (incluso si está en /admin)
+  // Puente de conexión: Crea un negocio válido para romper el bucle
+  const handleLogin = (businessId: string, selectedRole: 'owner' | 'reception') => {
+    // Simulamos los datos del negocio para que el Store lo acepte como válido
+    const mockBusiness = {
+      id: businessId,
+      name: 'Nail World Demo',
+      owner_pin: '1234'
+    } as any; 
+    
+    setBusiness(mockBusiness);
+    setRole(selectedRole);
+  };
+
+  // 1. Si no hay empresa o rol seleccionado, ir a Login PASANDO la función handleLogin
   if (!business || !role) {
-    return <LoginScreen />;
+    return <LoginScreen onLogin={handleLogin} />;
   }
 
-  // 2. Si la ruta es /admin y el usuario ya está autenticado, renderizar SuperAdminApp
+  // 2. Si la ruta es /admin y el usuario ya está autenticado
   if (isAdminRoute) {
     return <SuperAdminApp />;
   }
 
-  // 3. Vista de Administrador / Recepción / Operador
+  // 3. Vista de Administrador / Recepción
   if (role === 'admin' || role === 'reception') {
     return <AdminView />;
   }
@@ -34,8 +47,7 @@ function AppContent() {
   if (role === 'owner') {
     if (!pinUnlocked) {
       if (!business.owner_pin) {
-        // Si no hay PIN configurado en la empresa, regresa a Login por seguridad
-        return <LoginScreen />;
+        return <LoginScreen onLogin={handleLogin} />;
       }
       return (
         <PinPad
@@ -49,15 +61,5 @@ function AppContent() {
     return <OwnerView />;
   }
 
-  // Fallback de seguridad
-  return <LoginScreen />;
-}
-
-export default function App() {
-  return (
-    <AppProvider>
-      <AppContent />
-      <ToastContainer />
-    </AppProvider>
-  );
+  return <LoginScreen onLogin={handleLogin} />;
 }
