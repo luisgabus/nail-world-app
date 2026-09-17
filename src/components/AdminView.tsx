@@ -529,7 +529,19 @@ const handleStartWash = async (w: Wash) => {
     showToast('Foto de soporte adjuntada', 'success');
   };
 
-const buildTicketWhatsAppUrl = (w: Wash): string | null => {
+// 1. Función para avisar cuando la especialista está lista (Estado: en_espera)
+  const buildReadyWhatsAppUrl = (w: Wash): string | null => {
+    if (!w.customer_phone) return null;
+    const phone = w.customer_phone.replace(/[^0-9]/g, '');
+    if (!phone) return null;
+    const fullName = w.customer_name ? `Sra. ${w.customer_name}` : 'Estimada cliente';
+    const opName = w.operator_name || 'su especialista';
+    const msg = `¡Hola! ${fullName}.\n\nLe informamos que su especialista ${opName} ya está lista para atenderla.\n\n¡Por favor pase a la estación de servicio!`;
+    return `https://wa.me/57${phone}?text=${encodeURIComponent(msg)}`;
+  };
+
+  // 2. Función para enviar el ticket de cobro (Estado: listo)
+  const buildTicketWhatsAppUrl = (w: Wash): string | null => {
     if (!w.customer_phone) return null;
     const phone = w.customer_phone.replace(/[^0-9]/g, '');
     if (!phone) return null;
