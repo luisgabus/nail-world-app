@@ -22,14 +22,13 @@ export function CategoryManager({
   const [name, setName] = useState('');
   const [basePrice, setBasePrice] = useState(0);
   const [orderIndex, setOrderIndex] = useState(0);
-  const [icon] = useState('sparkles');
   const [saving, setSaving] = useState(false);
 
   const handleEdit = (cat: VehicleCategory) => {
     setEditingCategory(cat);
     setName(cat.name);
-    setBasePrice(cat.base_price);
-    setOrderIndex(cat.order_index);
+    setBasePrice(cat.base_price || 0);
+    setOrderIndex(cat.order_index || 0);
   };
 
   const handleNew = () => {
@@ -56,19 +55,29 @@ export function CategoryManager({
       await onSave({
         ...editingCategory,
         name: name.trim(),
-        base_price: basePrice,
+        base_price: Number(basePrice) || 0,
         icon: 'sparkles',
-        order_index: orderIndex,
+        order_index: Number(orderIndex) || 0,
       });
       setEditingCategory(null);
-    } catch (err) {
+    } catch (err: any) {
       console.error('Error al guardar categoría:', err);
+      alert(`Supabase rechazó el guardado: ${err?.message || 'Verifica permisos de RLS'}`);
     } finally {
       setSaving(false);
     }
   };
 
-  const sortedCategories = [...categories].sort((a, b) => a.order_index - b.order_index);
+  const handleDelete = async (id: string) => {
+    if (!window.confirm('¿Seguro que deseas eliminar este servicio?')) return;
+    try {
+      await onDelete(id);
+    } catch (err: any) {
+      alert(`No se pudo eliminar: ${err?.message || 'Verifica permisos de RLS'}`);
+    }
+  };
+
+  const sortedCategories = [...categories].sort((a, b) => (a.order_index || 0) - (b.order_index || 0));
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] text-slate-900">
@@ -88,7 +97,7 @@ export function CategoryManager({
           <>
             <button
               onClick={handleNew}
-              className="action-control w-full py-3.5 bg-primary text-white font-semibold rounded-2xl flex items-center justify-center gap-2 hover:bg-rose-500 transition-all shadow-sm"
+              className="action-control w-full py-3.5 bg-rose-500 text-white font-semibold rounded-2xl flex items-center justify-center gap-2 hover:bg-rose-600 transition-all shadow-sm"
             >
               <Plus className="w-5 h-5" /> Agregar Categoría
             </button>
@@ -119,7 +128,7 @@ export function CategoryManager({
                       <Pencil className="w-4 h-4" />
                     </button>
                     <button
-                      onClick={() => onDelete(cat.id)}
+                      onClick={() => handleDelete(cat.id)}
                       className="p-2 rounded-xl bg-red-50 border border-red-100 hover:bg-red-100 text-red-600 transition-all"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -146,7 +155,7 @@ export function CategoryManager({
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="Ej: Manicura Semipermanente, Pedicura Spa..."
+                placeholder="Ej: Manicura Semipermanente..."
                 className="w-full px-4 py-3 bg-slate-50 border border-[#E2E8F0] rounded-xl text-slate-900 text-sm focus:outline-none focus:border-rose-500"
                 required
                 autoFocus
@@ -185,7 +194,7 @@ export function CategoryManager({
               <button
                 type="submit"
                 disabled={saving || !name.trim()}
-                className="action-control flex-1 py-3 bg-primary text-white font-semibold rounded-xl hover:bg-rose-500 transition-all disabled:opacity-50"
+                className="action-control flex-1 py-3 bg-rose-500 text-white font-semibold rounded-xl hover:bg-rose-600 transition-all disabled:opacity-50"
               >
                 {saving ? 'Guardando...' : 'Guardar'}
               </button>
