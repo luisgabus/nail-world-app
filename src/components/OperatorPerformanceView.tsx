@@ -1,11 +1,11 @@
 import { useState, useMemo } from 'react';
 import {
-  Users, Car, DollarSign, Clock, Trophy, TrendingUp,
+  Users, Sparkles, DollarSign, Clock, Trophy, TrendingUp,
 } from 'lucide-react';
 import type { Wash } from '@/lib/types';
 
 type PeriodPreset = 'week' | 'month';
-type SortMode = 'revenue' | 'cars';
+type SortMode = 'revenue' | 'services';
 
 function startOfDay(d: Date): string {
   return d.toISOString().slice(0, 10);
@@ -36,7 +36,7 @@ function formatDuration(seconds: number): string {
 
 interface OperatorStats {
   name: string;
-  cars: number;
+  services: number;
   revenue: number;
   totalDuration: number;
   avgDuration: number;
@@ -59,12 +59,12 @@ export function OperatorPerformanceView({ washes }: { washes: Wash[] }) {
 
   // KPIs
   const kpis = useMemo(() => {
-    const totalCars = completedInRange.length;
+    const totalServices = completedInRange.length;
     const totalRevenue = completedInRange.reduce((s, w) => s + washTotal(w), 0);
     const withDuration = completedInRange.filter((w) => w.duration_seconds);
     const totalDuration = withDuration.reduce((s, w) => s + (w.duration_seconds ?? 0), 0);
     const avgDuration = withDuration.length > 0 ? Math.round(totalDuration / withDuration.length) : 0;
-    return { totalCars, totalRevenue, avgDuration };
+    return { totalServices, totalRevenue, avgDuration };
   }, [completedInRange]);
 
   // Per-operator stats
@@ -72,18 +72,18 @@ export function OperatorPerformanceView({ washes }: { washes: Wash[] }) {
     const map = new Map<string, OperatorStats>();
     for (const w of completedInRange) {
       const name = w.operator_name || 'Sin Especialista';
-      const entry = map.get(name) ?? { name, cars: 0, revenue: 0, totalDuration: 0, avgDuration: 0, avgTicket: 0 };
-      entry.cars++;
+      const entry = map.get(name) ?? { name, services: 0, revenue: 0, totalDuration: 0, avgDuration: 0, avgTicket: 0 };
+      entry.services++;
       entry.revenue += washTotal(w);
       if (w.duration_seconds) entry.totalDuration += w.duration_seconds;
       map.set(name, entry);
     }
     const list = [...map.values()];
     for (const entry of list) {
-      entry.avgDuration = entry.cars > 0 ? Math.round(entry.totalDuration / entry.cars) : 0;
-      entry.avgTicket = entry.cars > 0 ? Math.round(entry.revenue / entry.cars) : 0;
+      entry.avgDuration = entry.services > 0 ? Math.round(entry.totalDuration / entry.services) : 0;
+      entry.avgTicket = entry.services > 0 ? Math.round(entry.revenue / entry.services) : 0;
     }
-    list.sort((a, b) => sortMode === 'revenue' ? b.revenue - a.revenue : b.cars - a.cars);
+    list.sort((a, b) => sortMode === 'revenue' ? b.revenue - a.revenue : b.services - a.services);
     return list;
   }, [completedInRange, sortMode]);
 
@@ -121,10 +121,10 @@ export function OperatorPerformanceView({ washes }: { washes: Wash[] }) {
       <div className="grid grid-cols-3 gap-3">
         <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-3">
           <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-rose-600 to-rose-500 flex items-center justify-center mb-2">
-            <Car className="w-4 h-4 text-white" />
+            <Sparkles className="w-4 h-4 text-white" />
           </div>
-          <div className="text-lg font-bold text-slate-900">{kpis.totalCars}</div>
-          <div className="text-[10px] text-slate-500 mt-0.5">Carros Total</div>
+          <div className="text-lg font-bold text-slate-900">{kpis.totalServices}</div>
+          <div className="text-[10px] text-slate-500 mt-0.5">Servicios Totales</div>
         </div>
         <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-3">
           <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-600 to-green-500 flex items-center justify-center mb-2">
@@ -138,7 +138,7 @@ export function OperatorPerformanceView({ washes }: { washes: Wash[] }) {
             <Clock className="w-4 h-4 text-white" />
           </div>
           <div className="text-lg font-bold text-slate-900">{formatDuration(kpis.avgDuration)}</div>
-          <div className="text-[10px] text-slate-500 mt-0.5">Min/carro Prom.</div>
+          <div className="text-[10px] text-slate-500 mt-0.5">Min/Servicio Prom.</div>
         </div>
       </div>
 
@@ -156,14 +156,14 @@ export function OperatorPerformanceView({ washes }: { washes: Wash[] }) {
           <DollarSign className="w-3 h-3" /> Ingresos
         </button>
         <button
-          onClick={() => setSortMode('cars')}
+          onClick={() => setSortMode('services')}
           className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-1 ${
-            sortMode === 'cars'
+            sortMode === 'services'
               ? 'bg-rose-50 text-rose-500 border border-rose-200'
               : 'bg-white text-slate-500 border border-[#E2E8F0]'
           }`}
         >
-          <Car className="w-3 h-3" /> Carros
+          <Sparkles className="w-3 h-3" /> Servicios
         </button>
       </div>
 
@@ -200,19 +200,19 @@ export function OperatorPerformanceView({ washes }: { washes: Wash[] }) {
               <div className="grid grid-cols-3 gap-2 text-xs">
                 <div className="bg-slate-100 rounded-lg p-2 text-center">
                   <div className="flex items-center justify-center gap-1 text-[10px] text-slate-500 mb-1">
-                    <Car className="w-3 h-3" /> Carros
+                    <Sparkles className="w-3 h-3" /> Servicios
                   </div>
-                  <div className="font-bold text-rose-500">{op.cars}</div>
+                  <div className="font-bold text-rose-500">{op.services}</div>
                 </div>
                 <div className="bg-slate-100 rounded-lg p-2 text-center">
                   <div className="flex items-center justify-center gap-1 text-[10px] text-slate-500 mb-1">
-                    <TrendingUp className="w-3 h-3" /> $/carro
+                    <TrendingUp className="w-3 h-3" /> $/Servicio
                   </div>
                   <div className="font-bold text-emerald-600">${op.avgTicket.toLocaleString('es-CO')}</div>
                 </div>
                 <div className="bg-slate-100 rounded-lg p-2 text-center">
                   <div className="flex items-center justify-center gap-1 text-[10px] text-slate-500 mb-1">
-                    <Clock className="w-3 h-3" /> Min/carro
+                    <Clock className="w-3 h-3" /> Min/Servicio
                   </div>
                   <div className="font-bold text-amber-600">{formatDuration(op.avgDuration)}</div>
                 </div>
