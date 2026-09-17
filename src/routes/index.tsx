@@ -6,13 +6,13 @@ const CarWashApp = lazy(() => import("@/carwash/CarWashApp"));
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "CarWash Pro — Gestión de Salóns" },
+      { title: "Nail World — Gestión de Salones" },
       {
         name: "description",
         content:
-          "Gestión inteligente de Salóns de clientes: operatividad rápida, liquidaciones, tickets e inteligencia de negocio.",
+          "Gestión inteligente de Salones: operatividad rápida, liquidaciones, tickets e inteligencia de negocio.",
       },
-      { property: "og:title", content: "CarWash Pro — Gestión de Salóns" },
+      { property: "og:title", content: "Nail World — Gestión de Salones" },
       {
         property: "og:description",
         content:
