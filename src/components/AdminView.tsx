@@ -904,8 +904,9 @@ const buildReadyWhatsAppUrl = (w: Wash): string | null => {
                     <span className="font-bold text-sm text-slate-900">${washTotal(w).toLocaleString('es-CO')}</span>
                   </div>
 
-                  {/* Row 3: action buttons */}
-{w.status === 'en_espera' && (
+{/* Row 3: action buttons */}
+                  <div className="flex gap-2 mt-4">
+                    {w.status === 'en_espera' && (
                       <>
                         <button
                           onClick={() => handleStartWash(w)}
@@ -947,6 +948,7 @@ const buildReadyWhatsAppUrl = (w: Wash): string | null => {
                         <Square className="w-4 h-4" /> Finalizar servicio
                       </button>
                     )}
+                    
                     {w.status === 'listo' && (
                       <>
                         {waUrl && (
@@ -967,6 +969,7 @@ const buildReadyWhatsAppUrl = (w: Wash): string | null => {
                         </button>
                       </>
                     )}
+                    
                     <button
                       onClick={() => setTicketModal(w)}
                       className="action-control action-surface px-3 py-2.5 border border-rose-200/80 text-slate-500 rounded-lg"
@@ -978,6 +981,7 @@ const buildReadyWhatsAppUrl = (w: Wash): string | null => {
               );
             })}
           </div>
+          
         </section>
 
         {/* ===== Registration form ===== */}
