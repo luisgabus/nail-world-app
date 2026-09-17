@@ -316,8 +316,12 @@ export function AdminView() {
     }
   };
 
-  const handleStartWash = async (w: Wash) => {
-    if (w.operator_id && busyOperatorIds.has(w.operator_id)) {
+const handleStartWash = async (w: Wash) => {
+    if (!w.operator_id) {
+      showToast('Debes asignar una especialista antes de iniciar el servicio.', 'error');
+      return;
+    }
+    if (busyOperatorIds.has(w.operator_id)) {
       showToast(`La especialista ${w.operator_name} debe finalizar su servicio actual antes de iniciar este servicio.`, 'error');
       return;
     }
@@ -525,14 +529,13 @@ export function AdminView() {
     showToast('Foto de soporte adjuntada', 'success');
   };
 
-  const buildWhatsAppUrl = (w: Wash): string | null => {
+const buildReadyWhatsAppUrl = (w: Wash): string | null => {
     if (!w.customer_phone) return null;
     const phone = w.customer_phone.replace(/[^0-9]/g, '');
     if (!phone) return null;
-    const fullName = w.customer_name || 'Cliente';
-    const washTotal = (w.total_price ?? (w.price + (w.additional_total ?? 0))) + w.tip;
-    const total = washTotal.toLocaleString('es-CO');
-    const msg = `¡Hola ${fullName}! ✨💅\n\nLe informamos que su servicio de ${w.category_name} (Ticket #${w.ticket_number}) ha finalizado.\n\nValor total: $${total}\n\n¡Gracias por preferirnos! 🙌`;
+    const fullName = w.customer_name ? `Sra. ${w.customer_name}` : 'Estimada cliente';
+    const opName = w.operator_name || 'su especialista';
+    const msg = `¡Hola! ${fullName} ✨💅\n\nLe informamos que su especialista ${opName} ya está lista para atenderla.\n\n¡Por favor pase a la estación de servicio!`;
     return `https://wa.me/57${phone}?text=${encodeURIComponent(msg)}`;
   };
 
@@ -902,23 +905,40 @@ export function AdminView() {
                   </div>
 
                   {/* Row 3: action buttons */}
-                  <div className="flex gap-2">
-                    {w.status === 'en_espera' && (
+{w.status === 'en_espera' && (
                       <>
                         <button
                           onClick={() => handleStartWash(w)}
-                          className="action-control action-surface flex-1 py-2.5 border border-rose-200/80 font-semibold rounded-lg flex items-center justify-center gap-1.5 text-sm text-rose-500"
+                          className="action-control action-surface flex-1 py-2.5 border border-blue-200/80 font-semibold rounded-lg flex items-center justify-center gap-1.5 text-sm text-blue-600"
                         >
-                          <Play className="w-4 h-4" /> Iniciar servicio
+                          <Play className="w-4 h-4" /> Iniciar
                         </button>
+                        {w.customer_phone && (
+                          <a
+                            href={w.operator_id ? (buildReadyWhatsAppUrl(w) || '#') : '#'}
+                            target={w.operator_id ? "_blank" : "_self"}
+                            rel="noopener noreferrer"
+                            onClick={(e) => {
+                              if (!w.operator_id) {
+                                e.preventDefault();
+                                showToast('Asigna una especialista (lápiz azul) para poder avisarle a la cliente.', 'warning');
+                              }
+                            }}
+                            className="action-control flex-1 py-2.5 bg-gradient-to-br from-green-500 to-emerald-600 border border-green-600/80 text-white font-bold rounded-lg flex items-center justify-center gap-1.5 text-sm"
+                          >
+                            <MessageCircle className="w-4 h-4" /> Avisar
+                          </a>
+                        )}
                         <button
                           onClick={() => { setDesistidoTarget(w); setCancellationReason(''); }}
-                          className="action-control px-3 py-2.5 bg-gradient-to-br from-red-50 via-white to-slate-50 border border-rose-200/80 text-red-600 font-medium rounded-lg flex items-center justify-center gap-1.5 text-sm"
+                          className="action-control px-3 py-2.5 bg-gradient-to-br from-red-50 via-white to-slate-50 border border-red-200/80 text-red-600 font-medium rounded-lg flex items-center justify-center gap-1.5 text-sm"
+                          title="Cancelar turno"
                         >
-                          <XCircle className="w-4 h-4" /> Cancelar
+                          <XCircle className="w-4 h-4" />
                         </button>
                       </>
                     )}
+                    
                     {w.status === 'en_servicio' && (
                       <button
                         onClick={() => handleFinishWash(w)}
