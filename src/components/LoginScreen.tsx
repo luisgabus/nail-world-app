@@ -5,7 +5,7 @@ interface LoginScreenProps {
   onLogin?: (businessId: string, role: 'owner' | 'reception') => void;
 }
 
-export function LoginScreen({ onLogin }: LoginScreenProps) {
+export defualt function LoginScreen({ onLogin }: LoginScreenProps) {
   const [businessId, setBusinessId] = useState('');
   const [submittingRole, setSubmittingRole] = useState<'owner' | 'reception' | null>(null);
 
