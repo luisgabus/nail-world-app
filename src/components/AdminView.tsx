@@ -708,13 +708,13 @@ export function AdminView() {
 
   if (view === 'categories') {
     return (
-      <CategoryManager
-        categories={categories}
-        businessId={business!.id}
-        onBack={() => { setView('main'); loadData(); }}
-        onSave={saveCategory}
-        onDelete={deleteCategory}
-      />
+<CategoryManager
+    categories={categories}
+    businessId={business!.id}
+    onBack={() => { setView('main'); loadData(); }}
+    onSave={async (cat) => { await saveCategory(cat); await loadData(); }}
+    onDelete={async (id) => { await deleteCategory(id); await loadData(); }}
+  />
     );
   }
 
