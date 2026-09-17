@@ -848,7 +848,7 @@ const buildReadyWhatsAppUrl = (w: Wash): string | null => {
                   : w.status === 'listo' && w.started_at && w.completed_at
                     ? minutesBetween(w.started_at, w.completed_at)
                     : 0;
-              const waUrl = w.status === 'listo' ? buildWhatsAppUrl(w) : null;
+              const waUrl = w.status === 'listo' ? buildReadyWhatsAppUrl(w) : null;
               return (
                 <div
                   key={w.id}
