@@ -832,3 +832,61 @@ export async function fetchAdminProfile(): Promise<AdminProfile | null> {
 }
 
 export { uuid };
+
+// --- GESTIÓN DE SERVICIOS Y ADICIONALES (Nail World) ---
+
+export async function fetchCategories(businessId: string) {
+  const { data, error } = await supabase
+    .from('categories')
+    .select('*')
+    .eq('business_id', businessId)
+    .order('created_at', { ascending: true });
+  if (error) throw error;
+  return data;
+}
+
+export async function createCategory(businessId: string, name: string, basePrice: number) {
+  const { data, error } = await supabase
+    .from('categories')
+    .insert([{ business_id: businessId, name, base_price: basePrice, active: true }])
+    .select()
+    .single();
+  if (error) throw error;
+  return data;
+}
+
+export async function deleteCategory(id: string) {
+  const { error } = await supabase
+    .from('categories')
+    .delete()
+    .eq('id', id);
+  if (error) throw error;
+}
+
+export async function fetchAdditionalServices(businessId: string) {
+  const { data, error } = await supabase
+    .from('additional_services')
+    .select('*')
+    .eq('business_id', businessId)
+    .order('created_at', { ascending: true });
+  if (error) throw error;
+  return data;
+}
+
+export async function createAdditionalService(businessId: string, name: string, price: number) {
+  const { data, error } = await supabase
+    .from('additional_services')
+    .insert([{ business_id: businessId, name, price, active: true }])
+    .select()
+    .single();
+  if (error) throw error;
+  return data;
+}
+
+export async function deleteAdditionalService(id: string) {
+  const { error } = await supabase
+    .from('additional_services')
+    .delete()
+    .eq('id', id);
+  if (error) throw error;
+}
