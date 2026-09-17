@@ -535,7 +535,7 @@ const buildReadyWhatsAppUrl = (w: Wash): string | null => {
     if (!phone) return null;
     const fullName = w.customer_name ? `Sra. ${w.customer_name}` : 'Estimada cliente';
     const opName = w.operator_name || 'su especialista';
-    const msg = `¡Hola! ${fullName} ✨💅\n\nLe informamos que su especialista ${opName} ya está lista para atenderla.\n\n¡Por favor pase a la estación de servicio!`;
+    const msg = `¡Hola! ${fullName}.\n\nLe informamos que su especialista ${opName} ya está lista para atenderla.\n\n¡Por favor pase a la estación de servicio!`;
     return `https://wa.me/57${phone}?text=${encodeURIComponent(msg)}`;
   };
 
@@ -981,7 +981,7 @@ const buildReadyWhatsAppUrl = (w: Wash): string | null => {
               );
             })}
           </div>
-          
+
         </section>
 
         {/* ===== Registration form ===== */}
