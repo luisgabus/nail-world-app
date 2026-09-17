@@ -541,7 +541,7 @@ const handleStartWash = async (w: Wash) => {
   };
 
   // 2. Función para enviar el ticket de cobro (Estado: listo)
-  const buildTicketWhatsAppUrl = (w: Wash): string | null => {
+const buildTicketWhatsAppUrl = (w: Wash): string | null => {
     if (!w.customer_phone) return null;
     const phone = w.customer_phone.replace(/[^0-9]/g, '');
     if (!phone) return null;
@@ -551,13 +551,13 @@ const handleStartWash = async (w: Wash) => {
     const operatorName = w.operator_name || 'Nuestra especialista';
     const formattedPrice = Number(w.total_price || w.price || 0).toLocaleString('es-CO');
     
-    const msg = `✨ *NAIL WORLD - Resumen de Servicio* ✨\n\n` +
+    const msg = `*NAIL WORLD - Resumen de Servicio*\n\n` +
       `¡Hola, ${clientName}! Gracias por visitarnos. Aquí tiene el detalle de su servicio:\n\n` +
-      `📌 *Turno:* #${w.ticket_number}\n` +
-      `💅 *Servicio:* ${serviceName}\n` +
-      `👩‍🎨 *Especialista:* ${operatorName}\n` +
-      `💰 *Total a pagar:* $${formattedPrice}\n\n` +
-      `¡Esperamos que haya disfrutado su experiencia con nosotros! 💖`;
+      `- Turno: #${w.ticket_number}\n` +
+      `- Servicio: ${serviceName}\n` +
+      `- Especialista: ${operatorName}\n` +
+      `- Total a pagar: $${formattedPrice}\n\n` +
+      `¡Esperamos que haya disfrutado su experiencia con nosotros!`;
 
     return `https://wa.me/57${phone}?text=${encodeURIComponent(msg)}`;
   };
