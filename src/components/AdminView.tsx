@@ -529,13 +529,24 @@ const handleStartWash = async (w: Wash) => {
     showToast('Foto de soporte adjuntada', 'success');
   };
 
-const buildReadyWhatsAppUrl = (w: Wash): string | null => {
+const buildTicketWhatsAppUrl = (w: Wash): string | null => {
     if (!w.customer_phone) return null;
     const phone = w.customer_phone.replace(/[^0-9]/g, '');
     if (!phone) return null;
-    const fullName = w.customer_name ? `Sra. ${w.customer_name}` : 'Estimada cliente';
-    const opName = w.operator_name || 'su especialista';
-    const msg = `¡Hola! ${fullName}.\n\nLe informamos que su especialista ${opName} ya está lista para atenderla.\n\n¡Por favor pase a la estación de servicio!`;
+    
+    const clientName = w.customer_name ? `Sra. ${w.customer_name}` : 'Estimada cliente';
+    const serviceName = w.category_name || 'Servicio de estética';
+    const operatorName = w.operator_name || 'Nuestra especialista';
+    const formattedPrice = Number(w.total_price || w.price || 0).toLocaleString('es-CO');
+    
+    const msg = `✨ *NAIL WORLD - Resumen de Servicio* ✨\n\n` +
+      `¡Hola, ${clientName}! Gracias por visitarnos. Aquí tiene el detalle de su servicio:\n\n` +
+      `📌 *Turno:* #${w.ticket_number}\n` +
+      `💅 *Servicio:* ${serviceName}\n` +
+      `👩‍🎨 *Especialista:* ${operatorName}\n` +
+      `💰 *Total a pagar:* $${formattedPrice}\n\n` +
+      `¡Esperamos que haya disfrutado su experiencia con nosotros! 💖`;
+
     return `https://wa.me/57${phone}?text=${encodeURIComponent(msg)}`;
   };
 
@@ -949,26 +960,31 @@ const buildReadyWhatsAppUrl = (w: Wash): string | null => {
                       </button>
                     )}
                     
-                    {w.status === 'listo' && (
-                      <>
-                        {waUrl && (
-                          <a
-                            href={waUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="action-control flex-1 py-2.5 bg-gradient-to-br from-green-500 to-emerald-600 border border-rose-200/80 text-white font-bold rounded-lg flex items-center justify-center gap-1.5 text-sm animate-fadeIn"
-                          >
-                            <MessageCircle className="w-4 h-4" /> Avisar por WhatsApp
-                          </a>
-                        )}
-                        <button
-                          onClick={() => handleDeliverWash(w)}
-                          className="action-control flex-1 py-2.5 bg-gradient-to-br from-emerald-50 via-white to-slate-50 border border-rose-200/80 text-emerald-600 font-semibold rounded-lg flex items-center justify-center gap-1.5 text-sm"
-                        >
-                          <HandCoins className="w-4 h-4" /> Cobrar Servicio
-                        </button>
-                      </>
-                    )}
+{w.status === 'listo' && (
+  (() => {
+    const ticketWaUrl = buildTicketWhatsAppUrl(w);
+    return (
+      <>
+        {ticketWaUrl && (
+          <a
+            href={ticketWaUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="action-control flex-1 py-2.5 bg-gradient-to-br from-green-500 to-emerald-600 border border-emerald-600/80 text-white font-bold rounded-lg flex items-center justify-center gap-1.5 text-sm animate-fadeIn shadow-sm"
+          >
+            <MessageCircle className="w-4 h-4" /> Enviar Ticket WhatsApp
+          </a>
+        )}
+        <button
+          onClick={() => handleDeliverWash(w)}
+          className="action-control flex-1 py-2.5 bg-gradient-to-br from-emerald-50 via-white to-slate-50 border border-emerald-200 text-emerald-600 font-semibold rounded-lg flex items-center justify-center gap-1.5 text-sm shadow-sm"
+        >
+          <HandCoins className="w-4 h-4" /> Cobrar Servicio
+        </button>
+      </>
+    );
+  })()
+)}
                     
                     <button
                       onClick={() => setTicketModal(w)}
