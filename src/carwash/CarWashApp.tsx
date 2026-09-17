@@ -63,3 +63,12 @@ function AppContent() {
 
   return <LoginScreen onLogin={handleLogin} />;
 } 
+
+export default function CarWashApp() {
+  return (
+    <AppProvider>
+      <AppContent />
+      <ToastContainer />
+    </AppProvider>
+  );
+}
