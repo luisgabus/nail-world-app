@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Plus, Trash2, Sparkles, Scissors } from 'lucide-react';
+import { Plus, Trash2, Sparkles } from 'lucide-react';
 import { fetchCategories, saveCategory, deleteCategory, uuid } from '@/lib/data';
 import type { VehicleCategory } from '@/lib/types';
 
@@ -21,14 +21,14 @@ export function ServiceManager({ businessId }: { businessId: string }) {
   const handleAdd = async () => {
     if (!newName.trim() || !newPrice) return;
     
-    // Usamos la estructura de VehicleCategory adaptada para los servicios del salón
-    const item: VehicleCategory = {
+    // Forzamos la inyección del precio dinámicamente
+    const item = {
       id: uuid(),
       business_id: businessId,
       name: newName.trim(),
       price: parseInt(newPrice.replace(/\D/g, ''), 10) || 0,
       icon: 'sparkles',
-    };
+    } as VehicleCategory & { price?: number };
     
     await saveCategory(item);
     setNewName('');
@@ -54,7 +54,7 @@ export function ServiceManager({ businessId }: { businessId: string }) {
       </button>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-        {services.map((service) => (
+        {services.map((service: any) => (
           <div key={service.id} className="p-4 rounded-2xl bg-white border border-[#E2E8F0] flex items-center justify-between shadow-sm">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-rose-50 flex items-center justify-center">
@@ -62,7 +62,10 @@ export function ServiceManager({ businessId }: { businessId: string }) {
               </div>
               <div>
                 <div className="font-semibold text-slate-800">{service.name}</div>
-                <div className="text-sm font-bold text-emerald-600">${service.price.toLocaleString('es-CO')}</div>
+                <div className="text-sm font-bold text-emerald-600">
+                  {/* Aquí está la corrección: (service.price || 0) previene el colapso */}
+                  ${(service.price || 0).toLocaleString('es-CO')}
+                </div>
               </div>
             </div>
             <button 
