@@ -3,7 +3,7 @@ import {
   BarChart3, TrendingUp, Clock, AlertTriangle, Users, Package,
   LogOut, DollarSign, Calendar, ChevronDown, ChevronUp, Plus, Minus,
   ArrowLeft, Boxes, Receipt, Wallet, ChevronRight, History,
-  CreditCard, Smartphone, Banknote, QrCode, CheckCircle2,
+  CreditCard, Smartphone, Banknote, QrCode, CheckCircle2, Sparkles,
 } from 'lucide-react';
 import { useApp } from '@/lib/store';
 import {
@@ -17,8 +17,9 @@ import { getSubscriptionState, planLabel, statusLabel } from '@/lib/subscription
 import { SyncIndicator } from './SyncIndicator';
 import { HistoryView } from './HistoryView';
 import { OperatorPerformanceView } from './OperatorPerformanceView';
+import { ServiceManager } from './ServiceManager';
 
-type OwnerTab = 'dashboard' | 'liquidation' | 'losses' | 'inventory' | 'history' | 'operators' | 'subscription';
+type OwnerTab = 'dashboard' | 'services' | 'liquidation' | 'losses' | 'inventory' | 'history' | 'operators' | 'subscription';
 
 function washTotal(w: Wash): number {
   return (w.total_price ?? (w.price + (w.additional_total ?? 0))) || w.price;
@@ -26,7 +27,7 @@ function washTotal(w: Wash): number {
 
 export function OwnerView() {
   const { business, setBusiness, setRole } = useApp();
- const [tab, setTab] = useState<OwnerTab 'services' |>('dashboard');
+  const [tab, setTab] = useState<OwnerTab>('dashboard');
   const [washes, setWashes] = useState<Wash[]>([]);
   const [operators, setOperators] = useState<Operator[]>([]);
   const [startDate, setStartDate] = useState(new Date().toISOString().slice(0, 10));
@@ -181,6 +182,7 @@ export function OwnerView() {
       <nav className="px-4 flex gap-2 overflow-x-auto pb-2">
         {([
           { key: 'dashboard', label: 'Resumen', Icon: TrendingUp },
+          { key: 'services', label: 'Servicios', Icon: Sparkles },
           { key: 'liquidation', label: 'Liquidación', Icon: Users },
           { key: 'losses', label: 'Pérdidas', Icon: AlertTriangle },
           { key: 'inventory', label: 'Inventario', Icon: Package },
@@ -203,6 +205,11 @@ export function OwnerView() {
       </nav>
 
       <main className="px-4 py-4 pb-24">
+        {/* SERVICES TAB */}
+        {tab === 'services' && business && (
+          <ServiceManager businessId={business.id} />
+        )}
+
         {/* DASHBOARD TAB */}
         {tab === 'dashboard' && (
           <div className="space-y-4 animate-fadeIn">
