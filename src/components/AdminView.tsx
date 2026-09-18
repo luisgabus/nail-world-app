@@ -31,6 +31,7 @@ import { StaffView } from './StaffView';
 import { CategoryManager } from './CategoryManager';
 import { PlateScannerModal } from './PlateScannerModal';
 import LiquidationModal from './LiquidationModal';
+import { ServiceManager } from './ServiceManager';
 
 type View = 'main' | 'operators' | 'categories' | 'staff';
 
