@@ -247,7 +247,7 @@ export async function lookupPlateHistory(businessId: string, plate: string): Pro
   };
 }
 
-// ============ Vehicle Categories ============
+// ============ Categories (Servicios Principales) ============
 
 export async function fetchCategories(businessId: string): Promise<VehicleCategory[]> {
   if (isOnline()) {
@@ -255,7 +255,7 @@ export async function fetchCategories(businessId: string): Promise<VehicleCatego
       .from('categories')
       .select('*')
       .eq('business_id', businessId)
-      .order('order_index');
+      .order('order_index', { ascending: true });
     if (!error && data) {
       return data as VehicleCategory[];
     }
@@ -263,7 +263,19 @@ export async function fetchCategories(businessId: string): Promise<VehicleCatego
   const local = await dbGetAll<VehicleCategory>('categories');
   return local
     .filter((c) => c.business_id === businessId)
-    .sort((a, b) => a.order_index - b.order_index);
+    .sort((a, b) => (a.order_index ?? 0) - (b.order_index ?? 0));
+}
+
+export async function createCategory(businessId: string, name: string, basePrice: number): Promise<VehicleCategory> {
+  const newCat: VehicleCategory = {
+    id: uuid(),
+    business_id: businessId,
+    name,
+    base_price: basePrice,
+    active: true,
+    created_at: new Date().toISOString(),
+  };
+  return saveCategory(newCat);
 }
 
 export async function saveCategory(cat: VehicleCategory): Promise<VehicleCategory> {
@@ -364,7 +376,6 @@ export async function updateWashStatus(
   extra?: Partial<Wash>,
 ): Promise<void> {
   const updates: Record<string, unknown> = { status, ...extra };
-  // Merge with existing local record to avoid overwriting with a partial object
   const existing = await dbGet<Wash>('washes', washId);
   if (existing) {
     await dbPut('washes', { ...existing, ...updates } as Wash);
@@ -525,11 +536,11 @@ export async function seedDefaultInventory(businessId: string): Promise<void> {
   if (existing.length > 0) return;
 
   const defaults = [
-    { name: 'Shampoo Automotriz', unit: 'litros', quantity: 20, min_quantity: 5 },
-    { name: 'Cera Pulidora', unit: 'unidades', quantity: 10, min_quantity: 3 },
-    { name: 'Jabón servicio', unit: 'kilos', quantity: 15, min_quantity: 4 },
-    { name: 'Paños Microfibra', unit: 'unidades', quantity: 50, min_quantity: 10 },
-  { name: 'Desengrasante', unit: 'litros', quantity: 8, min_quantity: 3 },
+    { name: 'Esmalte Base', unit: 'unidades', quantity: 20, min_quantity: 5 },
+    { name: 'Esmalte Top Coat', unit: 'unidades', quantity: 10, min_quantity: 3 },
+    { name: 'Alcohol Antiséptico', unit: 'litros', quantity: 15, min_quantity: 4 },
+    { name: 'Limas de Uñas', unit: 'unidades', quantity: 50, min_quantity: 10 },
+    { name: 'Aceite de Cutícula', unit: 'unidades', quantity: 8, min_quantity: 3 },
   ];
 
   for (const item of defaults) {
@@ -831,37 +842,7 @@ export async function fetchAdminProfile(): Promise<AdminProfile | null> {
   return data as AdminProfile | null;
 }
 
-export { uuid };
-
-// --- GESTIÓN DE SERVICIOS Y ADICIONALES (Nail World) ---
-
-export async function fetchCategories(businessId: string) {
-  const { data, error } = await supabase
-    .from('categories')
-    .select('*')
-    .eq('business_id', businessId)
-    .order('created_at', { ascending: true });
-  if (error) throw error;
-  return data;
-}
-
-export async function createCategory(businessId: string, name: string, basePrice: number) {
-  const { data, error } = await supabase
-    .from('categories')
-    .insert([{ business_id: businessId, name, base_price: basePrice, active: true }])
-    .select()
-    .single();
-  if (error) throw error;
-  return data;
-}
-
-export async function deleteCategory(id: string) {
-  const { error } = await supabase
-    .from('categories')
-    .delete()
-    .eq('id', id);
-  if (error) throw error;
-}
+// ============ Servicios Adicionales (Nail World) ============
 
 export async function fetchAdditionalServices(businessId: string) {
   const { data, error } = await supabase
@@ -890,3 +871,5 @@ export async function deleteAdditionalService(id: string) {
     .eq('id', id);
   if (error) throw error;
 }
+
+export { uuid };
