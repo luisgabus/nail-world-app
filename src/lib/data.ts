@@ -881,14 +881,6 @@ export async function createAdditionalService(businessId: string, name: string, 
   return data;
 }
 
-export async function deleteAdditionalService(id: string) {
-  const { error } = await supabase
-    .from('additional_services')
-    .delete()
-    .eq('id', id);
-  if (error) throw error;
-}
-
 export { uuid };
 export interface AdditionalService {
   id: string;
