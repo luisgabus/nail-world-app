@@ -854,6 +854,23 @@ export async function fetchAdditionalServices(businessId: string) {
   return data;
 }
 
+export async function saveAdditionalService(service: any) {
+  const { error } = await supabase
+    .from('additional_services')
+    .upsert(service);
+    
+  if (error) throw error;
+}
+
+export async function deleteAdditionalService(id: string) {
+  const { error } = await supabase
+    .from('additional_services')
+    .delete()
+    .eq('id', id);
+    
+  if (error) throw error;
+}
+
 export async function createAdditionalService(businessId: string, name: string, price: number) {
   const { data, error } = await supabase
     .from('additional_services')
@@ -873,3 +890,9 @@ export async function deleteAdditionalService(id: string) {
 }
 
 export { uuid };
+export interface AdditionalService {
+  id: string;
+  business_id: string;
+  name: string;
+  price: number;
+}
