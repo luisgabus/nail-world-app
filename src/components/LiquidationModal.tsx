@@ -1,7 +1,7 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { X, Plus, Trash2, Timer, User, CheckCircle2, Coffee, Wrench } from 'lucide-react';
 import type { Wash, Operator, WashItem } from '@/lib/types';
-import { uuid } from '@/lib/data';
+import { uuid, fetchAdditionalServices } from '@/lib/data';
 
 interface LiquidationModalProps {
   wash: Wash;
@@ -18,20 +18,15 @@ interface LiquidationModalProps {
   }) => Promise<void>;
 }
 
-const QUICK_SERVICES = [
-  { name: 'servicio de motor', amount: 10000 },
-  { name: 'Encerado', amount: 10000 },
-  { name: 'Chasis', amount: 10000 },
-  { name: 'Limpieza interior', amount: 8000 },
-  { name: 'Siliconado llantas', amount: 5000 },
-  { name: 'Pulido faros', amount: 12000 },
-];
-
 export default function LiquidationModal({ wash, operators, onClose, onConfirm }: LiquidationModalProps) {
   const [basePrice, setBasePrice] = useState(wash.price);
   const [tip, setTip] = useState(0);
   const [selectedOperatorId, setSelectedOperatorId] = useState(wash.operator_id ?? '');
   const [selectedServices, setSelectedServices] = useState<Set<string>>(new Set());
+  
+  // Estado para los servicios traídos de Supabase
+  const [dynamicServices, setDynamicServices] = useState<{name: string, amount: number}[]>([]);
+
   const [customName, setCustomName] = useState('');
   const [customAmount, setCustomAmount] = useState(0);
   const [customServices, setCustomServices] = useState<{ id: string; name: string; amount: number }[]>([]);
@@ -52,6 +47,24 @@ export default function LiquidationModal({ wash, operators, onClose, onConfirm }
   };
 
   const operatorName = operators.find((o) => o.id === selectedOperatorId)?.name ?? wash.operator_name ?? '';
+
+  // Cargar los servicios desde la base de datos al abrir el modal
+  useEffect(() => {
+    const loadServices = async () => {
+      if (!wash.business_id) return;
+      try {
+        const data = await fetchAdditionalServices(wash.business_id);
+        const formattedServices = data.map((item) => ({
+          name: item.name,
+          amount: item.price
+        }));
+        setDynamicServices(formattedServices);
+      } catch (error) {
+        console.error("Error al cargar servicios adicionales:", error);
+      }
+    };
+    loadServices();
+  }, [wash.business_id]);
 
   const toggleService = (key: string) => {
     setSelectedServices((prev) => {
@@ -84,15 +97,16 @@ export default function LiquidationModal({ wash, operators, onClose, onConfirm }
     setConsumos((prev) => prev.filter((c) => c.id !== id));
   };
 
+  // Cálculo corregido para usar los servicios dinámicos
   const totalAdicionales = useMemo(() => {
     let sum = 0;
     for (const key of selectedServices) {
-      const svc = QUICK_SERVICES.find((s) => s.name === key);
+      const svc = dynamicServices.find((s) => s.name === key);
       if (svc) sum += svc.amount;
     }
     for (const s of customServices) sum += s.amount;
     return sum;
-  }, [selectedServices, customServices]);
+  }, [selectedServices, customServices, dynamicServices]);
 
   const totalConsumos = useMemo(() => consumos.reduce((s, c) => s + c.amount, 0), [consumos]);
 
@@ -104,8 +118,9 @@ export default function LiquidationModal({ wash, operators, onClose, onConfirm }
       const sanitizeAmount = (val: number) => Math.max(0, Math.floor(Number(val) || 0));
       const items: WashItem[] = [];
 
+      // Validamos contra los servicios dinámicos
       for (const key of selectedServices) {
-        const svc = QUICK_SERVICES.find((s) => s.name === key);
+        const svc = dynamicServices.find((s) => s.name === key);
         if (svc) {
           items.push({
             id: uuid(),
@@ -225,28 +240,32 @@ export default function LiquidationModal({ wash, operators, onClose, onConfirm }
             </div>
           </div>
 
-          {/* Quick service chips */}
+          {/* Dynamic service chips */}
           <div>
             <h3 className="text-sm font-semibold text-slate-600 mb-2 flex items-center gap-2">
               <Wrench className="w-4 h-4 text-rose-500" /> Servicios adicionales
             </h3>
             <div className="flex flex-wrap gap-2">
-              {QUICK_SERVICES.map((svc) => {
-                const isSel = selectedServices.has(svc.name);
-                return (
-                  <button
-                    key={svc.name}
-                    onClick={() => toggleService(svc.name)}
-                    className={`action-control px-3 py-2 rounded-xl text-sm font-medium border border-rose-200/80 ${
-                      isSel
-                        ? 'bg-gradient-to-br from-rose-100 via-white to-slate-50 text-rose-700'
-                        : 'action-surface text-slate-500'
-                    }`}
-                  >
-                    + {svc.name} ${svc.amount.toLocaleString('es-CO')}
-                  </button>
-                );
-              })}
+              {dynamicServices.length === 0 ? (
+                <span className="text-sm text-slate-400 italic">No hay servicios adicionales configurados.</span>
+              ) : (
+                dynamicServices.map((svc) => {
+                  const isSel = selectedServices.has(svc.name);
+                  return (
+                    <button
+                      key={svc.name}
+                      onClick={() => toggleService(svc.name)}
+                      className={`action-control px-3 py-2 rounded-xl text-sm font-medium border border-rose-200/80 ${
+                        isSel
+                          ? 'bg-gradient-to-br from-rose-100 via-white to-slate-50 text-rose-700'
+                          : 'action-surface text-slate-500'
+                      }`}
+                    >
+                      + {svc.name} ${svc.amount.toLocaleString('es-CO')}
+                    </button>
+                  );
+                })
+              )}
             </div>
 
             {/* Custom service input */}
