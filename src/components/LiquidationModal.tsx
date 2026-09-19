@@ -274,7 +274,7 @@ export default function LiquidationModal({ wash, operators, onClose, onConfirm }
                 type="text"
                 value={customName}
                 onChange={(e) => setCustomName(e.target.value)}
-                placeholder="Techo, asientos, aros..."
+                placeholder="Figuras, decoración, accesorios..."
                 className="flex-1 bg-white border border-[#E2E8F0] shadow-sm rounded-xl px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-cyan-200"
               />
               <div className="flex items-center gap-1 bg-white border border-[#E2E8F0] shadow-sm rounded-xl px-3">
