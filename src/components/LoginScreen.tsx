@@ -2,23 +2,29 @@ import React, { useState } from 'react';
 import { Sparkles, ArrowRight, Loader2 } from 'lucide-react';
 
 interface LoginScreenProps {
-  onLogin?: (businessId: string, role: 'owner' | 'reception') => void;
+  // 1. Ampliamos la interfaz para que pueda enviar la contraseña al componente padre
+  onLogin?: (businessId: string, role: 'owner' | 'reception', password: string) => void;
 }
 
 export function LoginScreen({ onLogin }: LoginScreenProps) {
   const [businessId, setBusinessId] = useState('');
+  const [password, setPassword] = useState(''); // 2. Añadimos el estado en memoria
   const [submittingRole, setSubmittingRole] = useState<'owner' | 'reception' | null>(null);
 
   const handleLogin = (role: 'owner' | 'reception') => {
     const trimmedId = businessId.trim().toUpperCase();
-    if (!trimmedId) {
-      alert('Por favor ingresa el ID del Negocio');
+    
+    // 3. Validamos que ambos campos estén llenos
+    if (!trimmedId || !password.trim()) {
+      alert('Por favor ingresa el ID del Negocio y la contraseña');
       return;
     }
+    
     setSubmittingRole(role);
-    // Solo llamamos a la función del padre. El Store se encarga del resto.
+    
+    // 4. Enviamos el ID, el Rol y la Contraseña al cerebro lógico (el Store/Padre)
     if (typeof onLogin === 'function') {
-      onLogin(trimmedId, role);
+      onLogin(trimmedId, role, password.trim());
     } 
   };
 
@@ -40,29 +46,45 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
           <p className="text-slate-500 text-sm mt-1">Gestión inteligente de salones</p>
         </div>
 
-        {/* Form */}
+        {/* Formulario Estructurado */}
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label htmlFor="businessId" className="block text-sm font-medium text-slate-600 mb-2">
-              ID del Negocio
-            </label>
-            <input
-              id="businessId"
-              type="text"
-              value={businessId}
-              onChange={(e) => setBusinessId(e.target.value)}
-              placeholder="Ej: NAIL01"
-              className="w-full px-4 py-4 text-lg font-mono uppercase tracking-wider bg-white border border-rose-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-400 focus:border-transparent transition-all shadow-sm"
-              autoFocus
-              disabled={!!submittingRole}
-            />
+          <div className="space-y-4">
+            <div>
+              <label htmlFor="businessId" className="block text-sm font-medium text-slate-600 mb-2">
+                ID del Negocio
+              </label>
+              <input
+                id="businessId"
+                type="text"
+                value={businessId}
+                onChange={(e) => setBusinessId(e.target.value)}
+                placeholder="Ej: NAIL01"
+                className="w-full px-4 py-4 text-lg font-mono uppercase tracking-wider bg-white border border-rose-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-400 focus:border-transparent transition-all shadow-sm"
+                autoFocus
+                disabled={!!submittingRole}
+              />
+            </div>
+
+            {/* 5. Nuevo Campo Visual Integrado */}
+            <div>
+              <label className="block text-sm font-medium text-slate-600 mb-2">
+                Contraseña de Acceso
+              </label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                className="w-full px-4 py-4 text-lg bg-white border border-rose-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-400 focus:border-transparent transition-all shadow-sm"
+                disabled={!!submittingRole}
+              />
+            </div>
           </div>
 
-          {/* Buttons */}
+          {/* Botones */}
           <div className="space-y-3 pt-2">
             <button
-              type="button"
-              onClick={() => handleLogin('reception')}
+              type="submit"
               disabled={!!submittingRole}
               className="w-full py-4 bg-rose-400 hover:bg-rose-500 text-white font-semibold rounded-xl flex items-center justify-center gap-2 disabled:opacity-50 transition-colors shadow-sm"
             >
