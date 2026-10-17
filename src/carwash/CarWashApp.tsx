@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useLocation } from '@tanstack/react-router';
 import { useApp, AppProvider } from '@/lib/store';
+import { supabase } from '@/lib/supabase'; // <-- AGREGA ESTA LÍNEA OBLIGATORIAMENTE
 import { ClientRegistration } from '@/components/ClientRegistration';
 import { LoginScreen } from '@/components/LoginScreen';
 import { AdminView } from '@/components/AdminView';
@@ -15,17 +16,36 @@ function AppContent() {
   const location = useLocation();
   const isAdminRoute = location.pathname === '/admin';
 
-  // Puente de conexión: Crea un negocio válido para romper el bucle
-  const handleLogin = (businessId: string, selectedRole: 'owner' | 'reception') => {
-    // Simulamos los datos del negocio para que el Store lo acepte como válido
-    const mockBusiness = {
-      id: businessId,
-      name: 'Nail World Demo',
-      owner_pin: '1234'
-    } as any; 
-    
-    setBusiness(mockBusiness);
-    setRole(selectedRole);
+// Puente de conexión real a Supabase con escudo de contraseña
+  const handleLogin = async (businessId: string, selectedRole: 'owner' | 'reception', password: string) => {
+    try {
+      // 1. Consultar el negocio cruzando el ID/Nombre y la contraseña exacta
+      const { data: biz, error: dbError } = await supabase
+        .from('businesses')
+        .select('*')
+        .or(`codigo.ilike.${businessId},name.ilike.${businessId}`)
+        .eq('access_password', password) // <-- EL ESCUDO
+        .limit(1)
+        .maybeSingle();
+
+      if (dbError || !biz) {
+        alert('Credenciales incorrectas. Verifica el código de tu negocio y la contraseña.');
+        return;
+      }
+
+      // 2. ESCUDO DE SEGMENTACIÓN: Validar que pertenezca a Nail World
+      if (biz.demo_selected && biz.demo_selected !== 'Nail World') { // Verifica que el texto coincida con lo que guardas en la BD
+        alert('Este negocio está registrado para CarWash. Por favor ingresa en su plataforma correspondiente.');
+        return;
+      }
+
+      // 3. Conceder acceso
+      setBusiness(biz);
+      setRole(selectedRole);
+      
+    } catch (err) {
+      alert('Ocurrió un error al verificar las credenciales. Intenta nuevamente.');
+    }
   };
 
   // 1. Si no hay empresa o rol seleccionado, ir a Login PASANDO la función handleLogin
