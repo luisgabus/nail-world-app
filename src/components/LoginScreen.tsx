@@ -59,7 +59,7 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
                 value={businessId}
                 onChange={(e) => setBusinessId(e.target.value)}
                 placeholder="Ej: NAIL01"
-                className="w-full px-4 py-4 text-lg font-mono uppercase tracking-wider bg-white border border-rose-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-400 focus:border-transparent transition-all shadow-sm"
+                className="w-full px-4 py-4 text-lg font-mono tracking-wider bg-white border border-rose-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-400 focus:border-transparent transition-all shadow-sm"
                 autoFocus
                 disabled={!!submittingRole}
               />
