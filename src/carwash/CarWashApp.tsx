@@ -11,20 +11,25 @@ import { ToastContainer } from '@/components/Toast';
 import { SuperAdminApp } from '@/components/SuperAdminApp';
 
 function AppContent() {
-  const { business, role, setRole, setBusiness } = useApp();
+ const { business, role, setRole, setBusiness } = useApp();
   const [pinUnlocked, setPinUnlocked] = useState(false);
   const location = useLocation();
   const isAdminRoute = location.pathname === '/admin';
 
-// Puente de conexión real a Supabase con escudo de contraseña
+// Puente de conexión real a Supabase con escudo de contraseña y protección de espacios
   const handleLogin = async (businessId: string, selectedRole: 'owner' | 'reception', password: string) => {
     try {
+      // Limpiamos espacios accidentales al inicio o al final
+      const cleanId = businessId.trim();
+      const cleanPassword = password.trim();
+
       // 1. Consultar el negocio cruzando el ID/Nombre y la contraseña exacta
       const { data: biz, error: dbError } = await supabase
         .from('businesses')
         .select('*')
-        .or(`codigo.ilike.${businessId},name.ilike.${businessId}`)
-        .eq('access_password', password) // <-- EL ESCUDO
+        // Envolvemos el valor en comillas dobles para que el intérprete lea espacios correctamente
+        .or(`codigo.ilike."${cleanId}",name.ilike."${cleanId}"`)
+        .eq('access_password', cleanPassword) // <-- EL ESCUDO
         .limit(1)
         .maybeSingle();
 
