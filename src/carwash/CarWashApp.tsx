@@ -20,24 +20,24 @@ function AppContent() {
   const handleLogin = async (businessId: string, selectedRole: 'owner' | 'reception', password: string) => {
     try {
       // Limpiamos espacios accidentales al inicio o al final
-      const cleanId = businessId.trim();
+ const cleanId = businessId.trim();
       const cleanPassword = password.trim();
 
-      // 1. Consultar el negocio cruzando el ID/Nombre y la contraseña exacta
+      // Consultamos usando 'id' (no codigo) y reparamos las comillas dobles
       const { data: biz, error: dbError } = await supabase
         .from('businesses')
         .select('*')
-        // Envolvemos el valor en comillas dobles para que el intérprete lea espacios correctamente
-        .or(`codigo.ilike."${cleanId}",name.ilike."${cleanId}`)
-        .eq('access_password', cleanPassword) // <-- EL ESCUDO
+        .or(`id.ilike."${cleanId}",name.ilike."${cleanId}"`)
+        .eq('access_password', cleanPassword)
         .limit(1)
         .maybeSingle();
 
       if (dbError || !biz) {
+        console.error("Error de DB:", dbError);
         alert('Credenciales incorrectas. Verifica el código de tu negocio y la contraseña.');
         return;
       }
-
+      
       // 2. ESCUDO DE SEGMENTACIÓN: Validar que pertenezca a Nail World
       if (biz.demo_selected && biz.demo_selected !== 'Nail World') { // Verifica que el texto coincida con lo que guardas en la BD
         alert('Este negocio está registrado para CarWash. Por favor ingresa en su plataforma correspondiente.');
