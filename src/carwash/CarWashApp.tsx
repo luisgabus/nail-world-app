@@ -28,7 +28,7 @@ function AppContent() {
         .from('businesses')
         .select('*')
         // Envolvemos el valor en comillas dobles para que el intérprete lea espacios correctamente
-        .or(`codigo.ilike."${cleanId}",name.ilike."${cleanId}"`)
+        .or(`codigo.ilike."${cleanId}",name.ilike."${cleanId}`)
         .eq('access_password', cleanPassword) // <-- EL ESCUDO
         .limit(1)
         .maybeSingle();
