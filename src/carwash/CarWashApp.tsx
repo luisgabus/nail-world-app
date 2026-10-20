@@ -39,7 +39,7 @@ function AppContent() {
       }
       
       // 2. ESCUDO DE SEGMENTACIÓN: Validar que pertenezca a Nail World
-      if (biz.demo_selected && biz.demo_selected !== 'Nail World') { // Verifica que el texto coincida con lo que guardas en la BD
+      if (biz.demo_selected && biz.demo_selected !== 'NailWorld') { // Verifica que el texto coincida con lo que guardas en la BD
         alert('Este negocio está registrado para CarWash. Por favor ingresa en su plataforma correspondiente.');
         return;
       }
