@@ -116,7 +116,7 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
           </div>
 
           <p className="text-center text-xs text-slate-500 pt-4">
-            Demo: usa <span className="font-mono text-rose-400 font-bold">NAIL01</span> para entrar
+            Demo: usa <span className="font-mono text-rose-400 font-bold">NAIL01</span> para usuario y contraseña
           </p>
         </form>
 
