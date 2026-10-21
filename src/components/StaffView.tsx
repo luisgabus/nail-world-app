@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ArrowLeft, Plus, User, Trash2, Pencil, Check, X } from 'lucide-react';
+import { ArrowLeft, Plus, User, Phone, MapPin, CreditCard, Wallet, AlertTriangle, Trash2, Pencil, Check, X, Upload } from 'lucide-react';
 import type { Operator } from '@/lib/types';
 import { uuid } from '@/lib/data';
 
@@ -23,12 +23,26 @@ export function StaffView({
   const [role, setRole] = useState<'servicio' | 'recepcion'>('servicio');
   const [active, setActive] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [phone, setPhone] = useState('');
+  const [address, setAddress] = useState('');
+  const [documentId, setDocumentId] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState('');
+  const [accountNumber, setAccountNumber] = useState('');
+  const [emergencyName, setEmergencyName] = useState('');
+  const [emergencyPhone, setEmergencyPhone] = useState('');
 
-  const handleEdit = (op: Operator) => {
+const handleEdit = (op: Operator) => {
     setEditingOperator(op);
     setName(op.name);
-    setRole(op.role || 'servicio');
-    setActive(op.active);
+    setRole(op.role === 'recepcion' ? 'recepcion' : 'servicio');
+    setActive(op.active !== false);
+    setPhone(op.phone || '');
+    setAddress(op.address || '');
+    setDocumentId(op.document_id || '');
+    setPaymentMethod(op.payment_method ? op.payment_method.charAt(0).toUpperCase() + op.payment_method.slice(1) : '');
+    setAccountNumber(op.payment_account || '');
+    setEmergencyName(op.emergency_contact_name || '');
+    setEmergencyPhone(op.emergency_contact_phone || '');
   };
 
   const handleNew = () => {
@@ -38,11 +52,27 @@ export function StaffView({
       name: '',
       role: 'servicio',
       active: true,
-      created_at: new Date().toISOString(),
-    });
+      // Propiedades opcionales se inician en null
+      phone: null,
+      address: null,
+      document_id: null,
+      document_photo_url: null,
+      payment_method: null,
+      payment_account: null,
+      emergency_contact_name: null,
+      emergency_contact_phone: null
+    } as any); // Usamos as any para sortear el created_at si TypeScript se queja temporalmente
+    
     setName('');
     setRole('servicio');
     setActive(true);
+    setPhone('');
+    setAddress('');
+    setDocumentId('');
+    setPaymentMethod('');
+    setAccountNumber('');
+    setEmergencyName('');
+    setEmergencyPhone('');
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -54,8 +84,15 @@ export function StaffView({
       await onSave({
         ...editingOperator,
         name: name.trim(),
-        role,
-        active,
+        role: role,
+        active: active,
+        phone: phone.trim() || null,
+        address: address.trim() || null,
+        document_id: documentId.trim() || null,
+        payment_method: paymentMethod ? (paymentMethod.toLowerCase() as any) : null,
+        payment_account: accountNumber.trim() || null,
+        emergency_contact_name: emergencyName.trim() || null,
+        emergency_contact_phone: emergencyPhone.trim() || null
       });
       setEditingOperator(null);
     } catch (err) {
@@ -140,74 +177,202 @@ export function StaffView({
               {operators.some((o) => o.id === editingOperator.id) ? 'Editar Especialista' : 'Nuevo Especialista'}
             </h2>
 
-            <div>
-              <label className="text-xs font-semibold text-slate-500 mb-1 block">Nombre completo</label>
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Ej: Camila Restrepo"
-                className="w-full px-4 py-3 bg-slate-50 border border-[#E2E8F0] rounded-xl text-slate-900 text-sm focus:outline-none focus:border-rose-500"
-                required
-                autoFocus
-              />
-            </div>
+<div className="space-y-6 overflow-y-auto max-h-[70vh] p-1">
+  
+  {/* Foto de Perfil */}
+  <div className="flex flex-col items-center gap-3">
+    <div className="w-20 h-20 border-2 border-dashed border-slate-300 rounded-xl flex items-center justify-center text-slate-400 bg-slate-50 overflow-hidden">
+      <User className="w-8 h-8" />
+    </div>
+    <button type="button" className="flex items-center gap-2 px-4 py-2 text-sm border border-slate-200 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors">
+      <Upload className="w-4 h-4" /> Cargar documento
+    </button>
+  </div>
 
-            <div>
-              <label className="text-xs font-semibold text-slate-500 mb-1 block">Rol en el negocio</label>
-              <div className="grid grid-cols-2 gap-2">
-                <button
-                  type="button"
-                  onClick={() => setRole('servicio')}
-                  className={`py-3 px-3 rounded-xl text-sm font-medium border transition-all ${
-                    role === 'servicio'
-                      ? 'bg-rose-50 border-rose-300 text-rose-700 font-semibold'
-                      : 'bg-slate-50 border-[#E2E8F0] text-slate-600'
-                  }`}
-                >
-                  Especialista (Servicios)
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setRole('recepcion')}
-                  className={`py-3 px-3 rounded-xl text-sm font-medium border transition-all ${
-                    role === 'recepcion'
-                      ? 'bg-rose-50 border-rose-300 text-rose-700 font-semibold'
-                      : 'bg-slate-50 border-[#E2E8F0] text-slate-600'
-                  }`}
-                >
-                  Recepción / Caja
-                </button>
-              </div>
-            </div>
+  {/* 1. Información Personal */}
+  <div className="space-y-3">
+    <div className="flex items-center gap-2 text-sm font-semibold text-slate-600 mb-2">
+      <User className="w-4 h-4" /> Información Personal
+    </div>
+    
+    <div>
+      <label className="block text-xs font-semibold text-slate-500 mb-1">Nombre Completo</label>
+      <input 
+        type="text" 
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        placeholder="Ej: Camila Restrepo" 
+        className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 text-sm" 
+        required
+      />
+    </div>
+    
+    <div>
+      <label className="block text-xs font-semibold text-slate-500 mb-1">Teléfono</label>
+      <div className="relative">
+        <Phone className="w-4 h-4 absolute left-3 top-2.5 text-slate-400" />
+        <input 
+          type="tel" 
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          placeholder="Ej: 300 123 4567" 
+          className="w-full pl-9 pr-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 text-sm" 
+        />
+      </div>
+    </div>
 
-            <div className="flex items-center justify-between bg-slate-50 border border-[#E2E8F0] rounded-xl p-3">
-              <span className="text-sm text-slate-700 font-medium">Estado activo</span>
-              <button
-                type="button"
-                onClick={() => setActive(!active)}
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${active ? 'bg-emerald-500' : 'bg-slate-300'}`}
-              >
-                <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${active ? 'translate-x-6' : 'translate-x-1'}`} />
-              </button>
-            </div>
+    <div>
+      <label className="block text-xs font-semibold text-slate-500 mb-1">Dirección</label>
+      <div className="relative">
+        <MapPin className="w-4 h-4 absolute left-3 top-2.5 text-slate-400" />
+        <input 
+          type="text" 
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+          placeholder="Ej: Calle 123 #45-67" 
+          className="w-full pl-9 pr-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 text-sm" 
+        />
+      </div>
+    </div>
 
-            <div className="flex gap-3 pt-2">
-              <button
-                type="button"
-                onClick={() => setEditingOperator(null)}
-                className="action-control action-surface flex-1 py-3 border border-rose-200/80 text-slate-600 font-medium rounded-xl"
-              >
-                Cancelar
-              </button>
-              <button
-                type="submit"
-                disabled={saving || !name.trim()}
-                className="action-control flex-1 py-3 bg-primary text-white font-semibold rounded-xl hover:bg-rose-500 transition-all disabled:opacity-50"
-              >
-                {saving ? 'Guardando...' : 'Guardar'}
-              </button>
-            </div>
+    <div>
+      <label className="block text-xs font-semibold text-slate-500 mb-1">Cédula / DNI</label>
+      <div className="relative">
+        <CreditCard className="w-4 h-4 absolute left-3 top-2.5 text-slate-400" />
+        <input 
+          type="text" 
+          value={documentId}
+          onChange={(e) => setDocumentId(e.target.value)}
+          placeholder="Ej: 1.030.456.789" 
+          className="w-full pl-9 pr-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 text-sm" 
+        />
+      </div>
+    </div>
+  </div>
+
+  {/* 2. Información de Pago */}
+  <div className="space-y-3 pt-4 border-t border-slate-100">
+    <div className="flex items-center gap-2 text-sm font-semibold text-slate-600 mb-2">
+      <Wallet className="w-4 h-4" /> Información de Pago
+    </div>
+    
+    <label className="block text-xs font-semibold text-slate-500 mb-1">Método de Pago Preferido</label>
+    <div className="grid grid-cols-3 gap-2">
+      <button 
+        type="button" 
+        onClick={() => setPaymentMethod('Nequi')}
+        className={`py-2 text-xs font-medium rounded-lg transition-all ${paymentMethod === 'Nequi' ? 'border border-rose-200 bg-rose-50 text-rose-600' : 'border border-slate-200 text-slate-600 hover:bg-slate-50'}`}
+      >
+        Nequi
+      </button>
+      <button 
+        type="button" 
+        onClick={() => setPaymentMethod('Daviplata')}
+        className={`py-2 text-xs font-medium rounded-lg transition-all ${paymentMethod === 'Daviplata' ? 'border border-rose-200 bg-rose-50 text-rose-600' : 'border border-slate-200 text-slate-600 hover:bg-slate-50'}`}
+      >
+        Daviplata
+      </button>
+      <button 
+        type="button" 
+        onClick={() => setPaymentMethod('Efectivo')}
+        className={`py-2 text-xs font-medium rounded-lg transition-all ${paymentMethod === 'Efectivo' ? 'border border-rose-200 bg-rose-50 text-rose-600' : 'border border-slate-200 text-slate-600 hover:bg-slate-50'}`}
+      >
+        Efectivo
+      </button>
+    </div>
+
+    <div className="mt-2">
+      <label className="block text-xs font-semibold text-slate-500 mb-1">Número de Cuenta / Teléfono</label>
+      <input 
+        type="text" 
+        value={accountNumber}
+        onChange={(e) => setAccountNumber(e.target.value)}
+        placeholder="Ej: 300 123 4567" 
+        className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 text-sm" 
+      />
+    </div>
+  </div>
+
+  {/* 3. Contacto de Emergencia */}
+  <div className="space-y-3 pt-4 border-t border-slate-100">
+    <div className="flex items-center gap-2 text-sm font-semibold text-amber-600 mb-2">
+      <AlertTriangle className="w-4 h-4" /> Contacto de Emergencia
+    </div>
+    
+    <div>
+      <label className="block text-xs font-semibold text-slate-500 mb-1">Nombre del Contacto</label>
+      <input 
+        type="text" 
+        value={emergencyName}
+        onChange={(e) => setEmergencyName(e.target.value)}
+        placeholder="Ej: María Pérez" 
+        className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 text-sm" 
+      />
+    </div>
+    
+    <div>
+      <label className="block text-xs font-semibold text-slate-500 mb-1">Teléfono del Contacto</label>
+      <input 
+        type="tel" 
+        value={emergencyPhone}
+        onChange={(e) => setEmergencyPhone(e.target.value)}
+        placeholder="Ej: 300 987 6543" 
+        className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 text-sm" 
+      />
+    </div>
+  </div>
+
+  {/* 4. Rol y Estado */}
+  <div className="space-y-3 pt-4 border-t border-slate-100">
+    <label className="block text-xs font-semibold text-slate-500 mb-1">Rol en el negocio</label>
+    <div className="grid grid-cols-2 gap-2">
+      <button 
+        type="button" 
+        onClick={() => setRole('servicio')}
+        className={`py-2 text-xs font-medium rounded-lg transition-all ${role === 'servicio' ? 'border border-rose-200 bg-rose-50 text-rose-600' : 'border border-slate-200 text-slate-600 hover:bg-slate-50'}`}
+      >
+        Especialista (Servicios)
+      </button>
+      <button 
+        type="button" 
+        onClick={() => setRole('recepcion')}
+        className={`py-2 text-xs font-medium rounded-lg transition-all ${role === 'recepcion' ? 'border border-rose-200 bg-rose-50 text-rose-600' : 'border border-slate-200 text-slate-600 hover:bg-slate-50'}`}
+      >
+        Recepción / Caja
+      </button>
+    </div>
+    
+    <div className="flex items-center justify-between p-3 border border-slate-100 rounded-lg mt-3 bg-slate-50">
+      <span className="text-sm font-medium text-slate-700">Estado activo</span>
+      <button
+        type="button"
+        onClick={() => setActive(!active)}
+        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${active ? 'bg-emerald-500' : 'bg-slate-300'}`}
+      >
+        <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${active ? 'translate-x-6' : 'translate-x-1'}`} />
+      </button>
+    </div>
+  </div>
+
+</div>
+
+{/* Botones de Acción */}
+<div className="flex gap-3 pt-4 border-t border-slate-100 mt-2">
+  <button 
+    type="button" 
+    onClick={() => setEditingOperator(null)} 
+    className="w-full py-2.5 text-sm font-medium border border-rose-200 text-slate-600 rounded-xl hover:bg-slate-50 transition-colors"
+  >
+    Cancelar
+  </button>
+  <button 
+    type="submit" 
+    disabled={saving || !name.trim()} 
+    className="w-full py-2.5 text-sm font-medium bg-[#D99AAB] text-white rounded-xl hover:bg-[#c48898] transition-colors disabled:opacity-50"
+  >
+    {saving ? 'Guardando...' : 'Guardar'}
+  </button>
+</div>
           </form>
         )}
       </main>
