@@ -1,31 +1,59 @@
 import React, { useState } from 'react';
 import { Sparkles, ArrowRight, Loader2 } from 'lucide-react';
+// IMPORTANTE: Asegúrate de que la ruta de importación de supabase coincida con la de tu proyecto
+import { supabase } from '@/lib/supabase'; 
 
 interface LoginScreenProps {
-  // 1. Ampliamos la interfaz para que pueda enviar la contraseña al componente padre
+  // Mantenemos la firma original para no romper el componente padre
   onLogin?: (businessId: string, role: 'owner' | 'reception', password: string) => void;
 }
 
 export function LoginScreen({ onLogin }: LoginScreenProps) {
-  const [businessId, setBusinessId] = useState('');
-  const [password, setPassword] = useState(''); // 2. Añadimos el estado en memoria
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [submittingRole, setSubmittingRole] = useState<'owner' | 'reception' | null>(null);
+  const [error, setError] = useState('');
 
-  const handleLogin = (role: 'owner' | 'reception') => {
-    const trimmedId = businessId.trim().toUpperCase();
-    
-    // 3. Validamos que ambos campos estén llenos
-    if (!trimmedId || !password.trim()) {
-      alert('Por favor ingresa el ID del Negocio y la contraseña');
+  const handleLogin = async (role: 'owner' | 'reception') => {
+    if (!email.trim() || !password.trim()) {
+      setError('Por favor ingresa tu correo y contraseña');
       return;
     }
     
     setSubmittingRole(role);
+    setError('');
     
-    // 4. Enviamos el ID, el Rol y la Contraseña al cerebro lógico (el Store/Padre)
-    if (typeof onLogin === 'function') {
-      onLogin(trimmedId, role, password.trim());
-    } 
+    try {
+      // 1. Autenticación criptográfica con Supabase Auth
+      const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+        email: email.trim(),
+        password: password.trim()
+      });
+
+      if (authError) throw new Error('Credenciales incorrectas. Verifica tu correo y contraseña.');
+      if (!authData.user) throw new Error('Error al generar la sesión.');
+
+      // 2. Obtener el negocio asociado (RLS garantiza que solo traiga el suyo)
+      const { data: businessData, error: bizError } = await supabase
+        .from('businesses')
+        .select('id')
+        .eq('owner_auth_id', authData.user.id)
+        .single();
+
+      if (bizError || !businessData) {
+        throw new Error('No se encontró un negocio asociado a este usuario.');
+      }
+
+      // 3. Enviamos el ID recuperado, el Rol y la Contraseña al componente padre
+      if (typeof onLogin === 'function') {
+        onLogin(businessData.id, role, password.trim());
+      } 
+    } catch (err: any) {
+      console.error(err);
+      setError(err.message || 'Error al iniciar sesión');
+    } finally {
+      setSubmittingRole(null);
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -50,27 +78,27 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-4">
             <div>
-              <label htmlFor="businessId" className="block text-sm font-medium text-slate-600 mb-2">
-                ID del Negocio
+              <label htmlFor="email" className="block text-sm font-medium text-slate-600 mb-2">
+                Correo Electrónico
               </label>
               <input
-                id="businessId"
-                type="text"
-                value={businessId}
-                onChange={(e) => setBusinessId(e.target.value)}
-                placeholder="Ej: NAIL01"
-                className="w-full px-4 py-4 text-lg font-mono tracking-wider bg-white border border-rose-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-400 focus:border-transparent transition-all shadow-sm"
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="ejemplo@correo.com"
+                className="w-full px-4 py-4 text-lg bg-white border border-rose-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-400 focus:border-transparent transition-all shadow-sm"
                 autoFocus
                 disabled={!!submittingRole}
               />
             </div>
 
-            {/* 5. Nuevo Campo Visual Integrado */}
             <div>
-              <label className="block text-sm font-medium text-slate-600 mb-2">
+              <label htmlFor="password" className="block text-sm font-medium text-slate-600 mb-2">
                 Contraseña de Acceso
               </label>
               <input
+                id="password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -80,6 +108,13 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
               />
             </div>
           </div>
+
+          {/* Manejo de errores visuales */}
+          {error && (
+            <div className="p-3 bg-red-50 border border-red-100 rounded-xl text-red-600 text-sm text-center">
+              {error}
+            </div>
+          )}
 
           {/* Botones */}
           <div className="space-y-3 pt-2">
@@ -114,10 +149,6 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
               )}
             </button>
           </div>
-
-          <p className="text-center text-xs text-slate-500 pt-4">
-            Demo: usa <span className="font-mono text-rose-400 font-bold">NAIL01</span> para usuario y contraseña
-          </p>
         </form>
 
       </div>
