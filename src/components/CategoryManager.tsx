@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { ArrowLeft, Plus, Sparkles, Trash2, Pencil } from 'lucide-react';
+import { ArrowLeft, Plus, Sparkles, Trash2, Pencil, Grid } from 'lucide-react';
 import type { VehicleCategory } from '@/lib/types';
 import { uuid } from '@/lib/data';
+import { EmptyState } from '@/components/EmptyState'; // <-- Importación agregada
 
 interface CategoryManagerProps {
   categories: VehicleCategory[];
@@ -92,54 +93,63 @@ export function CategoryManager({
         <h1 className="text-lg font-bold">Categorías de Servicios</h1>
       </header>
 
-      <main className="p-4 max-w-2xl mx-auto space-y-4">
+      <main className="p-4 max-w-2xl mx-auto space-y-4 animate-fadeIn">
         {!editingCategory ? (
           <>
-            <button
-              onClick={handleNew}
-              className="action-control w-full py-3.5 bg-rose-500 text-white font-semibold rounded-2xl flex items-center justify-center gap-2 hover:bg-rose-600 transition-all shadow-sm"
-            >
-              <Plus className="w-5 h-5" /> Agregar Categoría
-            </button>
+            {/* Solo mostramos el botón superior si ya hay categorías */}
+            {categories.length > 0 && (
+              <button
+                onClick={handleNew}
+                className="action-control w-full py-3.5 bg-rose-500 text-white font-semibold rounded-2xl flex items-center justify-center gap-2 hover:bg-rose-600 transition-all shadow-sm"
+              >
+                <Plus className="w-5 h-5" /> Agregar Categoría
+              </button>
+            )}
 
             <div className="space-y-3">
-              {sortedCategories.map((cat) => (
-                <div
-                  key={cat.id}
-                  className="bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-4 flex items-center justify-between"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-rose-50 flex items-center justify-center text-rose-500">
-                      <Sparkles className="w-5 h-5" />
+              {/* Integración del EmptyState */}
+              {sortedCategories.length === 0 ? (
+                <EmptyState
+                  icon={Grid}
+                  title="Sin servicios configurados"
+                  description="Comienza a estructurar tu catálogo agregando los servicios principales de tu salón (ej. Manicura, Pedicura, Acrílicas)."
+                  actionLabel="Crear mi primer servicio"
+                  onAction={handleNew}
+                />
+              ) : (
+                sortedCategories.map((cat) => (
+                  <div
+                    key={cat.id}
+                    className="bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-4 flex items-center justify-between"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-rose-50 flex items-center justify-center text-rose-500">
+                        <Sparkles className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-slate-900">{cat.name}</h3>
+                        <p className="text-xs text-slate-500">
+                          ${cat.base_price.toLocaleString('es-CO')} · Orden {cat.order_index}
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="font-bold text-slate-900">{cat.name}</h3>
-                      <p className="text-xs text-slate-500">
-                        ${cat.base_price.toLocaleString('es-CO')} · Orden {cat.order_index}
-                      </p>
-                    </div>
-                  </div>
 
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => handleEdit(cat)}
-                      className="p-2 rounded-xl bg-slate-50 border border-[#E2E8F0] hover:bg-slate-100 text-slate-600 transition-all"
-                    >
-                      <Pencil className="w-4 h-4" />
-                    </button>
-                    <button
-                      onClick={() => handleDelete(cat.id)}
-                      className="p-2 rounded-xl bg-red-50 border border-red-100 hover:bg-red-100 text-red-600 transition-all"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => handleEdit(cat)}
+                        className="p-2 rounded-xl bg-slate-50 border border-[#E2E8F0] hover:bg-slate-100 text-slate-600 transition-all"
+                      >
+                        <Pencil className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(cat.id)}
+                        className="p-2 rounded-xl bg-red-50 border border-red-100 hover:bg-red-100 text-red-600 transition-all"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
                   </div>
-                </div>
-              ))}
-              {sortedCategories.length === 0 && (
-                <div className="text-center py-8 text-slate-500 text-sm">
-                  No hay categorías registradas. Presiona "Agregar Categoría" para crear la primera.
-                </div>
+                ))
               )}
             </div>
           </>
