@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Plus, Trash2, Sparkles, Pencil } from 'lucide-react';
 import { fetchAdditionalServices, saveAdditionalService, deleteAdditionalService, uuid } from '@/lib/data';
 import type { AdditionalService } from '@/lib/types';
+import { EmptyState } from '@/components/EmptyState'; // <-- Inserción del nuevo componente
 
 export function ServiceManager({ businessId }: { businessId: string }) {
   const [services, setServices] = useState<AdditionalService[]>([]);
@@ -57,51 +58,60 @@ export function ServiceManager({ businessId }: { businessId: string }) {
 
   return (
     <div className="space-y-4 animate-fadeIn">
-      <button
-        onClick={openAddModal}
-        className="action-control w-full py-3 bg-gradient-to-br from-rose-600 to-rose-500 border border-rose-200/80 text-white font-semibold rounded-xl flex items-center justify-center gap-2"
-      >
-        <Plus className="w-5 h-5" /> Agregar Servicio Adicional
-      </button>
+      {/* Si hay servicios, mostramos el botón superior clásico */}
+      {services.length > 0 && (
+        <button
+          onClick={openAddModal}
+          className="action-control w-full py-3 bg-gradient-to-br from-rose-600 to-rose-500 border border-rose-200/80 text-white font-semibold rounded-xl flex items-center justify-center gap-2"
+        >
+          <Plus className="w-5 h-5" /> Agregar Servicio Adicional
+        </button>
+      )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-        {services.map((service) => (
-          <div key={service.id} className="p-4 rounded-2xl bg-white border border-[#E2E8F0] flex items-center justify-between shadow-sm">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-rose-50 flex items-center justify-center">
-                <Sparkles className="w-5 h-5 text-rose-500" />
-              </div>
-              <div>
-                <div className="font-semibold text-slate-800">{service.name}</div>
-                <div className="text-sm font-bold text-emerald-600">
-                  ${(service.price || 0).toLocaleString('es-CO')}
+      {/* Renderizado Condicional: Empty State vs Cuadrícula */}
+      {services.length === 0 ? (
+        <EmptyState
+          icon={Sparkles}
+          title="Sin servicios adicionales"
+          description="Aumenta el valor de tus citas agregando servicios extra como Nail Art, diseño con pedrería o masajes relajantes."
+          actionLabel="Crear Primer Servicio"
+          onAction={openAddModal}
+        />
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          {services.map((service) => (
+            <div key={service.id} className="p-4 rounded-2xl bg-white border border-[#E2E8F0] flex items-center justify-between shadow-sm">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-rose-50 flex items-center justify-center">
+                  <Sparkles className="w-5 h-5 text-rose-500" />
+                </div>
+                <div>
+                  <div className="font-semibold text-slate-800">{service.name}</div>
+                  <div className="text-sm font-bold text-emerald-600">
+                    ${(service.price || 0).toLocaleString('es-CO')}
+                  </div>
                 </div>
               </div>
+              <div className="flex gap-1">
+                <button 
+                  onClick={() => openEditModal(service)}
+                  className="p-2 rounded-lg bg-slate-50 hover:bg-slate-100 text-slate-600 transition-all"
+                  title="Editar adicional"
+                >
+                  <Pencil className="w-4 h-4" />
+                </button>
+                <button 
+                  onClick={() => handleDelete(service.id)}
+                  className="p-2 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 transition-all"
+                  title="Eliminar adicional"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
             </div>
-            <div className="flex gap-1">
-              <button 
-                onClick={() => openEditModal(service)}
-                className="p-2 rounded-lg bg-slate-50 hover:bg-slate-100 text-slate-600 transition-all"
-                title="Editar adicional"
-              >
-                <Pencil className="w-4 h-4" />
-              </button>
-              <button 
-                onClick={() => handleDelete(service.id)}
-                className="p-2 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 transition-all"
-                title="Eliminar adicional"
-              >
-                <Trash2 className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-        ))}
-        {services.length === 0 && (
-          <div className="col-span-full text-center text-slate-500 py-8 text-sm bg-white rounded-2xl border border-dashed border-slate-300">
-            No hay servicios adicionales registrados. Agrega el primero arriba.
-          </div>
-        )}
-      </div>
+          ))}
+        </div>
+      )}
 
       {/* Modal para agregar / editar */}
       {showModal && (
