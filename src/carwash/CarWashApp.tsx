@@ -14,16 +14,13 @@ function AppContent() {
   const [pinUnlocked, setPinUnlocked] = useState(false);
   const [isSuspended, setIsSuspended] = useState(false);
 
-  // --- ESCUDO ANTI-ZOMBIES Y KILL SWITCH EN TIEMPO REAL ---
   useEffect(() => {
-    // 1. Validación estática inicial
     if (business?.subscription_status === 'suspended') {
       setIsSuspended(true);
     } else {
       setIsSuspended(false);
     }
 
-    // 2. Conexión WebSocket para expulsión forzada en vivo
     if (business?.id) {
       const channel = supabase
         .channel('business_status_monitor')
@@ -47,9 +44,6 @@ function AppContent() {
     }
   }, [business]);
 
-  // =================================================================
-  // CAPA 1: PANTALLA DE BLOQUEO ABSOLUTO (Se sobrepone a toda la app)
-  // =================================================================
   if (isSuspended) {
     return (
       <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4">
@@ -61,8 +55,8 @@ function AppContent() {
           </p>
           <button
             onClick={() => {
-              setRole(null); // Purga la sesión local
-              window.location.reload(); // Fuerza la limpieza de caché visual
+              setRole(null); 
+              window.location.reload(); 
             }}
             className="w-full py-3 bg-red-600/10 hover:bg-red-600/20 text-red-400 font-semibold rounded-xl transition-colors border border-red-500/30"
           >
@@ -73,25 +67,17 @@ function AppContent() {
     );
   }
 
-  // =================================================================
-  // CAPA 2: RUTAS NORMALES DE LA APLICACIÓN
-  // =================================================================
-
-  // 1. Si no hay empresa o rol seleccionado, ir a Login
   if (!business || !role) {
     return <LoginScreen />;
   }
 
-  // 2. Vista de Administrador / Operador
   if (role === 'admin') {
     return <AdminView />;
   }
 
-  // 3. Vista de Propietario con validación de PIN
   if (role === 'owner') {
     if (!pinUnlocked) {
       if (!business.owner_pin) {
-        // Si no hay PIN configurado en la empresa, regresa a Login por seguridad
         return <LoginScreen />;
       }
       return (
@@ -106,24 +92,27 @@ function AppContent() {
     return <OwnerView />;
   }
 
-  // Fallback de seguridad
   return <LoginScreen />;
 }
 
 export default function App({ incomingBusinessId }: { incomingBusinessId?: string }) {
   const [tenantId, setTenantId] = useState<string | null>(null);
-  
-  // 1. Variable clave para evitar los errores #418 y #419 en SSR
   const [isMounted, setIsMounted] = useState(false);
+  const [isSuperAdminRoute, setIsSuperAdminRoute] = useState(false);
 
   useEffect(() => {
-    // 2. Indicamos que ya estamos en el navegador seguro
     setIsMounted(true);
     
+    // 1. Verificación robusta del lado del cliente para ignorar el tenantId si estamos en admin
+    if (window.location.href.includes('/admin')) {
+      setIsSuperAdminRoute(true);
+      return; // Detenemos la ejecución aquí, no necesitamos tenantId
+    }
+    
+    // 2. Lógica normal de salones para el resto de rutas
     if (incomingBusinessId) {
       localStorage.setItem('gabsoft_tenant_id', incomingBusinessId);
       setTenantId(incomingBusinessId);
-      
       window.history.replaceState({}, document.title, window.location.pathname);
     } else {
       const stored = localStorage.getItem('gabsoft_tenant_id');
@@ -131,7 +120,6 @@ export default function App({ incomingBusinessId }: { incomingBusinessId?: strin
     }
   }, [incomingBusinessId]);
 
-  // 3. Mientras el servidor hidrata el componente, no mostramos UI dependiente de localStorage
   if (!isMounted) {
     return (
       <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center text-white p-4">
@@ -141,9 +129,9 @@ export default function App({ incomingBusinessId }: { incomingBusinessId?: strin
   }
 
   // =================================================================
-  // EXCEPCIÓN SUPERADMIN: Intercepta la ruta de forma segura y flexible
+  // EXCEPCIÓN SUPERADMIN: Renderizado aislado y seguro
   // =================================================================
-  if (window.location.pathname.startsWith('/admin')) {
+  if (isSuperAdminRoute) {
     return (
       <>
         <SuperAdminApp />
@@ -152,7 +140,6 @@ export default function App({ incomingBusinessId }: { incomingBusinessId?: strin
     );
   }
 
-  // 4. Si el montaje terminó y no hay ID, el escudo actúa correctamente
   if (!tenantId) {
     return (
       <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center text-white p-4 text-center">
