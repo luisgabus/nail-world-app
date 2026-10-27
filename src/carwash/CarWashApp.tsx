@@ -131,12 +131,12 @@ export default function App({ incomingBusinessId }: { incomingBusinessId?: strin
   // =================================================================
   // EXCEPCIÓN SUPERADMIN: Renderizado aislado y seguro
   // =================================================================
-  if (isSuperAdminRoute) {
+if (isSuperAdminRoute) {
     return (
-      <>
+      <AppProvider>
         <SuperAdminApp />
         <ToastContainer />
-      </>
+      </AppProvider>
     );
   }
 
