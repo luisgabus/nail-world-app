@@ -100,19 +100,25 @@ export default function App({ incomingBusinessId }: { incomingBusinessId?: strin
   const [isMounted, setIsMounted] = useState(false);
   const [isSuperAdminRoute, setIsSuperAdminRoute] = useState(false);
 
-  useEffect(() => {
+useEffect(() => {
     setIsMounted(true);
     
-    // 1. Verificación robusta del lado del cliente para ignorar el tenantId si estamos en admin
-    if (window.location.href.includes('/admin')) {
+    // 1. Verificación robusta para aislar el SuperAdmin
+    if (window.location.pathname.startsWith('/admin')) {
       setIsSuperAdminRoute(true);
-      return; // Detenemos la ejecución aquí, no necesitamos tenantId
+      return; 
     }
     
-    // 2. Lógica normal de salones para el resto de rutas
-    if (incomingBusinessId) {
-      localStorage.setItem('gabsoft_tenant_id', incomingBusinessId);
-      setTenantId(incomingBusinessId);
+    // 2. Extraer el ID directamente de la URL (si el botón de la Landing Page lo envía por ahí)
+    const params = new URLSearchParams(window.location.search);
+    const urlId = params.get('id') || params.get('tenant') || params.get('business');
+    const finalBusinessId = incomingBusinessId || urlId;
+    
+    // 3. Lógica normal de salones
+    if (finalBusinessId) {
+      localStorage.setItem('gabsoft_tenant_id', finalBusinessId);
+      setTenantId(finalBusinessId);
+      // Limpiamos la URL para que se vea profesional y limpia
       window.history.replaceState({}, document.title, window.location.pathname);
     } else {
       const stored = localStorage.getItem('gabsoft_tenant_id');
