@@ -141,9 +141,9 @@ export default function App({ incomingBusinessId }: { incomingBusinessId?: strin
   }
 
   // =================================================================
-  // EXCEPCIÓN SUPERADMIN: Intercepta la ruta antes del tenant
+  // EXCEPCIÓN SUPERADMIN: Intercepta la ruta de forma segura y flexible
   // =================================================================
-  if (window.location.pathname === '/admin') {
+  if (window.location.pathname.startsWith('/admin')) {
     return (
       <>
         <SuperAdminApp />
