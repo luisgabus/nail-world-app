@@ -1,78 +1,98 @@
-import { useState } from 'react';
-import { useLocation } from '@tanstack/react-router';
+import { useState, useEffect } from 'react';
+import { supabase } from '@/lib/supabase';
+import { ShieldAlert, Loader2 } from 'lucide-react';
 import { useApp, AppProvider } from '@/lib/store';
-import { supabase } from '@/lib/supabase'; // <-- AGREGA ESTA LÍNEA OBLIGATORIAMENTE
-import { ClientRegistration } from '@/components/ClientRegistration';
 import { LoginScreen } from '@/components/LoginScreen';
 import { AdminView } from '@/components/AdminView';
 import { OwnerView } from '@/components/OwnerView';
 import { PinPad } from '@/components/PinPad';
 import { ToastContainer } from '@/components/Toast';
-import { SuperAdminApp } from '@/components/SuperAdminApp';
+import { SuperAdminApp } from '../components/SuperAdminApp';
 
 function AppContent() {
- const { business, role, setRole, setBusiness } = useApp();
+  const { business, role, setRole } = useApp();
   const [pinUnlocked, setPinUnlocked] = useState(false);
-  const location = useLocation();
-  const isAdminRoute = location.pathname === '/admin';
+  const [isSuspended, setIsSuspended] = useState(false);
 
-// Puente de conexión real a Supabase con escudo de contraseña y protección de espacios
-  const handleLogin = async (businessId: string, selectedRole: 'owner' | 'reception', password: string) => {
-    try {
-      // Limpiamos espacios accidentales al inicio o al final
- const cleanId = businessId.trim();
-      const cleanPassword = password.trim();
-
-      // Consultamos usando 'id' (no codigo) y reparamos las comillas dobles
-      const { data: biz, error: dbError } = await supabase
-        .from('businesses')
-        .select('*')
-        .or(`id.ilike."${cleanId}",name.ilike."${cleanId}"`)
-        .eq('access_password', cleanPassword)
-        .limit(1)
-        .maybeSingle();
-
-      if (dbError || !biz) {
-        console.error("Error de DB:", dbError);
-        alert('Credenciales incorrectas. Verifica el código de tu negocio y la contraseña.');
-        return;
-      }
-      
-      // 2. ESCUDO DE SEGMENTACIÓN: Validar que pertenezca a Nail World
-      if (biz.demo_selected && biz.demo_selected !== 'NailWorld') { // Verifica que el texto coincida con lo que guardas en la BD
-        alert('Este negocio está registrado para CarWash. Por favor ingresa en su plataforma correspondiente.');
-        return;
-      }
-
-      // 3. Conceder acceso
-      setBusiness(biz);
-      setRole(selectedRole);
-      
-    } catch (err) {
-      alert('Ocurrió un error al verificar las credenciales. Intenta nuevamente.');
+  // --- ESCUDO ANTI-ZOMBIES Y KILL SWITCH EN TIEMPO REAL ---
+  useEffect(() => {
+    // 1. Validación estática inicial
+    if (business?.subscription_status === 'suspended') {
+      setIsSuspended(true);
+    } else {
+      setIsSuspended(false);
     }
-  };
 
-  // 1. Si no hay empresa o rol seleccionado, ir a Login PASANDO la función handleLogin
+    // 2. Conexión WebSocket para expulsión forzada en vivo
+    if (business?.id) {
+      const channel = supabase
+        .channel('business_status_monitor')
+        .on('postgres_changes', {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'businesses',
+          filter: `id=eq.${business.id}`
+        }, (payload) => {
+          if (payload.new.subscription_status === 'suspended') {
+            setIsSuspended(true);
+          } else if (payload.new.subscription_status === 'active') {
+            setIsSuspended(false);
+          }
+        })
+        .subscribe();
+
+      return () => {
+        supabase.removeChannel(channel);
+      };
+    }
+  }, [business]);
+
+  // =================================================================
+  // CAPA 1: PANTALLA DE BLOQUEO ABSOLUTO (Se sobrepone a toda la app)
+  // =================================================================
+  if (isSuspended) {
+    return (
+      <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4">
+        <div className="bg-slate-800 p-8 rounded-2xl border border-red-500/30 text-center max-w-md w-full shadow-2xl animate-in fade-in zoom-in duration-300">
+          <ShieldAlert className="w-16 h-16 text-red-500 mx-auto mb-6" />
+          <h1 className="text-2xl font-bold text-white mb-2">Servicio Suspendido</h1>
+          <p className="text-slate-400 mb-6 text-sm">
+            El acceso operativo a esta plataforma ha sido temporalmente restringido. Por favor, regulariza el estado de la cuenta para recuperar el servicio inmediatamente.
+          </p>
+          <button
+            onClick={() => {
+              setRole(null); // Purga la sesión local
+              window.location.reload(); // Fuerza la limpieza de caché visual
+            }}
+            className="w-full py-3 bg-red-600/10 hover:bg-red-600/20 text-red-400 font-semibold rounded-xl transition-colors border border-red-500/30"
+          >
+            Cerrar Sesión
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // =================================================================
+  // CAPA 2: RUTAS NORMALES DE LA APLICACIÓN
+  // =================================================================
+
+  // 1. Si no hay empresa o rol seleccionado, ir a Login
   if (!business || !role) {
-    return <LoginScreen onLogin={handleLogin} />;
+    return <LoginScreen />;
   }
 
-  // 2. Si la ruta es /admin y el usuario ya está autenticado
-  if (isAdminRoute) {
-    return <SuperAdminApp />;
-  }
-
-  // 3. Vista de Administrador / Recepción
-  if (role === 'admin' || role === 'reception') {
+  // 2. Vista de Administrador / Operador
+  if (role === 'admin') {
     return <AdminView />;
   }
 
-  // 4. Vista de Propietario con validación de PIN
+  // 3. Vista de Propietario con validación de PIN
   if (role === 'owner') {
     if (!pinUnlocked) {
       if (!business.owner_pin) {
-        return <LoginScreen onLogin={handleLogin} />;
+        // Si no hay PIN configurado en la empresa, regresa a Login por seguridad
+        return <LoginScreen />;
       }
       return (
         <PinPad
@@ -86,10 +106,68 @@ function AppContent() {
     return <OwnerView />;
   }
 
-  return <LoginScreen onLogin={handleLogin} />;
-} 
+  // Fallback de seguridad
+  return <LoginScreen />;
+}
 
-export default function CarWashApp() {
+export default function App({ incomingBusinessId }: { incomingBusinessId?: string }) {
+  const [tenantId, setTenantId] = useState<string | null>(null);
+  
+  // 1. Variable clave para evitar los errores #418 y #419 en SSR
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    // 2. Indicamos que ya estamos en el navegador seguro
+    setIsMounted(true);
+    
+    if (incomingBusinessId) {
+      localStorage.setItem('gabsoft_tenant_id', incomingBusinessId);
+      setTenantId(incomingBusinessId);
+      
+      window.history.replaceState({}, document.title, window.location.pathname);
+    } else {
+      const stored = localStorage.getItem('gabsoft_tenant_id');
+      if (stored) setTenantId(stored);
+    }
+  }, [incomingBusinessId]);
+
+  // 3. Mientras el servidor hidrata el componente, no mostramos UI dependiente de localStorage
+  if (!isMounted) {
+    return (
+      <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center text-white p-4">
+        <Loader2 className="w-10 h-10 animate-spin text-blue-500 mb-4" />
+      </div>
+    );
+  }
+
+  // =================================================================
+  // EXCEPCIÓN SUPERADMIN: Intercepta la ruta antes del tenant
+  // =================================================================
+  if (window.location.pathname === '/admin') {
+    return (
+      <>
+        <SuperAdminApp />
+        <ToastContainer />
+      </>
+    );
+  }
+
+  // 4. Si el montaje terminó y no hay ID, el escudo actúa correctamente
+  if (!tenantId) {
+    return (
+      <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center text-white p-4 text-center">
+        <ShieldAlert className="w-16 h-16 text-slate-600 mb-4" />
+        <h2 className="text-2xl font-bold mb-2">Acceso Inválido</h2>
+        <p className="text-slate-400 mb-6 max-w-sm text-sm">
+          No se ha especificado un identificador de negocio válido. Por favor, ingresa desde el enlace oficial.
+        </p>
+        <a href="https://gabsoftx.com" className="px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white font-medium rounded-xl">
+          Volver al Inicio
+        </a>
+      </div>
+    );
+  }
+
   return (
     <AppProvider>
       <AppContent />
