@@ -14,6 +14,7 @@ function AppContent() {
   const [pinUnlocked, setPinUnlocked] = useState(false);
   const [isSuspended, setIsSuspended] = useState(false);
 
+  // --- ESCUDO ANTI-ZOMBIES Y KILL SWITCH EN TIEMPO REAL ---
   useEffect(() => {
     if (business?.subscription_status === 'suspended') {
       setIsSuspended(true);
@@ -67,25 +68,33 @@ function AppContent() {
     );
   }
 
+  // 1. Si no hay empresa o rol, muestra la pantalla de inicio de sesión por correo
   if (!business || !role) {
     return <LoginScreen />;
   }
 
+  // 2. Si el rol es 'admin' (Modo Piso / Recepción), entra de inmediato sin pedir PIN
   if (role === 'admin') {
     return <AdminView />;
   }
 
+  // 3. Si el rol es 'owner', la app entra primero a la operación o vista general, 
+  // y exige el PIN internamente para desbloquear el panel de control del dueño.
   if (role === 'owner') {
     if (!pinUnlocked) {
       if (!business.owner_pin) {
-        return <LoginScreen />;
+        // Si por alguna razón no hay PIN, dejamos pasar directo a la vista de dueño
+        return <OwnerView />;
       }
       return (
         <PinPad
-          title="PIN del Dueño"
+          title="PIN de Acceso Gerencial"
           expectedPin={business.owner_pin}
           onSuccess={() => setPinUnlocked(true)}
-          onCancel={() => setRole(null)}
+          onCancel={() => {
+            setRole(null); // Si cancela el PIN, regresa al login general
+            setPinUnlocked(false);
+          }}
         />
       );
     }
