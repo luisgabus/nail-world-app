@@ -1,30 +1,27 @@
 import React, { useState } from 'react';
 import { Sparkles, ArrowRight, Loader2 } from 'lucide-react';
-// IMPORTANTE: Asegúrate de que la ruta de importación de supabase coincida con la de tu proyecto
 import { supabase } from '@/lib/supabase'; 
+import { useApp } from '@/lib/store';
 
-interface LoginScreenProps {
-  // Mantenemos la firma original para no romper el componente padre
-  onLogin?: (businessId: string, role: 'owner' | 'reception', password: string) => void;
-}
-
-export function LoginScreen({ onLogin }: LoginScreenProps) {
+export function LoginScreen() {
+  const { setBusiness, setRole } = useApp();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [submittingRole, setSubmittingRole] = useState<'owner' | 'reception' | null>(null);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const handleLogin = async (role: 'owner' | 'reception') => {
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
     if (!email.trim() || !password.trim()) {
       setError('Por favor ingresa tu correo y contraseña');
       return;
     }
     
-    setSubmittingRole(role);
+    setLoading(true);
     setError('');
     
     try {
-      // 1. Autenticación criptográfica con Supabase Auth
+      // 1. Autenticación con Supabase Auth
       const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
         email: email.trim(),
         password: password.trim()
@@ -33,10 +30,10 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
       if (authError) throw new Error('Credenciales incorrectas. Verifica tu correo y contraseña.');
       if (!authData.user) throw new Error('Error al generar la sesión.');
 
-      // 2. Obtener el negocio asociado (RLS garantiza que solo traiga el suyo)
+      // 2. Obtener el negocio asociado mediante el owner_auth_id
       const { data: businessData, error: bizError } = await supabase
         .from('businesses')
-        .select('id')
+        .select('*')
         .eq('owner_auth_id', authData.user.id)
         .single();
 
@@ -44,21 +41,16 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
         throw new Error('No se encontró un negocio asociado a este usuario.');
       }
 
-      // 3. Enviamos el ID recuperado, el Rol y la Contraseña al componente padre
-      if (typeof onLogin === 'function') {
-        onLogin(businessData.id, role, password.trim());
-      } 
+      // 3. Establecemos el negocio y asignamos el rol de 'owner' de manera directa
+      setBusiness(businessData);
+      setRole('owner');
+
     } catch (err: any) {
       console.error(err);
       setError(err.message || 'Error al iniciar sesión');
     } finally {
-      setSubmittingRole(null);
+      setLoading(false);
     }
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    handleLogin('reception');
   };
 
   return (
@@ -75,7 +67,7 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
         </div>
 
         {/* Formulario Estructurado */}
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleLogin} className="space-y-4">
           <div className="space-y-4">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-slate-600 mb-2">
@@ -89,7 +81,7 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
                 placeholder="ejemplo@correo.com"
                 className="w-full px-4 py-4 text-lg bg-white border border-rose-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-400 focus:border-transparent transition-all shadow-sm"
                 autoFocus
-                disabled={!!submittingRole}
+                disabled={loading}
               />
             </div>
 
@@ -104,7 +96,7 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 className="w-full px-4 py-4 text-lg bg-white border border-rose-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-400 focus:border-transparent transition-all shadow-sm"
-                disabled={!!submittingRole}
+                disabled={loading}
               />
             </div>
           </div>
@@ -116,34 +108,18 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
             </div>
           )}
 
-          {/* Botones */}
-          <div className="space-y-3 pt-2">
+          {/* Botón Único de Acceso */}
+          <div className="pt-2">
             <button
               type="submit"
-              disabled={!!submittingRole}
+              disabled={loading}
               className="w-full py-4 bg-rose-400 hover:bg-rose-500 text-white font-semibold rounded-xl flex items-center justify-center gap-2 disabled:opacity-50 transition-colors shadow-sm"
             >
-              {submittingRole === 'reception' ? (
+              {loading ? (
                 <Loader2 className="w-5 h-5 animate-spin" />
               ) : (
                 <>
-                  Ingresar como Recepción
-                  <ArrowRight className="w-5 h-5" />
-                </>
-              )}
-            </button>
-
-            <button
-              type="button"
-              onClick={() => handleLogin('owner')}
-              disabled={!!submittingRole}
-              className="action-control action-surface w-full py-4 bg-rose-50 hover:bg-rose-100 border border-rose-200 text-slate-700 font-semibold rounded-xl flex items-center justify-center gap-2 disabled:opacity-50 transition-colors"
-            >
-              {submittingRole === 'owner' ? (
-                <Loader2 className="w-5 h-5 animate-spin" />
-              ) : (
-                <>
-                  Ingresar como Administrador
+                  Ingresar al Panel
                   <ArrowRight className="w-5 h-5" />
                 </>
               )}
