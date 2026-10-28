@@ -68,38 +68,35 @@ function AppContent() {
     );
   }
 
-  // 1. Si no hay empresa o rol, muestra la pantalla de inicio de sesión por correo
+ // 1. Si no hay empresa o rol activo, ir a la pantalla de correo/contraseña
   if (!business || !role) {
     return <LoginScreen />;
   }
 
-  // 2. Si el rol es 'admin' (Modo Piso / Recepción), entra de inmediato sin pedir PIN
-  if (role === 'admin') {
-    return <AdminView />;
-  }
-
-  // 3. Si el rol es 'owner', la app entra primero a la operación o vista general, 
-  // y exige el PIN internamente para desbloquear el panel de control del dueño.
+  // 2. Si el sistema intenta abrir el Modo Dueño, activamos el filtro interno (PIN)
   if (role === 'owner') {
     if (!pinUnlocked) {
       if (!business.owner_pin) {
-        // Si por alguna razón no hay PIN, dejamos pasar directo a la vista de dueño
+        // Si el negocio aún no tiene PIN configurado en BD, pasa directo
         return <OwnerView />;
       }
       return (
         <PinPad
-          title="PIN de Acceso Gerencial"
+          title="PIN del Dueño"
           expectedPin={business.owner_pin}
           onSuccess={() => setPinUnlocked(true)}
           onCancel={() => {
-            setRole(null); // Si cancela el PIN, regresa al login general
-            setPinUnlocked(false);
+            // LA CLAVE: Si cancela el PIN, no lo echa de la app, lo devuelve al Piso
+            setRole('admin'); 
           }}
         />
       );
     }
     return <OwnerView />;
   }
+
+  // 3. El Modo Piso (AdminView) es la vista base por defecto para el rol 'admin'
+  return <AdminView />;
 
   return <LoginScreen />;
 }
