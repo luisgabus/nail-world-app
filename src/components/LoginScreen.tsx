@@ -43,7 +43,7 @@ export function LoginScreen() {
 
       // 3. Establecemos el negocio y asignamos el rol de 'owner' de manera directa
       setBusiness(businessData);
-      setRole('owner');
+      setRole('admin');
 
     } catch (err: any) {
       console.error(err);
