@@ -68,7 +68,7 @@ function AppContent() {
     );
   }
 
- // 1. Si no hay empresa o rol activo, ir a la pantalla de correo/contraseña
+  // 1. Si no hay empresa o rol activo, ir a la pantalla de correo/contraseña
   if (!business || !role) {
     return <LoginScreen />;
   }
@@ -97,8 +97,6 @@ function AppContent() {
 
   // 3. El Modo Piso (AdminView) es la vista base por defecto para el rol 'admin'
   return <AdminView />;
-
-  return <LoginScreen />;
 }
 
 export default function App({ incomingBusinessId }: { incomingBusinessId?: string }) {
@@ -106,7 +104,7 @@ export default function App({ incomingBusinessId }: { incomingBusinessId?: strin
   const [isMounted, setIsMounted] = useState(false);
   const [isSuperAdminRoute, setIsSuperAdminRoute] = useState(false);
 
-useEffect(() => {
+  useEffect(() => {
     setIsMounted(true);
     
     // 1. Verificación robusta para aislar el SuperAdmin
@@ -115,7 +113,7 @@ useEffect(() => {
       return; 
     }
     
-    // 2. Extraer el ID directamente de la URL (si el botón de la Landing Page lo envía por ahí)
+    // 2. Extraer el ID directamente de la URL
     const params = new URLSearchParams(window.location.search);
     const urlId = params.get('id') || params.get('tenant') || params.get('business');
     const finalBusinessId = incomingBusinessId || urlId;
@@ -124,7 +122,6 @@ useEffect(() => {
     if (finalBusinessId) {
       localStorage.setItem('gabsoft_tenant_id', finalBusinessId);
       setTenantId(finalBusinessId);
-      // Limpiamos la URL para que se vea profesional y limpia
       window.history.replaceState({}, document.title, window.location.pathname);
     } else {
       const stored = localStorage.getItem('gabsoft_tenant_id');
@@ -143,7 +140,7 @@ useEffect(() => {
   // =================================================================
   // EXCEPCIÓN SUPERADMIN: Renderizado aislado y seguro
   // =================================================================
-if (isSuperAdminRoute) {
+  if (isSuperAdminRoute) {
     return (
       <AppProvider>
         <SuperAdminApp />

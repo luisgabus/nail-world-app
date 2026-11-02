@@ -764,11 +764,10 @@ const buildTicketWhatsAppUrl = (w: Wash): string | null => {
           <div className="flex items-center gap-2">
             <SyncIndicator />
             
-            {/* Botón de Modo Dueño protegido por PIN */}
+{/* Botón de Modo Dueño protegido por PIN */}
             <button
               type="button"
               onClick={() => {
-                setPinUnlocked(false);
                 setRole('owner');
               }}
               className="flex items-center gap-2 px-3 py-2 bg-slate-100 border border-slate-200 hover:bg-slate-200 text-slate-700 rounded-xl transition-colors font-medium text-sm shadow-sm"
