@@ -14,6 +14,13 @@ function AppContent() {
   const [pinUnlocked, setPinUnlocked] = useState(false);
   const [isSuspended, setIsSuspended] = useState(false);
 
+  // --- REINICIAR MEMORIA DEL PIN AL CERRAR SESIÓN O CAMBIAR A ADMIN ---
+  useEffect(() => {
+    if (!role || role === 'admin') {
+      setPinUnlocked(false);
+    }
+  }, [role]);
+
   // --- ESCUDO ANTI-ZOMBIES Y KILL SWITCH EN TIEMPO REAL ---
   useEffect(() => {
     if (business?.subscription_status === 'suspended') {
@@ -86,7 +93,6 @@ function AppContent() {
           expectedPin={business.owner_pin}
           onSuccess={() => setPinUnlocked(true)}
           onCancel={() => {
-            // LA CLAVE: Si cancela el PIN, no lo echa de la app, lo devuelve al Piso
             setRole('admin'); 
           }}
         />
