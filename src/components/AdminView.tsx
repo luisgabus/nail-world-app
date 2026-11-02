@@ -428,9 +428,10 @@ const handleStartWash = async (w: Wash) => {
     }
   };
 
-  const handleLogout = () => {
-    setBusiness(null);
-    setRole(null);
+const handleFullLogout = () => {
+    localStorage.removeItem('carwash_session'); // Limpia la persistencia
+    setBusiness(null); // Borra el negocio activo
+    setRole(null);     // Borra el rol y manda al login
   };
 
   const handleAddExpense = async () => {
@@ -748,6 +749,7 @@ const buildTicketWhatsAppUrl = (w: Wash): string | null => {
   return (
     <div className="min-h-screen bg-[#F8FAFC] text-slate-900">
       {/* Header */}
+ {/* Header */}
       <header className="sticky top-0 z-30 bg-white backdrop-blur-xl border-b border-[#E2E8F0] px-4 py-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -761,12 +763,28 @@ const buildTicketWhatsAppUrl = (w: Wash): string | null => {
           </div>
           <div className="flex items-center gap-2">
             <SyncIndicator />
+            
+            {/* Botón de Modo Dueño protegido por PIN */}
             <button
-              onClick={handleLogout}
-              className="p-2 rounded-xl bg-white border border-[#E2E8F0] hover:bg-slate-100 transition-all"
+              type="button"
+              onClick={() => {
+                setPinUnlocked(false);
+                setRole('owner');
+              }}
+              className="flex items-center gap-2 px-3 py-2 bg-slate-100 border border-slate-200 hover:bg-slate-200 text-slate-700 rounded-xl transition-colors font-medium text-sm shadow-sm"
+              title="Modo Dueño"
+            >
+              <Lock className="w-4 h-4 text-slate-500" />
+              <span className="hidden sm:inline">Modo Dueño</span>
+            </button>
+
+            {/* Botón de Salir */}
+            <button
+              onClick={handleFullLogout}
+              className="p-2 rounded-xl bg-white border border-[#E2E8F0] hover:bg-red-50 hover:border-red-200 hover:text-red-600 transition-all"
               title="Cerrar sesión"
             >
-              <LogOut className="w-5 h-5 text-slate-600" />
+              <LogOut className="w-5 h-5 text-slate-600 hover:text-red-600" />
             </button>
           </div>
         </div>
